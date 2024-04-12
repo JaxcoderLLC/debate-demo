@@ -5,14 +5,10 @@ const Hero = (props: { stats: any }) => {
         <div className="mx-auto max-w-2xl lg:max-w-none">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-700 sm:text-4xl">
-              Trusted by event creators and promoters worldwide
+              Donate & Debate
             </h2>
-            <p className="mt-4 text-lg leading-8 italic text-gray-600">
-              Check out some of the events that have used IncentiVibe to
-              incentivize their attendees to promote their events.
-            </p>
           </div>
-          <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
+          <dl className="mt-10 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
             {props.stats.map((stat: any) => (
               <div key={stat.id} className="flex flex-col bg-gray-400/25 p-8">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">

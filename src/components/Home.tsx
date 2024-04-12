@@ -62,6 +62,23 @@ const Home = () => {
               suscipit, sapien nec vehicula lacin
             </p>
           </div>
+          <div className="bg-white p-4 rounded-lg shadow-md">
+            <h3 className="text-xl font-bold text-gray-800">Track</h3>
+            <p className="text-gray-600 mt-2">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+              suscipit, sapien nec vehicula lacinia, erat odio ultricies nunc,
+              nec scelerisque neque nunc at justo. Nunc non nisl vel lorem
+              tincidunt suscipit. Nulla facilisi. Nam nec libero ut elit lacinia
+              auctor.
+            </p>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-md">
+            <h3 className="text-xl font-bold text-gray-800">Analyze</h3>
+            <p className="text-gray-600 mt-2">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+              suscipit, sapien nec vehicula lacin
+            </p>
+          </div>
         </div>
         <div className="flex items-center justify-center text-center mb-16 mt-12">
           <Link
