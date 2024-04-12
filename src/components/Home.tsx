@@ -6,6 +6,7 @@ import Hero from "@/components/Hero";
 import { Container } from "@/components/Container";
 import { useConnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
+import Link from "next/link";
 
 const Home = () => {
   useEffect(() => {
@@ -34,7 +35,7 @@ const Home = () => {
     <main>
       <Container>
         <Hero stats={stats} />
-        <div className=" text-center">
+        <div className=" text-center mt-10">
           <h2 className="text-2xl font-bold text-gray-800">How it works</h2>
           <p className="text-lg text-gray-600 mt-2">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
@@ -43,9 +44,9 @@ const Home = () => {
             suscipit. Nulla facilisi. Nam nec libero ut elit lacinia auctor.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
           <div className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-gray-800">Create an Event</h3>
+            <h3 className="text-xl font-bold text-gray-800">Onboard</h3>
             <p className="text-gray-600 mt-2">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
               suscipit, sapien nec vehicula lacinia, erat odio ultricies nunc,
@@ -55,39 +56,20 @@ const Home = () => {
             </p>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-gray-800">Share the Link</h3>
-            <p className="text-gray-600 mt-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              suscipit, sapien nec vehicula lacinia, erat odio ultricies nunc,
-              nec scelerisque neque nunc at justo. Nunc non nisl vel lorem
-              tincidunt suscipit. Nulla facilisi. Nam nec libero ut elit lacinia
-              auctor.
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-gray-800">
-              Collect Donations
-            </h3>
-            <p className="text-gray-600 mt-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              suscipit, sapien nec vehicula lacinia, erat odio ultricies nunc,
-              nec scelerisque neque nunc at justo. Nunc non nisl vel lorem
-              tincidunt suscipit. Nulla facilisi. Nam nec libero ut elit lacinia
-              auctor.
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-gray-800">Withdraw Funds</h3>
+            <h3 className="text-xl font-bold text-gray-800">Donate</h3>
             <p className="text-gray-600 mt-2">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
               suscipit, sapien nec vehicula lacin
             </p>
           </div>
         </div>
-        <div className="flex items-center justify-center mb-16 mt-12">
-          <button className="p-6 w-1/3 mt-4 text-centerborder rounded-xl text-3xl bg-blue-600 text-white">
+        <div className="flex items-center justify-center text-center mb-16 mt-12">
+          <Link
+            href="/onboard"
+            className="p-6 w-1/3 mt-4 text-center border rounded-xl text-3xl text-white shimmer-gradient"
+          >
             Get Started
-          </button>
+          </Link>
         </div>
       </Container>
     </main>

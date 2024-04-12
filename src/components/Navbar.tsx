@@ -63,7 +63,7 @@ export default function Navbar() {
   return (
     <Disclosure
       as="nav"
-      className="bg-transparent backdrop-filter backdrop-blur-lg bg-opacity-30 fixed w-full z"
+      className="bg-blue-600 bg-opacity-30 fixed w-full shadow-2xl text-2xl"
     >
       {({ open }: { open: boolean }) => (
         <>
@@ -92,7 +92,7 @@ export default function Navbar() {
                     <Image
                       className="h-auto w-auto"
                       src={logo}
-                      alt="IncentiVibe"
+                      alt="Debate & Donate logo"
                       height={64}
                       width={64}
                       onClick={() => {
@@ -127,7 +127,7 @@ export default function Navbar() {
                 <div className="flex-shrink-0">
                   {/* Add wallet connect here */}
                   <button
-                    className="border mx-2 border-gray-300 rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    className="border mx-2 border-black rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                     onClick={() => {
                       // @ts-ignore
                       window.ethereum.login();
@@ -137,7 +137,7 @@ export default function Navbar() {
                     login
                   </button>
                   <button
-                    className="border mx-2 border-gray-300 rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    className="border mx-2 border-black rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                     onClick={() => {
                       // @ts-ignore
                       window.ethereum.loginSelector();
