@@ -63,7 +63,7 @@ export default function Navbar() {
   return (
     <Disclosure
       as="nav"
-      className="bg-blue-600 bg-opacity-30 fixed w-full shadow-2xl text-2xl"
+      className="fixed w-full shadow-2xl text-2xl"
     >
       {({ open }: { open: boolean }) => (
         <>
