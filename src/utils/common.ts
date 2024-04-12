@@ -1,10 +1,10 @@
-import { TEventStatus, TStatus } from "@/app/types";
+import { IDonationStatus, TStatus } from "@/app/types";
 
 export const classNames = (...classes: string[]): string => {
   return classes.filter(Boolean).join(" ");
 };
 
-export const statuses: TEventStatus = {
+export const statusesStyle = {
   ["Pending" as TStatus]: "text-yellow-700 bg-yellow-50 ring-yellow-600/20",
   ["InProgress" as TStatus]: "text-blue-600 bg-blue-50 ring-blue-500/10",
   ["Completed" as TStatus]: "text-green-800 bg-green-50 ring-green-600/20",

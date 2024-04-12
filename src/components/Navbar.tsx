@@ -6,17 +6,14 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../assets/IV_Logo_1.png";
-// import Dropdown from "./Dropdown";
 import ToastNotification from "./ToastNotification";
-// import { BellIcon } from "@heroicons/react/24/outline";
-import NavbarDropdown from "./NavbarDropdown";
 import { useAccount, useConnect, useEnsName } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { initSilk } from "@silk-wallet/silk-wallet-sdk";
 
 const navigation = [
-  { name: "New Community", href: "/community/new", current: false },
-  { name: "New Event", href: "/event/new", current: false },
+  { name: "Donate", href: "/donate", current: false },
+  { name: "Stats", href: "/stats", current: false },
 ];
 
 export type TToastNotification = {
@@ -30,22 +27,24 @@ export default function Navbar() {
       show: false,
       args: [],
     });
-  // const [profileId, setProfileId] = useState<`0x${string}`>("0x");
   const { address, isConnected } = useAccount();
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
   const { data: ensName } = useEnsName({ address });
+  const [isOnboarded, setIsOnboarded] = useState(false);
 
   const userNavigation = [
-    { name: "New Community", href: "/community/new", current: false },
-    { name: "New Event", href: "/event/new", current: false },
+    { name: "Donate", href: "/donate", current: false },
+    { name: "Stats", href: "/stats", current: false },
   ];
 
   useEffect(() => {
     try {
       setTimeout(() => {
         const provider = initSilk();
+
+        // setIsOnboarded(true);
 
         // @ts-ignore
         window.ethereum = provider;
@@ -58,6 +57,8 @@ export default function Navbar() {
   function setToast(...args: any[]) {
     setToastNotification({ show: true, args: args });
   }
+
+  console.log("isOnboarded:", isOnboarded);
 
   return (
     <Disclosure
@@ -185,19 +186,20 @@ export default function Navbar() {
 
           <Disclosure.Panel className="md:hidden">
             <div className="hidden md:flex space-y-1 px-2 pb-3 pt-2 sm:px-3">
-              {navigation.map((item) => {
-                console.log("item:", item);
-                return (
-                  <Disclosure.Button
-                    key={item.name}
-                    as="a"
-                    href={item.href}
-                    aria-current={item.current ? "page" : undefined}
-                  >
-                    {item.name}
-                  </Disclosure.Button>
-                );
-              })}
+              {isOnboarded &&
+                navigation.map((item) => {
+                  console.log("item:", item);
+                  return (
+                    <Disclosure.Button
+                      key={item.name}
+                      as="a"
+                      href={item.href}
+                      aria-current={item.current ? "page" : undefined}
+                    >
+                      {item.name}
+                    </Disclosure.Button>
+                  );
+                })}
             </div>
             <div className="border-t border-gray-700 pb-3 pt-4">
               <div className="mt-3 space-y-1 px-2 sm:px-3">
@@ -209,16 +211,17 @@ export default function Navbar() {
                 >
                   Home
                 </Disclosure.Button>
-                {userNavigation.map((item) => (
-                  <Disclosure.Button
-                    key={item.name}
-                    as="a"
-                    href={item.href}
-                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-200"
-                  >
-                    {item.name}
-                  </Disclosure.Button>
-                ))}
+                {isOnboarded &&
+                  navigation.map((item) => (
+                    <Disclosure.Button
+                      key={item.name}
+                      as="a"
+                      href={item.href}
+                      className="block rounded-md px-3 py-2 text-base font-medium text-gray-200"
+                    >
+                      {item.name}
+                    </Disclosure.Button>
+                  ))}
               </div>
             </div>
           </Disclosure.Panel>

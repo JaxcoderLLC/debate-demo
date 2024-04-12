@@ -1,11 +1,11 @@
 import { wagmiConfig } from "@/services/wagmi";
-import { EventContextProvider } from "./EventContext";
+import { DonationContextProvider } from "./DonationContext";
 import { WagmiConfig } from "wagmi";
 
 const Providers = (props: { children: JSX.Element[] | JSX.Element }) => {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <EventContextProvider>{props.children}</EventContextProvider>
+      <DonationContextProvider>{props.children}</DonationContextProvider>
     </WagmiConfig>
   );
 };

@@ -13,7 +13,7 @@
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@hookform/resolvers": "^3.3.2",
-    "@silk-wallet/silk-wallet-sdk": "^0.0.21",
+    "@silk-wallet/silk-wallet-sdk": "^0.0.24",
     "@tailwindcss/forms": "^0.5.7",
     "dotenv": "^16.3.1",
     "graphql-request": "^6.1.0",
