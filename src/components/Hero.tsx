@@ -1,4 +1,4 @@
-const Hero = (props: { stats: any }) => {
+const Hero = () => {
   return (
     <div className="py-6 sm:py-3">
       <div className="mx-auto px-6 lg:px-8">
@@ -8,7 +8,7 @@ const Hero = (props: { stats: any }) => {
               Donate & Debate
             </h2>
           </div>
-          <dl className="mt-10 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
+          {/* <dl className="mt-10 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
             {props.stats.map((stat: any) => (
               <div key={stat.id} className="flex flex-col bg-gray-400/25 p-8">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">
@@ -19,7 +19,7 @@ const Hero = (props: { stats: any }) => {
                 </dd>
               </div>
             ))}
-          </dl>
+          </dl> */}
         </div>
       </div>
     </div>

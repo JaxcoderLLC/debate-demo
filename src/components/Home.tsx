@@ -23,18 +23,11 @@ const Home = () => {
     }
   }, []);
 
-  // TODO: fetch the actual stats we want to show
-  const stats = [
-    { id: 1, name: "Total Donations", value: "40K+" },
-    { id: 2, name: "Flat platform fee", value: "3%" },
-    { id: 3, name: "Total Events Created", value: "12" },
-    { id: 4, name: "Paid out to candidates", value: "$235,957" },
-  ];
 
   return (
     <main>
       <Container>
-        <Hero stats={stats} />
+        <Hero />
         <div className=" text-center mt-10">
           <h2 className="text-2xl font-bold text-gray-800">How it works</h2>
           <p className="text-lg text-gray-600 mt-2">
