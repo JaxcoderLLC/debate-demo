@@ -1,17 +1,19 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../assets/IV_Logo_1.png";
-import Dropdown from "./Dropdown";
 import ToastNotification from "./ToastNotification";
+import { useAccount, useConnect, useEnsName } from "wagmi";
+import { InjectedConnector } from "wagmi/connectors/injected";
+import { initSilk } from "@silk-wallet/silk-wallet-sdk";
 
 const navigation = [
-  { name: "Redeem", href: "/redeem", current: false },
-  { name: "Calendar", href: "/calendar", current: false },
+  { name: "Donate", href: "/donate", current: false },
+  { name: "Stats", href: "/stats", current: false },
 ];
 
 export type TToastNotification = {
@@ -25,18 +27,38 @@ export default function Navbar() {
       show: false,
       args: [],
     });
-  const [profileId, setProfileId] = useState<`0x${string}`>("0x");
+  const { address, isConnected } = useAccount();
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+  const { data: ensName } = useEnsName({ address });
+  const [isOnboarded, setIsOnboarded] = useState(false);
 
   const userNavigation = [
-    { name: "Redeem", href: "/redeem", current: false },
-    { name: "Calendar", href: "/calendar", current: false },
-    // { name: "My Profile", href: `/profile/${profileId}` },
-    { name: "Settings", href: "/settings" },
+    { name: "Donate", href: "/donate", current: false },
+    { name: "Stats", href: "/stats", current: false },
   ];
+
+  useEffect(() => {
+    try {
+      setTimeout(() => {
+        const provider = initSilk();
+
+        // setIsOnboarded(true);
+
+        // @ts-ignore
+        window.ethereum = provider;
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   function setToast(...args: any[]) {
     setToastNotification({ show: true, args: args });
   }
+
+  console.log("isOnboarded:", isOnboarded);
 
   return (
     <Disclosure
@@ -55,7 +77,7 @@ export default function Navbar() {
               <div className="flex">
                 <div className="-ml-2 mr-2 flex items-center md:hidden">
                   {/* Mobile menu button */}
-                  <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-200 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="absolute -inset-0.5" />
                     <span className="sr-only">Open main menu</span>
                     {open ? (
@@ -65,50 +87,76 @@ export default function Navbar() {
                     )}
                   </Disclosure.Button>
                 </div>
-                <div className="hidden md:flex md:items-center md:cursor-pointer">
-                  <Image
-                    className="h-auto w-auto"
-                    src={logo}
-                    alt="IncentiVibe"
-                    height={64}
-                    width={64}
-                    onClick={() => {
-                      window.location.href = "/";
-                    }}
-                  />
-                </div>
-                <div className="hidden md:flex md:items-center md:space-x-4 cursor-pointer">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className="px-3 py-2 text-sm font-medium"
-                      aria-current={item.current ? "page" : undefined}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+                <div className="flex flex-row items-center">
+                  <div className="hidden md:flex md:items-center md:cursor-pointer">
+                    <Image
+                      className="h-auto w-auto"
+                      src={logo}
+                      alt="IncentiVibe"
+                      height={64}
+                      width={64}
+                      onClick={() => {
+                        window.location.href = "/";
+                      }}
+                    />
+                  </div>
+                  <div className="hidden md:flex md:items-center md:space-x-4 cursor-pointer">
+                    {navigation.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className="px-3 py-2 text-md font-medium"
+                        aria-current={item.current ? "page" : undefined}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                    {/* <NavbarDropdown /> */}
+                  </div>
                 </div>
                 {/* <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4 cursor-pointer">
-                  <Dropdown profileId={profileId} />
+                  <ProfileDropdown profileId={profileId} />
                 </div> */}
               </div>
               <div className="flex items-center">
+                {isConnected ? (
+                  <div>Hi, {ensName}</div>
+                ) : (
+                  <div>Not connected</div>
+                )}
                 <div className="flex-shrink-0">
                   {/* Add wallet connect here */}
+                  <button
+                    className="border mx-2 border-gray-300 rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    onClick={() => {
+                      // @ts-ignore
+                      window.ethereum.login();
+                      connect();
+                    }}
+                  >
+                    login
+                  </button>
+                  <button
+                    className="border mx-2 border-gray-300 rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    onClick={() => {
+                      // @ts-ignore
+                      window.ethereum.loginSelector();
+                    }}
+                  >
+                    loginSelector
+                  </button>
                 </div>
                 <div className="hidden md:ml-4 md:flex md:flex-shrink-0 md:items-center">
                   {/* Notifications icon/button */}
                   {/* <button
                     type="button"
-                    className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    className="p-2 relative rounded-full text-sm font-medium border-neutral-700 text-gray-200 hover:bg-neutral-800/30"
                   >
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">View notifications</span>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
                   </button> */}
 
-                  {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">
                     <Transition
                       as={Fragment}
@@ -124,7 +172,7 @@ export default function Navbar() {
                           <Menu.Item key={item.name}>
                             {({ active }: { active: boolean }) => {
                               console.log("active:", active);
-                              return <a href={item.href}>{item.name}</a>;
+                              return <Link href={item.href}>{item.name}</Link>;
                             }}
                           </Menu.Item>
                         ))}
@@ -138,32 +186,42 @@ export default function Navbar() {
 
           <Disclosure.Panel className="md:hidden">
             <div className="hidden md:flex space-y-1 px-2 pb-3 pt-2 sm:px-3">
-              {navigation.map((item) => {
-                console.log("item:", item);
-                return (
-                  <Disclosure.Button
-                    key={item.name}
-                    as="a"
-                    href={item.href}
-                    aria-current={item.current ? "page" : undefined}
-                  >
-                    {item.name}
-                  </Disclosure.Button>
-                );
-              })}
+              {isOnboarded &&
+                navigation.map((item) => {
+                  console.log("item:", item);
+                  return (
+                    <Disclosure.Button
+                      key={item.name}
+                      as="a"
+                      href={item.href}
+                      aria-current={item.current ? "page" : undefined}
+                    >
+                      {item.name}
+                    </Disclosure.Button>
+                  );
+                })}
             </div>
             <div className="border-t border-gray-700 pb-3 pt-4">
               <div className="mt-3 space-y-1 px-2 sm:px-3">
-                {userNavigation.map((item) => (
-                  <Disclosure.Button
-                    key={item.name}
-                    as="a"
-                    href={item.href}
-                    className="block rounded-md px-3 py-2 text-base font-medium text-white"
-                  >
-                    {item.name}
-                  </Disclosure.Button>
-                ))}
+                <Disclosure.Button
+                  key={"home"}
+                  as="a"
+                  href="/"
+                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-200"
+                >
+                  Home
+                </Disclosure.Button>
+                {isOnboarded &&
+                  navigation.map((item) => (
+                    <Disclosure.Button
+                      key={item.name}
+                      as="a"
+                      href={item.href}
+                      className="block rounded-md px-3 py-2 text-base font-medium text-gray-200"
+                    >
+                      {item.name}
+                    </Disclosure.Button>
+                  ))}
               </div>
             </div>
           </Disclosure.Panel>
