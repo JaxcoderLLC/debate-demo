@@ -23,7 +23,7 @@ export const DonationContextProvider = (props: {
   useEffect(() => {
     console.log("fetching donations");
     const fetchEvents = async () => {
-      // TODO: fetch donations
+      // TODO: fetch donations for stats page
       // const donations = await getDonations();
       setDonations([]);
       setIsLoaded(true);
