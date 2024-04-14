@@ -4,8 +4,6 @@ import React, { useEffect } from "react";
 import { initSilk } from "@silk-wallet/silk-wallet-sdk";
 import Hero from "@/components/Hero";
 import { Container } from "@/components/Container";
-import { useConnect } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
 import Link from "next/link";
 
 const Home = () => {

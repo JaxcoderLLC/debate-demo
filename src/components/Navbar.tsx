@@ -8,8 +8,10 @@ import Image from "next/image";
 import logo from "../assets/IV_Logo_1.png";
 import ToastNotification from "./ToastNotification";
 import { useAccount, useConnect, useEnsName } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
+import { injected } from "wagmi/connectors";
 import { initSilk } from "@silk-wallet/silk-wallet-sdk";
+import { base } from "wagmi/chains";
+import { wagmiConfig } from "@/services/wagmi";
 
 const navigation = [
   { name: "Donate", href: "/donate", current: false },
@@ -28,9 +30,8 @@ export default function Navbar() {
       args: [],
     });
   const { address, isConnected } = useAccount();
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  });
+  // const { connect } = useConnect({ config: wagmiConfig });
+  const { connectors, connect } = useConnect();
   const { data: ensName } = useEnsName({ address });
   const [isOnboarded, setIsOnboarded] = useState(false);
 
@@ -61,10 +62,7 @@ export default function Navbar() {
   console.log("isOnboarded:", isOnboarded);
 
   return (
-    <Disclosure
-      as="nav"
-      className="fixed w-full shadow-2xl text-2xl"
-    >
+    <Disclosure as="nav" className="fixed w-full shadow-2xl text-2xl">
       {({ open }: { open: boolean }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -131,7 +129,7 @@ export default function Navbar() {
                     onClick={() => {
                       // @ts-ignore
                       window.ethereum.login();
-                      connect();
+                      connect({ chainId: base.id, connector: injected() });
                     }}
                   >
                     login

@@ -1,3 +1,18 @@
+"use client";
+
+import {
+  Allo,
+  Allocation,
+  CreateProfileArgs,
+  Registry,
+  SQFSuperFluidStrategy,
+  TransactionData,
+} from "@allo-team/allo-v2-sdk";
+import { TSetAllocatorData } from "../types";
+import { base } from "wagmi/chains";
+import { useSendTransaction } from "wagmi";
+import { AllocationSuperlfuid } from "@allo-team/allo-v2-sdk/dist/strategies/SuperFluidStrategy/types";
+
 /* eslint-disable @next/next/no-img-element */
 const Donate = () => {
   return (
@@ -135,8 +150,108 @@ function DonateButton(props: { amount: number }) {
     <button
       type="button"
       className="p-2 px-3 mt-4 text-center border rounded-lg text-sm text-white shimmer-gradient"
+      onClick={() => {
+        console.log(`Donating $${props.amount}`);
+
+        // todo: set up donation call - allocate() function on Allo
+      }}
     >
       Donate ${props.amount}
     </button>
   );
 }
+
+const allo = new Allo({
+  chain: base.id,
+  rpc: process.env.RPC_URL as string,
+});
+
+const registry = new Registry({
+  chain: base.id,
+  rpc: process.env.RPC_URL as string,
+});
+
+const strategy = new SQFSuperFluidStrategy({
+  chain: base.id,
+  rpc: process.env.RPC_URL as string,
+});
+
+// Note: admin function
+export const batchSetAllocator = async (
+  data: AllocationSuperlfuid[],
+  poolId: number
+) => {
+  if (strategy) {
+    // todo: set the strategy ID from the one you deployed/created
+    const strategyAddress = await allo.getStrategy(BigInt(poolId));
+    console.log("strategyAddress", strategyAddress);
+
+    // Set the contract address -> docs:
+    strategy.setContract(strategyAddress as `0x${string}`);
+    const txData: TransactionData = strategy.getBatchAllocationData(data);
+
+    console.log("txData", txData);
+
+    // try {
+    //   const tx = await sendTransaction({
+    //     to: txData.to as string,
+    //     data: txData.data,
+    //     value: BigInt(txData.value),
+    //   });
+
+    //   await publicClient.waitForTransactionReceipt({
+    //     hash: tx.hash,
+    //   });
+
+    //   await new Promise((resolve) => setTimeout(resolve, 3000));
+    // } catch (e) {
+    //   console.log("Updating Allocators", e);
+    // }
+  }
+};
+
+// Note: This is called when donate button is clicked
+export const allocate = async (data: AllocationSuperlfuid, poolId: number) => {
+  // Set some allocators for demo
+  // NOTE: move this
+  // const allocatorData: AllocationSuperlfuid[] = [
+  //   {
+  //     recipientId: "0x8C180840fcBb90CE8464B4eCd12ab0f840c6647C",
+  //     flowRate: BigInt(0),
+  //   },
+  // ];
+
+  // // todo: set the allocators defined above
+  // await batchSetAllocator(allocatorData, poolId);
+  // console.log("Allocators set");
+
+  if (strategy) {
+    // todo: set your poolId here
+    strategy.setPoolId(BigInt(poolId));
+
+    console.log(data);
+
+    // Get the allocation data from the SDK
+    // todo: snippet => getAllocationData
+    const txData: TransactionData = strategy.getAllocationData(
+      data.recipientId,
+      data.flowRate
+    );
+
+    // try {
+    //   const tx = await sendTransaction({
+    //     to: txData.to as string,
+    //     data: txData.data,
+    //     value: BigInt(txData.value),
+    //   });
+
+    //   await wagmiConfigData.publicClient.waitForTransactionReceipt({
+    //     hash: tx.hash,
+    //   });
+
+    //   await new Promise((resolve) => setTimeout(resolve, 3000));
+    // } catch (e) {
+    //   console.log("Allocating", e);
+    // }
+  }
+};

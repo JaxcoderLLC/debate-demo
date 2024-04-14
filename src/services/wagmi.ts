@@ -1,43 +1,37 @@
 "use client";
 
-import { configureChains, createConfig } from "wagmi";
-import { arbitrum, arbitrumGoerli, goerli } from "wagmi/chains";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { infuraProvider } from "wagmi/providers/infura";
-import { publicProvider } from "wagmi/providers/public";
-// import { InjectedConnector } from "@wagmi/core";
+import { createConfig, createStorage, http } from "wagmi";
+import { injected, metaMask, walletConnect } from "wagmi/connectors";
+import { base } from "wagmi/chains";
 
 import dotenv from "dotenv";
-import { initSilk } from "@silk-wallet/silk-wallet-sdk";
+
+// import { initSilk } from "@silk-wallet/silk-wallet-sdk";
+
 dotenv.config();
 
-const availableChains = [arbitrum, arbitrumGoerli, goerli];
-const { publicClient, webSocketPublicClient } = configureChains(
-  [...availableChains],
-  [
-    alchemyProvider({
-      apiKey:
-        (process.env.ALCHEMY_ID as string) ||
-        "ajWJk5YwtfTZ5vCAhMg8I8L61XFhyJpa",
-    }),
-    infuraProvider({
-      apiKey:
-        (process.env.INFURA_ID as string) || "ae484befdd004b64bfe2059d3526a138",
-    }),
-    publicProvider(),
-  ]
-);
+const connector = injected({
+  target() {
+    return {
+      id: "windowProvider",
+      name: "Window.Provider",
+      provider: window.ethereum,
+    };
+  },
+});
 
-// const connector = new InjectedConnector();
+const projectId =
+  (process.env.PROJECT_ID as string) || "31b0b6255ee5cc68ae76cab5fa96a9a0";
 
 export const wagmiConfig = createConfig({
-  autoConnect: true,
-  // connectors: [connector],
-  logger: {
-    warn: (message) => {
-      console.warn(message);
-    },
+  chains: [base],
+  connectors: [connector, walletConnect({ projectId })],
+  storage: createStorage({ storage: window.localStorage }),
+  transports: {
+    [base.id]: http(
+      (process.env.NEXT_PUBLIC_BASE_RPC_URL as string) ||
+        "https://base-mainnet.g.alchemy.com/v2/xFAklZUTuJWw2xfnsDrN73PklwhbZVfh",
+      { batch: true }
+    ),
   },
-  publicClient,
-  webSocketPublicClient,
 });

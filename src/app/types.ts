@@ -53,3 +53,20 @@ export type IDonationContextProps = {
   donationStatus: TStatus;
   setDonationStatus: (status: TStatus) => void;
 };
+
+export type TSetAllocatorData = {
+  allocatorAddress: `0x${string}`;
+  flag: boolean;
+};
+
+export type TAllocatedData = {
+  recipientId: `0x${string}`;
+  recipientAddress: `0x${string}`;
+  sender: `0x${string}`;
+  contractAddress: `0x${string}`;
+  contractName: string;
+  chainId: string;
+  blockTimestamp: string;
+  status: string;
+  transactionHash: string;
+};
