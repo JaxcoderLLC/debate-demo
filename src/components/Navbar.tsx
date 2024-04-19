@@ -13,9 +13,9 @@ import { initSilk } from "@silk-wallet/silk-wallet-sdk";
 import { base } from "wagmi/chains";
 import { wagmiConfig } from "@/services/wagmi";
 
-const navigation = [
-  { name: "Donate", href: "/donate", current: false },
-  { name: "Stats", href: "/stats", current: false },
+const navigation: any[] = [
+  // { name: "Donate", href: "/donate", current: false },
+  // { name: "Stats", href: "/stats", current: false },
 ];
 
 export type TToastNotification = {
@@ -37,7 +37,7 @@ export default function Navbar() {
 
   const userNavigation = [
     { name: "Donate", href: "/donate", current: false },
-    { name: "Stats", href: "/stats", current: false },
+    // { name: "Stats", href: "/stats", current: false },
   ];
 
   useEffect(() => {
@@ -62,7 +62,10 @@ export default function Navbar() {
   console.log("isOnboarded:", isOnboarded);
 
   return (
-    <Disclosure as="nav" className="fixed w-full shadow-2xl text-2xl">
+    <Disclosure
+      as="nav"
+      className="fixed w-full h-20 shadow-2xl text-2xl text-white bg-blue-500"
+    >
       {({ open }: { open: boolean }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -71,7 +74,7 @@ export default function Navbar() {
             ) : (
               <></>
             )}
-            <div className="flex h-16 justify-between">
+            <div className="flex h-20 justify-between">
               <div className="flex">
                 <div className="-ml-2 mr-2 flex items-center md:hidden">
                   {/* Mobile menu button */}
@@ -87,16 +90,9 @@ export default function Navbar() {
                 </div>
                 <div className="flex flex-row items-center">
                   <div className="hidden md:flex md:items-center md:cursor-pointer">
-                    <Image
-                      className="h-auto w-auto"
-                      src={logo}
-                      alt="Debate & Donate logo"
-                      height={64}
-                      width={64}
-                      onClick={() => {
-                        window.location.href = "/";
-                      }}
-                    />
+                    <Link href="/">
+                      <span className="uppercase">Debate Match</span>
+                    </Link>
                   </div>
                   <div className="hidden md:flex md:items-center md:space-x-4 cursor-pointer">
                     {navigation.map((item) => (
@@ -109,7 +105,6 @@ export default function Navbar() {
                         {item.name}
                       </Link>
                     ))}
-                    {/* <NavbarDropdown /> */}
                   </div>
                 </div>
                 {/* <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4 cursor-pointer">
@@ -117,32 +112,22 @@ export default function Navbar() {
                 </div> */}
               </div>
               <div className="flex items-center">
-                {isConnected ? (
-                  <div>Hi, {ensName}</div>
-                ) : (
-                  <div>Not connected</div>
-                )}
                 <div className="flex-shrink-0">
                   {/* Add wallet connect here */}
-                  <button
-                    className="border mx-2 border-black rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                    onClick={() => {
-                      // @ts-ignore
-                      window.ethereum.login();
-                      connect({ chainId: base.id, connector: injected() });
-                    }}
-                  >
-                    login
-                  </button>
-                  <button
-                    className="border mx-2 border-black rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                    onClick={() => {
-                      // @ts-ignore
-                      window.ethereum.loginSelector();
-                    }}
-                  >
-                    loginSelector
-                  </button>
+                  {!isConnected ? (
+                    <button
+                      className="border-2 m-2 border-white rounded-lg p-2 text-xl text-white font-medium hover:bg-gray-50 hover:text-gray-900 cursor-pointer"
+                      onClick={() => {
+                        // @ts-ignore
+                        // window.ethereum.login();
+                        connect({ chainId: base.id, connector: injected() });
+                      }}
+                    >
+                      login
+                    </button>
+                  ) : (
+                    <div>Connected</div>
+                  )}
                 </div>
                 <div className="hidden md:ml-4 md:flex md:flex-shrink-0 md:items-center">
                   {/* Notifications icon/button */}

@@ -2,31 +2,26 @@
 
 import {
   Allo,
-  Allocation,
-  CreateProfileArgs,
   Registry,
   SQFSuperFluidStrategy,
   TransactionData,
 } from "@allo-team/allo-v2-sdk";
-import { TSetAllocatorData } from "../types";
 import { base } from "wagmi/chains";
-import { useSendTransaction } from "wagmi";
 import { AllocationSuperlfuid } from "@allo-team/allo-v2-sdk/dist/strategies/SuperFluidStrategy/types";
+import JoshLImage from "../../assets/candidates/JoshL.png";
+import RichardMImage from "../../assets/candidates/RichardM.png";
+import JohnSImage from "../../assets/candidates/JohnS.png";
+import Image from "next/image";
+import { useState } from "react";
 
 /* eslint-disable @next/next/no-img-element */
 const Donate = () => {
   return (
-    <div className="">
+    <div className="px-4">
       <div className="text-xl mx-6">
-        <h2 className="text-3xl text-center font-bold mx-8">The Candidates</h2>
-        <div className="text-center mt-10">
-          <p className="text-lg text-gray-600 my-6">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-            suscipit, sapien nec vehicula lacinia, erat odio ultricies nunc, nec
-            scelerisque neque nunc at justo. Nunc non nisl vel lorem tincidunt
-            suscipit. Nulla facilisi. Nam nec libero ut elit lacinia auctor.
-          </p>
-        </div>
+        <h2 className="text-3xl text-center font-bold mt-20 mx-8">
+          The Candidates
+        </h2>
       </div>
       <Candidates />
     </div>
@@ -37,106 +32,92 @@ export default Donate;
 
 const candidates = [
   {
-    name: "Lindsay Walton",
-    role: "Senator",
-    state: "NV",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    xUrl: "#",
-    linkedinUrl: "#",
+    id: 1,
+    name: "Josh Levitt",
+    imageUrl: JoshLImage,
   },
   // More candidates...
   {
-    name: "Lindsay Walton",
-    role: "Senator",
-    state: "NV",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    xUrl: "#",
-    linkedinUrl: "#",
+    id: 2,
+    name: "Richard McArthur",
+    imageUrl: RichardMImage,
   },
   {
-    name: "Lindsay Walton",
-    role: "Senator",
-    state: "NV",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    xUrl: "#",
-    linkedinUrl: "#",
-  },
-  {
-    name: "Lindsay Walton",
-    role: "Senator",
-    state: "NV",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    xUrl: "#",
-    linkedinUrl: "#",
-  },
-  {
-    name: "Lindsay Walton",
-    role: "Senator",
-    state: "NV",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    xUrl: "#",
-    linkedinUrl: "#",
-  },
-  {
-    name: "Lindsay Walton",
-    role: "Senator",
-    state: "NV",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    xUrl: "#",
-    linkedinUrl: "#",
+    id: 3,
+    name: "John Steinck",
+    imageUrl: JohnSImage,
   },
 ];
 
+type Amounts = {
+  [key: string]: { amount: number };
+};
 function Candidates() {
+  const [customAmount, setCustomAmount] = useState<Amounts>({
+    "0": { amount: 0 },
+    "1": { amount: 0 },
+    "2": { amount: 0 },
+  });
+
   return (
-    <div className="bg-white py-6">
-      <div className="mx-auto max-w-7xl">
+    <div className="flex flex-col bg-white py-6">
+      <div className="mx-auto max-w-screen">
         <ul
           role="list"
-          className="mx-auto mt-4 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+          className="mx-auto mt-4 grid max-w-screen grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:grid-cols-1"
         >
           {candidates.map((person) => (
-            <li key={person.name}>
-              {/* Candidate Header */}
-              <h3 className="mb-2 text-center text-lg font-semibold leading-8 tracking-tight text-gray-900">
-                {person.name} |{" "}
-                <span className="text-base leading-7 text-gray-600">
-                  {person.state}{" "}
-                </span>
-                <span className="text-base leading-7 text-gray-600">
-                  {person.role}
-                </span>
-              </h3>
-              {/* Candidate Avatar */}
-              <img
-                className="aspect-[3/2] w-full rounded-2xl object-cover"
-                src={person.imageUrl}
-                alt="Candidate Avatar"
+            <li key={person.name} className="flex flex-row">
+              <div className="flex">
+                {/* Candidate Avatar */}
+                <Image
+                  className="aspect-[3/2] w-full object-cover"
+                  src={person.imageUrl}
+                  alt="Candidate Avatar"
+                  width={200}
+                  height={200}
+                />
+              </div>
+              <div className="flex">
+                <h3 className="mb-2 text-center text-lg font-semibold leading-8 tracking-tight text-gray-900">
+                  {person.name}
+                </h3>
+              </div>
+
+              <input
+                className="mt-4 p-2 px-3 border rounded-lg text-sm text-gray-700"
+                placeholder="Enter amount to donate"
+                onChange={(e) =>
+                  setCustomAmount({
+                    ...customAmount,
+                    [person.id]: { amount: Number(e.target.value) },
+                  })
+                }
+                type="number"
               />
-              {/* Donate Buttons */}
-              <ul
-                role="list"
-                className="mt-2 flex flex-row justify-between gap-1"
-              >
-                <li>
-                  <DonateButton amount={5} />
-                </li>
-                <li>
-                  <DonateButton amount={10} />
-                </li>
-                <li>
-                  <DonateButton amount={25} />
-                </li>
-                <li>
-                  <DonateButton amount={50} />
-                </li>
-              </ul>
+              <div className="flex">
+                {/* Donate Buttons */}
+                <ul
+                  role="row"
+                  className="mt-2 flex flex-row justify-between gap-1"
+                >
+                  <li>
+                    <DonateButton amount={5} index={person.id} />
+                  </li>
+                  <li>
+                    <DonateButton amount={25} index={person.id} />
+                  </li>
+                  <li>
+                    <DonateButton amount={50} index={person.id} />
+                  </li>
+                  <li>
+                    <DonateButton
+                      amount={customAmount[person.id].amount}
+                      index={person.id}
+                    />
+                  </li>
+                </ul>
+              </div>
             </li>
           ))}
         </ul>
@@ -145,7 +126,7 @@ function Candidates() {
   );
 }
 
-function DonateButton(props: { amount: number }) {
+function DonateButton(props: { amount: number; index: number }) {
   return (
     <button
       type="button"
