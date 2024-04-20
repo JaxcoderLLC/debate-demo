@@ -164,7 +164,7 @@ const strategy = new SQFSuperFluidStrategy({
 });
 
 // Note: admin function
-export const batchSetAllocator = async (
+const batchSetAllocator = async (
   data: AllocationSuperlfuid[],
   poolId: number
 ) => {
@@ -198,7 +198,7 @@ export const batchSetAllocator = async (
 };
 
 // Note: This is called when donate button is clicked
-export const allocate = async (data: AllocationSuperlfuid, poolId: number) => {
+const allocate = async (data: AllocationSuperlfuid, poolId: number) => {
   // Set some allocators for demo
   // NOTE: move this
   // const allocatorData: AllocationSuperlfuid[] = [
