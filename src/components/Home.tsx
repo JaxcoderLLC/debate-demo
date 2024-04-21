@@ -1,26 +1,4 @@
-"use client";
-
-import React, { useEffect } from "react";
-import { initSilk } from "@silk-wallet/silk-wallet-sdk";
-import Hero from "@/components/Hero";
-import { Container } from "@/components/Container";
-import Link from "next/link";
-
 const Home = () => {
-  useEffect(() => {
-    try {
-      setTimeout(() => {
-        const provider = initSilk();
-
-        // @ts-ignore
-        // window.ethereum = provider;
-        // provider.login();
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-
   return (
     <main>
       <div className="flex flex-col items-center justify-center min-h-screen py-2 -mt-48">

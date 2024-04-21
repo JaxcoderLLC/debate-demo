@@ -6,8 +6,6 @@ import { base } from "wagmi/chains";
 
 import dotenv from "dotenv";
 
-// import { initSilk } from "@silk-wallet/silk-wallet-sdk";
-
 dotenv.config();
 
 const connector = injected();
@@ -22,7 +20,7 @@ export const wagmiConfig = createConfig({
   transports: {
     [base.id]: http(
       (process.env.NEXT_PUBLIC_BASE_RPC_URL as string) ||
-        "https://base-mainnet.g.alchemy.com/v2/xFAklZUTuJWw2xfnsDrN73PklwhbZVfh",
+        "https://base-sepolia.g.alchemy.com/v2/xFAklZUTuJWw2xfnsDrN73PklwhbZVfh",
       { batch: true }
     ),
   },
