@@ -10,15 +10,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const connector = injected({
-  target() {
-    return {
-      id: "windowProvider",
-      name: "Window.Provider",
-      provider: window.ethereum,
-    };
-  },
-});
+const connector = injected();
 
 const projectId =
   (process.env.PROJECT_ID as string) || "31b0b6255ee5cc68ae76cab5fa96a9a0";
@@ -26,7 +18,7 @@ const projectId =
 export const wagmiConfig = createConfig({
   chains: [base],
   connectors: [connector, walletConnect({ projectId })],
-  storage: createStorage({ storage: window.localStorage }),
+  // storage: createStorage({ storage: window?.localStorage }),
   transports: {
     [base.id]: http(
       (process.env.NEXT_PUBLIC_BASE_RPC_URL as string) ||

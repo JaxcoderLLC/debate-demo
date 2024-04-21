@@ -13,7 +13,7 @@ const Home = () => {
         const provider = initSilk();
 
         // @ts-ignore
-        window.ethereum = provider;
+        // window.ethereum = provider;
         // provider.login();
       });
     } catch (error) {
