@@ -2,14 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import ToastNotification from "./ToastNotification";
 import { useAccount, useDisconnect } from "wagmi";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useSetActiveWallet } from "@privy-io/wagmi";
 import Button from "./Button";
 
 const navigation: any[] = [
-  // { name: "Donate", href: "/donate", current: false },
+  { name: "Donate", href: "/donate", current: false },
   // { name: "Stats", href: "/stats", current: false },
 ];
 
@@ -54,7 +53,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="fixed w-full h-22 shadow-2xl text-2xl text-white bg-blue-500">
+    <nav className="fixed w-full h-22 shadow-2xl text-2xl text-white bg-blue-500 z-10">
       <div className="mx-4 flex flex-row justify-between">
         <div className="flex flex-row items-center">
           <div className="hidden md:flex md:items-center md:cursor-pointer">

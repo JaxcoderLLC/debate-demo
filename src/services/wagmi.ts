@@ -29,11 +29,11 @@ export const wagmiConfig = createConfig({
 
 export const privyConfig: PrivyClientConfig = {
   embeddedWallets: {
-    createOnLogin: 'users-without-wallets',
+    createOnLogin: "users-without-wallets",
     requireUserPasswordOnCreate: true,
     noPromptOnSignature: false,
   },
-  loginMethods: ['wallet', 'email', 'sms'],
+  loginMethods: ["email", "sms"],
   appearance: {
     showWalletLoginFirst: true,
   },
