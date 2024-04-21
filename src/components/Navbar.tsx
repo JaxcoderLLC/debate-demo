@@ -10,7 +10,7 @@ import ToastNotification from "./ToastNotification";
 import { useAccount, useConnect, useEnsName } from "wagmi";
 import { injected } from "wagmi/connectors";
 import { initSilk } from "@silk-wallet/silk-wallet-sdk";
-import { base } from "wagmi/chains";
+import { base, baseSepolia } from "wagmi/chains";
 import { wagmiConfig } from "@/services/wagmi";
 
 const navigation: any[] = [
@@ -64,7 +64,7 @@ export default function Navbar() {
   return (
     <Disclosure
       as="nav"
-      className="fixed w-full h-20 shadow-2xl text-2xl text-white bg-blue-500"
+      className="fixed w-full h-20 shadow-2xl text-2xl text-white bg-blue-500 z-10"
     >
       {({ open }: { open: boolean }) => (
         <>
@@ -120,7 +120,7 @@ export default function Navbar() {
                       onClick={() => {
                         // @ts-ignore
                         // window.ethereum.login();
-                        connect({ chainId: base.id, connector: injected() });
+                        connect({ chainId: baseSepolia.id, connector: injected() });
                       }}
                     >
                       login
