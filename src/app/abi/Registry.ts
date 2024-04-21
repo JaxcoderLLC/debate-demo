@@ -1,4 +1,4 @@
-import { ContractAbi } from "@/app/types";
+import { ContractAbi } from "@allo-team/allo-v2-sdk";
 
 export const RegistryABI: ContractAbi = [
   {
