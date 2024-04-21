@@ -11,6 +11,3 @@ export const statusesStyle = {
   ["Canceled" as TStatus]: "text-gray-800 bg-gray-50 ring-gray-600/20",
   ["Rejected" as TStatus]: "text-red-800 bg-red-50 ring-red-600/20",
 };
-
-// start kyc
-// https://silksecure.net/holonym/silk

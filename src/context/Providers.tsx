@@ -6,17 +6,17 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 
 const queryClient = new QueryClient();
-import { ChakraProvider } from "@chakra-ui/react";
+import PrivyWrapper from "./PrivyWrapper";
 
 const Providers = (props: { children: JSX.Element[] | JSX.Element }) => {
   return (
-    <WagmiProvider config={wagmiConfig}>
+    <PrivyWrapper>
       <QueryClientProvider client={queryClient}>
-        <ChakraProvider>
-          <DonationContextProvider>{props.children}</DonationContextProvider>
-        </ChakraProvider>
+        <WagmiProvider config={wagmiConfig}>
+            <DonationContextProvider>{props.children}</DonationContextProvider>
+        </WagmiProvider>
       </QueryClientProvider>
-    </WagmiProvider>
+    </PrivyWrapper>
   );
 };
 
