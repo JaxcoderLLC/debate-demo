@@ -56,12 +56,12 @@ export default function Navbar() {
     <nav className="fixed w-full h-22 shadow-2xl text-2xl text-white bg-blue-500 z-10">
       <div className="mx-4 flex flex-row justify-between">
         <div className="flex flex-row items-center">
-          <div className="hidden md:flex md:items-center md:cursor-pointer">
+          <div className="md:flex md:items-center md:cursor-pointer">
             <Link href="/">
               <span className="uppercase">Debate Match</span>
             </Link>
           </div>
-          <div className="hidden md:flex md:items-center md:space-x-4 cursor-pointer">
+          <div className="md:flex md:items-center md:space-x-4 ml-2 cursor-pointer rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2">
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -77,13 +77,37 @@ export default function Navbar() {
 
         <div className="flex-shrink-0">
           {/* Add privy connect here */}
-          {ready && !authenticated && (
+          {ready && !authenticated ? (
             <div className="mb-2">
               <p>You are not authenticated with Privy</p>
-              <div className="flex items-center gap-4">
-                <Button onClick_={login} cta="Login" />
+              <div className="flex items-center gap-4 ">
+                <button
+                  className="rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2"
+                  onClick={login}
+                >
+                  Login
+                </button>
                 <span>or</span>
-                <Button onClick_={connectWallet} cta="Connect" />
+                <button
+                  className="rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2"
+                  onClick={connectWallet}
+                >
+                  Connect
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4">
+                <span>{"Me"}</span>
+              </div>
+              <div>
+                <button
+                  className="rounded-xl p-2 text-medium hover:bg-gray-100 hover:text-gray-800 my-2"
+                  onClick={logout}
+                >
+                  Logout
+                </button>
               </div>
             </div>
           )}

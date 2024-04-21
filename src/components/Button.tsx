@@ -3,18 +3,15 @@
 type buttonProps = {
   cta: string;
   onClick_: () => void;
+  className?: string;
   disabled?: boolean;
 };
 
-const Button = ({ cta, onClick_, disabled }: buttonProps) => {
+const Button = ({ cta, onClick_, className, disabled }: buttonProps) => {
   if (disabled) {
   }
   return (
-    <button
-      className="rounded bg-slate-800 px-10 py-2 text-white transition-all hover:bg-slate-900 active:bg-slate-900 enabled:hover:cursor-pointer enabled:active:scale-90 disabled:opacity-80"
-      onClick={onClick_}
-      disabled={disabled}
-    >
+    <button className={className ?? ""} onClick={onClick_} disabled={disabled}>
       {cta}
     </button>
   );
