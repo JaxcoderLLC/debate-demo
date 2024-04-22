@@ -48,7 +48,7 @@ export default function Navbar() {
         // setIsOnboarded(true);
 
         // @ts-ignore
-        //window?.ethereum = provider;
+        window.ethereum = provider;
       });
     } catch (error) {
       console.error(error);
