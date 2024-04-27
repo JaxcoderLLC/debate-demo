@@ -70,19 +70,18 @@ export default function Navbar() {
           {/* Add privy connect here */}
           {ready && !authenticated ? (
             <div className="mb-2">
-              <p>You are not authenticated with Privy</p>
               <div className="flex items-center gap-4 ">
                 <Button
                   className="rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2"
                   onClick_={login}
                   cta={"Login"}
                 />
-                <span>or</span>
+                {/* <span>or</span>
                 <Button
                   className="rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2"
                   onClick_={connectWallet}
                   cta={"Connect"}
-                />
+                /> */}
               </div>
             </div>
           ) : (
