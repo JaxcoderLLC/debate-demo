@@ -80,7 +80,7 @@ const Footer = () => {
         ))}
       </div>
       <p className="mt-4 text-center text-xs leading-5 text-gray-900">
-        2024 IncentiVibe ❤️ 
+        2024 Jaxcoder 🫠 
       </p>
     </div>
   );

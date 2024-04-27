@@ -6,16 +6,7 @@ import { useAccount, useDisconnect } from "wagmi";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useSetActiveWallet } from "@privy-io/wagmi";
 import Button from "./Button";
-
-const navigation: any[] = [
-  { name: "Donate", href: "/donate", current: false },
-  // { name: "Stats", href: "/stats", current: false },
-];
-
-export type TToastNotification = {
-  show: boolean;
-  args: any[];
-};
+import { TToastNotification } from "@/app/types";
 
 export default function Navbar() {
   const [toastNotification, setToastNotification] =
@@ -53,15 +44,15 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="fixed w-full h-22 shadow-2xl text-2xl text-white bg-blue-500 z-10">
+    <nav className="navbar sm:rounded-b-xl">
       <div className="mx-4 flex flex-row justify-between">
         <div className="flex flex-row items-center">
           <div className="md:flex md:items-center md:cursor-pointer">
             <Link href="/">
-              <span className="uppercase">Debate Match</span>
+              <span className="text-3xl">Debate & Donate</span>
             </Link>
           </div>
-          <div className="md:flex md:items-center md:space-x-4 ml-2 cursor-pointer rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2">
+          {/* <div className="md:flex md:items-center md:space-x-4 ml-2 cursor-pointer rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2">
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -72,7 +63,7 @@ export default function Navbar() {
                 {item.name}
               </Link>
             ))}
-          </div>
+          </div> */}
         </div>
 
         <div className="flex-shrink-0">
@@ -81,19 +72,17 @@ export default function Navbar() {
             <div className="mb-2">
               <p>You are not authenticated with Privy</p>
               <div className="flex items-center gap-4 ">
-                <button
+                <Button
                   className="rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2"
-                  onClick={login}
-                >
-                  Login
-                </button>
+                  onClick_={login}
+                  cta={"Login"}
+                />
                 <span>or</span>
-                <button
+                <Button
                   className="rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2"
-                  onClick={connectWallet}
-                >
-                  Connect
-                </button>
+                  onClick_={connectWallet}
+                  cta={"Connect"}
+                />
               </div>
             </div>
           ) : (
@@ -102,12 +91,11 @@ export default function Navbar() {
                 <span>{"Me"}</span>
               </div>
               <div>
-                <button
+                <Button
                   className="rounded-xl p-2 text-medium hover:bg-gray-100 hover:text-gray-800 my-2"
-                  onClick={logout}
-                >
-                  Logout
-                </button>
+                  onClick_={logout}
+                  cta="Logout"
+                />
               </div>
             </div>
           )}

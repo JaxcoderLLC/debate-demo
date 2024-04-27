@@ -1,3 +1,6 @@
+import { StaticImageData } from "next/image";
+import { Address } from "viem";
+
 export enum EStatus {
   Pending = "Pending",
   InProgress = "InProgress",
@@ -40,6 +43,15 @@ export type TProfileResponse = {
   createdAt: string;
 };
 
+export type Candidate = {
+  id: number;
+  recipientId: Address;
+  name: string;
+  imageUrl?: StaticImageData;
+  donations?: Donation[];
+  totalDonations?: bigint;
+};
+
 export type Donation = {
   id: string;
   amount: number;
@@ -49,9 +61,8 @@ export type Donation = {
 
 export type IDonationContextProps = {
   isLoaded: boolean;
-  donations: Donation[];
-  donationStatus: TStatus;
-  setDonationStatus: (status: TStatus) => void;
+  candidates: Candidate[];
+  setCandidates: (candidates: Candidate[]) => void;
 };
 
 export type TSetAllocatorData = {
@@ -69,4 +80,9 @@ export type TAllocatedData = {
   blockTimestamp: string;
   status: string;
   transactionHash: string;
+};
+
+export type TToastNotification = {
+  show: boolean;
+  args: any[];
 };

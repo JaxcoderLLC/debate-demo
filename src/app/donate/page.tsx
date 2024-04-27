@@ -11,16 +11,20 @@ import { AllocationSuperlfuid } from "@allo-team/allo-v2-sdk/dist/strategies/Sup
 import JoshLImage from "../../assets/candidates/JoshL.png";
 import RichardMImage from "../../assets/candidates/RichardM.png";
 import JohnSImage from "../../assets/candidates/JohnS.png";
-import Image from "next/image";
-import { useState } from "react";
+import Image, { StaticImageData } from "next/image";
+import { useEffect, useState } from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
+import { Address } from "viem";
+import { Candidate } from "../types";
+import { useSendTransaction } from "@privy-io/react-auth";
+import { wagmiConfig } from "@/services/wagmi";
 
 /* eslint-disable @next/next/no-img-element */
 const Donate = () => {
   return (
     <div className="px-4">
       <div className="text-xl mx-6">
-        <h2 className="text-3xl text-center font-bold mt-20 mx-8">
+        <h2 className="text-3xl text-center font-bold mt-10 mx-8">
           The Candidates
         </h2>
       </div>
@@ -31,48 +35,59 @@ const Donate = () => {
 
 export default Donate;
 
-const candidates = [
+const candidates: Candidate[] = [
   {
     id: 1,
+    recipientId: "0x8C180840fcBb90CE8464B4eCd12ab0f840c6647C",
     name: "Josh Levitt",
     imageUrl: JoshLImage,
+    totalDonations: BigInt(0),
   },
   // More candidates...
   {
     id: 2,
+    recipientId: "0x8C180840fcBb90CE8464B4eCd12ab0f840c6647C",
     name: "Richard McArthur",
     imageUrl: RichardMImage,
+    totalDonations: BigInt(0),
   },
   {
     id: 3,
+    recipientId: "0x8C180840fcBb90CE8464B4eCd12ab0f840c6647C",
     name: "John Steinck",
     imageUrl: JohnSImage,
+    totalDonations: BigInt(0),
   },
 ];
 
 type Amounts = {
-  [key: string]: { amount: number };
+  [key: string]: { amount: bigint };
 };
 function Candidates() {
   const [customAmount, setCustomAmount] = useState<Amounts>({
-    "0": { amount: 0 },
-    "1": { amount: 0 },
-    "2": { amount: 0 },
+    1: { amount: BigInt(0) },
+    2: { amount: BigInt(0) },
+    3: { amount: BigInt(0) },
   });
+  const { sendTransaction } = useSendTransaction();
+
+  useEffect(() => {
+    console.log(customAmount);
+  }, [customAmount]);
 
   return (
-    <div className="flex flex-col bg-white py-6">
+    <div className="flex flex-col bg-white py-4 mb-6">
       <div className="mx-auto max-w-screen">
         <ul
           role="list"
           className="mx-auto mt-4 grid max-w-screen grid-cols-1 gap-x-8 gap-y-10 lg:mx-0"
         >
           {candidates.map((person) => (
-            <li key={person.name} className="flex flex-row ">
+            <li key={person.id + "_" + person.name} className="flex flex-row">
               <div className="flex flex-row">
                 <div className="relative w-40 md:h-56 h-40">
                   <Image
-                    src={person.imageUrl}
+                    src={person.imageUrl!}
                     alt={`${person.name} image`}
                     layout="fill"
                     objectFit="cover"
@@ -82,13 +97,25 @@ function Candidates() {
                 <div className="flex flex-col justify-between ml-4 md:ml-12 mr-6">
                   <ul className="flex flex-row md:mt-10 mt-6 gap-4">
                     <li key={person.id}>
-                      <DonateButton amount={5} index={person.id} />
+                      <DonateButton
+                        amount={Number(5)}
+                        recipientId={person.recipientId}
+                        index={person.id}
+                      />
                     </li>
                     <li key={person.id}>
-                      <DonateButton amount={10} index={person.id} />
+                      <DonateButton
+                        amount={Number(10)}
+                        recipientId={person.recipientId}
+                        index={person.id}
+                      />
                     </li>
                     <li key={person.id}>
-                      <DonateButton amount={20} index={person.id} />
+                      <DonateButton
+                        amount={Number(20)}
+                        recipientId={person.recipientId}
+                        index={person.id}
+                      />
                     </li>
                   </ul>
                   <h3 className="text-2xl font-bold md:mb-14 mb:8 text-center">
@@ -109,18 +136,25 @@ function Candidates() {
                         type="number"
                         placeholder="Enter amount"
                         onChange={(e) => {
-                          setCustomAmount({
-                            ...customAmount,
-                            [person.id]: { amount: parseInt(e.target.value) },
-                          });
+                          const newAmount =
+                            e.target.value !== ""
+                              ? BigInt(e.target.value)
+                              : BigInt(0);
+                          setCustomAmount((prevAmounts) => ({
+                            ...prevAmounts,
+                            [person.id]: { amount: newAmount },
+                          }));
                         }}
                         className="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       />
                     </div>
                   </div>
+
                   <DonateButton
-                    amount={customAmount[person.id]?.amount}
+                    amount={Number(customAmount[person.id]?.amount ?? 0)}
+                    recipientId={person.recipientId}
                     index={person.id}
+                    disabled={customAmount[person.id]?.amount === BigInt(0)}
                   />
                 </div>
               </div>
@@ -132,18 +166,38 @@ function Candidates() {
   );
 }
 
-function DonateButton(props: { amount: number; index: number }) {
+function DonateButton(props: {
+  amount: number;
+  recipientId: Address;
+  index: number;
+  disabled?: boolean;
+}) {
+  const { sendTransaction } = useSendTransaction();
+
   return (
     <button
       type="button"
-      className="p-2 px-3 mt-4 text-center border rounded-lg text-sm text-white shimmer-gradient"
-      onClick={() => {
+      className={
+        props.disabled
+          ? `cursor-not-allowed p-2 px-3 mt-4 text-center border rounded-lg text-sm text-white shimmer-gradient-blue`
+          : `p-2 px-3 mt-4 text-center border rounded-lg text-sm text-white shimmer-gradient-blue`
+      }
+      onClick={async () => {
         console.log(`Donating $${props.amount}`);
 
         // todo: set up donation call - allocate() function on Allo
+        await allocate(
+          {
+            recipientId: props.recipientId,
+            flowRate: BigInt(props.amount),
+          },
+          25,
+          sendTransaction
+        );
       }}
+      disabled={props.disabled}
     >
-      Donate ${props.amount}
+      Donate ${props.amount.toString()}
     </button>
   );
 }
@@ -198,7 +252,13 @@ const batchSetAllocator = async (
 };
 
 // Note: This is called when donate button is clicked
-const allocate = async (data: AllocationSuperlfuid, poolId: number) => {
+const allocate = async (
+  data: AllocationSuperlfuid,
+  poolId: number,
+  sendTransaction: any
+) => {
+  console.log("Allocating...", data, poolId);
+
   // Set some allocators for demo
   // NOTE: move this
   // const allocatorData: AllocationSuperlfuid[] = [
@@ -225,20 +285,20 @@ const allocate = async (data: AllocationSuperlfuid, poolId: number) => {
       data.flowRate
     );
 
-    // try {
-    //   const tx = await sendTransaction({
-    //     to: txData.to as string,
-    //     data: txData.data,
-    //     value: BigInt(txData.value),
-    //   });
+    try {
+      const tx = await sendTransaction({
+        data: txData.data,
+        to: txData.to,
+        value: BigInt(txData.value),
+      });
 
-    //   await wagmiConfigData.publicClient.waitForTransactionReceipt({
-    //     hash: tx.hash,
-    //   });
+      // await wagmiConfig.publicClient.waitForTransactionReceipt({
+      //   hash: tx.hash,
+      // });
 
-    //   await new Promise((resolve) => setTimeout(resolve, 3000));
-    // } catch (e) {
-    //   console.log("Allocating", e);
-    // }
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+    } catch (e) {
+      console.log("Allocating", e);
+    }
   }
 };

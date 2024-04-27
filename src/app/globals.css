@@ -3,22 +3,60 @@
 @tailwind utilities;
 
 @keyframes shimmer {
-    0% {
-      background-position: -20rem 0;
-    }
-    100% {
-      background-position: 20rem 0;
-    }
+  0%, 100% {
+      background-position: 100% 50%;
   }
-  
-  .shimmer-gradient {
-    background: linear-gradient(
-      to right,
-      #4f46e5 0%,
-      #6366f1 50%,
-      #4f46e5 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 2s linear infinite;
+  50% {
+      background-position: 0% 50%;
   }
+}
+
+.shimmer-gradient-blue {
+  background: linear-gradient(
+      90deg, 
+      #e0e7ff 0%, 
+      #93c5fd 25%, 
+      #3b82f6 50%, 
+      #2563eb 75%, 
+      #1d4ed8 100%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 5s linear infinite;
+}
+
+.shimmer-gradient-blue:hover {
+  background: linear-gradient(
+      90deg, 
+      #dbe4ff 0%,  /* Lighter shade */
+      #bfdbfe 25%, /* Lighter shade */
+      #60a5fa 50%, /* Lighter shade */
+      #3b82f6 75%, /* Same as before */
+      #1e40af 100% /* Darker shade */
+  );
+  animation: shimmer 3s linear infinite; /* Faster animation on hover */
+}
+
+  .navbar {
+    position: fixed;   /* Keep it fixed on the top */
+    left: 0;           /* Align left edge with the viewport */
+    right: 0;          /* Align right edge with the viewport */
+    top: 0;            /* Align it at the top */
+    width: 100%;       /* Full width on mobile */
+    height: 80px;      /* Specified height */
+    font-size: 24px;   /* 2xl text size in Tailwind */
+    color: white;      /* Text color */
+    background-color: #1d4ed8; /* A blue background color */
+    z-index: 10;       /* Keep it above other elements */
+}
+
+@media (min-width: 768px) {
+    /* Adjustments for screens wider than 768px */
+    .navbar {
+        left: 50%;                  /* Move the left side of the element to the center of the container */
+        width: 80%;                 /* Adjust the width to 80% */
+        transform: translateX(-50%);/* Shift it left by half its own width to center it */
+    }
+}
+
+
   
