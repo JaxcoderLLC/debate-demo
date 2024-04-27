@@ -72,7 +72,7 @@ export default function Navbar() {
             <div className="mb-2">
               <div className="flex items-center gap-4 ">
                 <Button
-                  className="rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2"
+                  className="rounded-xl p-2 hover:bg-gray-100 hover:text-gray-800 my-2"
                   onClick_={login}
                   cta={"Login"}
                 />
