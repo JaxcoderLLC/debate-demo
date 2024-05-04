@@ -6,18 +6,23 @@ import {
   SQFSuperFluidStrategy,
   TransactionData,
 } from "@allo-team/allo-v2-sdk";
-import { base } from "wagmi/chains";
+import { optimismSepolia } from "wagmi/chains";
 import { AllocationSuperlfuid } from "@allo-team/allo-v2-sdk/dist/strategies/SuperFluidStrategy/types";
 import JoshLImage from "../../assets/candidates/JoshL.png";
 import RichardMImage from "../../assets/candidates/RichardM.png";
 import JohnSImage from "../../assets/candidates/JohnS.png";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
-import { Address } from "viem";
+import { Address, formatEther, parseEther } from "viem";
 import { Candidate } from "../types";
 import { useSendTransaction } from "@privy-io/react-auth";
-import { wagmiConfig } from "@/services/wagmi";
+import {
+  TimeInterval,
+  fromTimeUnitsToSeconds,
+  roundWeiAmount,
+  unitOfTime,
+} from "@/utils/utils";
 
 /* eslint-disable @next/next/no-img-element */
 const Donate = () => {
@@ -38,7 +43,7 @@ export default Donate;
 const candidates: Candidate[] = [
   {
     id: 1,
-    recipientId: "0x8C180840fcBb90CE8464B4eCd12ab0f840c6647C",
+    recipientId: "0x08e350796d1ffc87837072d3a92975fdf7a7b11c",
     name: "Josh Levitt",
     imageUrl: JoshLImage,
     totalDonations: BigInt(0),
@@ -46,14 +51,14 @@ const candidates: Candidate[] = [
   // More candidates...
   {
     id: 2,
-    recipientId: "0x8C180840fcBb90CE8464B4eCd12ab0f840c6647C",
+    recipientId: "0x433237e7c33834e250d63d3a6a066dce1f5c0a4b",
     name: "Richard McArthur",
     imageUrl: RichardMImage,
     totalDonations: BigInt(0),
   },
   {
     id: 3,
-    recipientId: "0x8C180840fcBb90CE8464B4eCd12ab0f840c6647C",
+    recipientId: "0x9f56fa49af3b3e6fdebe64763bd34ae4aa1c4106",
     name: "John Steinck",
     imageUrl: JohnSImage,
     totalDonations: BigInt(0),
@@ -69,11 +74,33 @@ function Candidates() {
     2: { amount: BigInt(0) },
     3: { amount: BigInt(0) },
   });
-  const { sendTransaction } = useSendTransaction();
+  const [newFlowRate, setNewFlowRate] = useState("");
+  const [amountPerTimeInterval, setAmountPerTimeInterval] = useState("");
+  const [timeInterval, setTimeInterval] = useState<TimeInterval>(
+    TimeInterval.MONTH
+  );
 
   useEffect(() => {
     console.log(customAmount);
-  }, [customAmount]);
+
+    setNewFlowRate(
+      (
+        parseEther(amountPerTimeInterval) /
+        BigInt(fromTimeUnitsToSeconds(1, unitOfTime[timeInterval]))
+      ).toString()
+    );
+  }, [amountPerTimeInterval, customAmount, timeInterval]);
+
+  useEffect(() => {
+    (async () => {
+      const currentStreamValue = roundWeiAmount(
+        BigInt(0) * BigInt(fromTimeUnitsToSeconds(1, unitOfTime[timeInterval])),
+        4
+      );
+
+      setAmountPerTimeInterval(currentStreamValue);
+    })();
+  }, [timeInterval]);
 
   return (
     <div className="flex flex-col bg-white py-4 mb-6">
@@ -96,23 +123,23 @@ function Candidates() {
                 </div>
                 <div className="flex flex-col justify-between ml-4 md:ml-12 mr-6">
                   <ul className="flex flex-row md:mt-10 mt-6 gap-4">
-                    <li key={person.id}>
+                    <li key={person.id + `_5`}>
                       <DonateButton
-                        amount={Number(5)}
+                        amount={parseEther("0.0016")}
                         recipientId={person.recipientId}
                         index={person.id}
                       />
                     </li>
-                    <li key={person.id}>
+                    <li key={person.id + `_10`}>
                       <DonateButton
-                        amount={Number(10)}
+                        amount={parseEther("0.0032")}
                         recipientId={person.recipientId}
                         index={person.id}
                       />
                     </li>
-                    <li key={person.id}>
+                    <li key={person.id + `_20`}>
                       <DonateButton
-                        amount={Number(20)}
+                        amount={parseEther("0.0064")}
                         recipientId={person.recipientId}
                         index={person.id}
                       />
@@ -151,7 +178,7 @@ function Candidates() {
                   </div>
 
                   <DonateButton
-                    amount={Number(customAmount[person.id]?.amount ?? 0)}
+                    amount={customAmount[person.id]?.amount ?? 0}
                     recipientId={person.recipientId}
                     index={person.id}
                     disabled={customAmount[person.id]?.amount === BigInt(0)}
@@ -167,15 +194,20 @@ function Candidates() {
 }
 
 function DonateButton(props: {
-  amount: number;
+  amount: bigint;
   recipientId: Address;
   index: number;
   disabled?: boolean;
 }) {
   const { sendTransaction } = useSendTransaction();
 
+  // parseEther(amountPerTimeInterval) /
+  //       BigInt(fromTimeUnitsToSeconds(1, unitOfTime[timeInterval]))
+  //     ).toString()
+
   return (
     <button
+      key={props.index}
       type="button"
       className={
         props.disabled
@@ -189,31 +221,39 @@ function DonateButton(props: {
         await allocate(
           {
             recipientId: props.recipientId,
-            flowRate: BigInt(props.amount),
+            flowRate: parseEther(
+              (
+                props.amount /
+                BigInt(
+                  fromTimeUnitsToSeconds(1, unitOfTime[TimeInterval.MONTH])
+                )
+              ).toString()
+            ),
           },
-          25,
+          22,
           sendTransaction
         );
       }}
       disabled={props.disabled}
     >
-      Donate ${props.amount.toString()}
+      {/* todo: convert to USD */}
+      Donate {formatEther(BigInt(props.amount.toString()))}
     </button>
   );
 }
 
 const allo = new Allo({
-  chain: base.id,
+  chain: optimismSepolia.id,
   rpc: process.env.RPC_URL as string,
 });
 
 const registry = new Registry({
-  chain: base.id,
+  chain: optimismSepolia.id,
   rpc: process.env.RPC_URL as string,
 });
 
 const strategy = new SQFSuperFluidStrategy({
-  chain: base.id,
+  chain: optimismSepolia.id,
   rpc: process.env.RPC_URL as string,
 });
 
@@ -229,6 +269,7 @@ const batchSetAllocator = async (
 
     // Set the contract address -> docs:
     strategy.setContract(strategyAddress as `0x${string}`);
+    strategy.setPoolId(BigInt(poolId));
     const txData: TransactionData = strategy.getBatchAllocationData(data);
 
     console.log("txData", txData);
@@ -257,18 +298,18 @@ const allocate = async (
   poolId: number,
   sendTransaction: any
 ) => {
-  console.log("Allocating...", data, poolId);
+  console.log("Allocating...", { data, poolId });
 
   // Set some allocators for demo
   // NOTE: move this
   // const allocatorData: AllocationSuperlfuid[] = [
   //   {
-  //     recipientId: "0x8C180840fcBb90CE8464B4eCd12ab0f840c6647C",
+  //     recipientId: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
   //     flowRate: BigInt(0),
   //   },
   // ];
 
-  // // todo: set the allocators defined above
+  // todo: set the allocators defined above
   // await batchSetAllocator(allocatorData, poolId);
   // console.log("Allocators set");
 
@@ -276,25 +317,24 @@ const allocate = async (
     // todo: set your poolId here
     strategy.setPoolId(BigInt(poolId));
 
-    console.log(data);
+    // console.log(data);
 
     // Get the allocation data from the SDK
     // todo: snippet => getAllocationData
-    const txData: TransactionData = strategy.getAllocationData(
+    const allocationData: TransactionData = strategy.getAllocationData(
       data.recipientId,
-      data.flowRate
+      BigInt(parseEther("0.0016"))
     );
+
+    console.log("allocationData", allocationData);
 
     try {
       const tx = await sendTransaction({
-        data: txData.data,
-        to: txData.to,
-        value: BigInt(txData.value),
+        data: allocationData.data,
+        to: allocationData.to as Address,
+        value: BigInt(allocationData.value),
+        gas: BigInt(1000000),
       });
-
-      // await wagmiConfig.publicClient.waitForTransactionReceipt({
-      //   hash: tx.hash,
-      // });
 
       await new Promise((resolve) => setTimeout(resolve, 3000));
     } catch (e) {

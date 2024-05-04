@@ -1,12 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAccount, useDisconnect } from "wagmi";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useSetActiveWallet } from "@privy-io/wagmi";
 import Button from "./Button";
 import { TToastNotification } from "@/app/types";
+import { Address } from "viem";
+import {
+  BeakerIcon,
+  ClipboardDocumentIcon,
+  ComputerDesktopIcon,
+} from "@heroicons/react/20/solid";
 
 export default function Navbar() {
   const [toastNotification, setToastNotification] =
@@ -39,6 +45,12 @@ export default function Navbar() {
 
   console.log("isOnboarded:", isOnboarded, "ready", ready);
 
+  useEffect(() => {
+    if (ready && authenticated) {
+      setToast("Welcome back, " + user?.email ?? "email not set");
+    }
+  }, [ready, authenticated]);
+
   if (!ready) {
     return null;
   }
@@ -47,11 +59,9 @@ export default function Navbar() {
     <nav className="navbar sm:rounded-b-xl">
       <div className="mx-4 flex flex-row justify-between">
         <div className="flex flex-row items-center">
-          <div className="md:flex md:items-center md:cursor-pointer">
-            <Link href="/">
-              <span className="text-3xl">Debate & Donate</span>
-            </Link>
-          </div>
+          <Link className="md:flex md:items-center md:cursor-pointer" href="/">
+            <span className="text-3xl">Debate & Donate</span>
+          </Link>
           {/* <div className="md:flex md:items-center md:space-x-4 ml-2 cursor-pointer rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2">
             {navigation.map((item) => (
               <Link
@@ -69,10 +79,10 @@ export default function Navbar() {
         <div className="flex-shrink-0">
           {/* Add privy connect here */}
           {ready && !authenticated ? (
-            <div className="mb-2">
+            <div className="mb-0">
               <div className="flex items-center gap-4 ">
                 <Button
-                  className="rounded-xl p-2 hover:bg-gray-100 hover:text-gray-800 my-2"
+                  className="rounded-xl p-2 hover:bg-gray-100 hover:text-gray-800"
                   onClick_={login}
                   cta={"Login"}
                 />
@@ -85,13 +95,19 @@ export default function Navbar() {
               </div>
             </div>
           ) : (
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-4">
-                <span>{"Me"}</span>
+            <div className="flex items-center gap-4 mt-3">
+              <div
+                className="flex items-center"
+                onClick={() => {
+                  copyToClipboard(user?.wallet?.address as Address);
+                }}
+              >
+                <ClipboardDocumentIcon className="h-5 w-5 mx-2 text-gray-500 cursor-pointer" />
+                <span>{shortenAddress(user?.wallet?.address as Address)}</span>
               </div>
               <div>
                 <Button
-                  className="rounded-xl p-2 text-medium hover:bg-gray-100 hover:text-gray-800 my-2"
+                  className="rounded-xl p-2 text-medium hover:bg-gray-100 hover:text-gray-800"
                   onClick_={logout}
                   cta="Logout"
                 />
@@ -100,6 +116,16 @@ export default function Navbar() {
           )}
         </div>
       </div>
+      {/* todo: set up toast notifs */}
+      {/* <div>{toastNotification.args[0]}</div> */}
     </nav>
   );
+}
+
+function copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text);
+}
+
+function shortenAddress(address: string | Address) {
+  return address.slice(0, 4) + "..." + address.slice(-4);
 }

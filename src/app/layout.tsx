@@ -26,7 +26,7 @@ export default function RootLayout({
           className={`${inter.className} flex flex-col min-h-screen justify-between text-gray-700`}
         >
           {/* Header */}
-          <header className="">
+          <header>
             <Navbar />
           </header>
           <div className="isolate mt-20">{children}</div>
