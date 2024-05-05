@@ -12,7 +12,7 @@ import JoshLImage from "../../assets/candidates/JoshL.png";
 import RichardMImage from "../../assets/candidates/RichardM.png";
 import JohnSImage from "../../assets/candidates/JohnS.png";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
 import { Address, formatEther, parseEther } from "viem";
 import { Candidate } from "../types";
@@ -23,9 +23,10 @@ import {
   roundWeiAmount,
   unitOfTime,
 } from "@/utils/utils";
+import { usePrice } from "@/hooks/usePrice";
 
 /* eslint-disable @next/next/no-img-element */
-const Donate = () => {
+export default function Donate() {
   return (
     <div className="px-4">
       <div className="text-xl mx-6">
@@ -36,9 +37,7 @@ const Donate = () => {
       <Candidates />
     </div>
   );
-};
-
-export default Donate;
+}
 
 const candidates: Candidate[] = [
   {
@@ -48,7 +47,6 @@ const candidates: Candidate[] = [
     imageUrl: JoshLImage,
     totalDonations: BigInt(0),
   },
-  // More candidates...
   {
     id: 2,
     recipientId: "0x433237e7c33834e250d63d3a6a066dce1f5c0a4b",
@@ -80,6 +78,8 @@ function Candidates() {
     TimeInterval.MONTH
   );
 
+  const { fetchPrice, ethValues, usdValues } = usePrice("ethereum");
+
   useEffect(() => {
     console.log(customAmount);
 
@@ -101,6 +101,12 @@ function Candidates() {
       setAmountPerTimeInterval(currentStreamValue);
     })();
   }, [timeInterval]);
+
+  useLayoutEffect(() => {
+    console.log("Fetching price...");
+
+    fetchPrice("ethereum");
+  }, []);
 
   return (
     <div className="flex flex-col bg-white py-4 mb-6">
@@ -128,6 +134,7 @@ function Candidates() {
                         amount={parseEther("0.0016")}
                         recipientId={person.recipientId}
                         index={person.id}
+                        usdValue={usdValues[0].amount}
                       />
                     </li>
                     <li key={person.id + `_10`}>
@@ -135,6 +142,7 @@ function Candidates() {
                         amount={parseEther("0.0032")}
                         recipientId={person.recipientId}
                         index={person.id}
+                        usdValue={usdValues[1].amount}
                       />
                     </li>
                     <li key={person.id + `_20`}>
@@ -142,6 +150,7 @@ function Candidates() {
                         amount={parseEther("0.0064")}
                         recipientId={person.recipientId}
                         index={person.id}
+                        usdValue={usdValues[2].amount}
                       />
                     </li>
                   </ul>
@@ -182,6 +191,8 @@ function Candidates() {
                     recipientId={person.recipientId}
                     index={person.id}
                     disabled={customAmount[person.id]?.amount === BigInt(0)}
+                    // todo: convert the custom amount to USD
+                    usdValue={0}
                   />
                 </div>
               </div>
@@ -198,6 +209,7 @@ function DonateButton(props: {
   recipientId: Address;
   index: number;
   disabled?: boolean;
+  usdValue: number;
 }) {
   const { sendTransaction } = useSendTransaction();
 
@@ -237,7 +249,7 @@ function DonateButton(props: {
       disabled={props.disabled}
     >
       {/* todo: convert to USD */}
-      Donate {formatEther(BigInt(props.amount.toString()))}
+      Donate ${props.usdValue}{" "}
     </button>
   );
 }
