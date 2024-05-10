@@ -116,7 +116,7 @@ function Candidates() {
           className="mx-auto mt-4 grid max-w-screen grid-cols-1 gap-x-8 gap-y-10 lg:mx-0"
         >
           {candidates.map((person) => (
-            <li key={person.id + "_" + person.name} className="flex flex-row">
+            <li key={person.id + "_" + person.name} className="flex flex-row border rounded-xl p-2 bg-gray-50 shadow-xl">
               <div className="flex flex-row">
                 <div className="relative w-40 md:h-56 h-40">
                   <Image
@@ -124,7 +124,7 @@ function Candidates() {
                     alt={`${person.name} image`}
                     layout="fill"
                     objectFit="cover"
-                    className="rounded-lg"
+                    className="rounded-lg shadow-sm"
                   />
                 </div>
                 <div className="flex flex-col justify-between ml-4 md:ml-12 mr-6">
@@ -181,7 +181,7 @@ function Candidates() {
                             [person.id]: { amount: newAmount },
                           }));
                         }}
-                        className="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        className="block w-full shadow-xl rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       />
                     </div>
                   </div>
@@ -223,8 +223,8 @@ function DonateButton(props: {
       type="button"
       className={
         props.disabled
-          ? `cursor-not-allowed p-2 px-3 mt-4 text-center border rounded-lg text-sm text-white bg-blue-500 hover:bg-blue-700`
-          : `p-2 px-3 mt-4 text-center border rounded-lg text-sm text-white bg-blue-500 hover:bg-blue-700`
+          ? `cursor-not-allowed p-2 px-3 mt-4 text-center shadow-xl border rounded-lg text-sm text-white bg-blue-500 hover:bg-blue-700`
+          : `p-2 px-3 mt-4 shadow-xl text-center border rounded-lg text-sm text-white bg-blue-500 hover:bg-blue-700`
       }
       onClick={async () => {
         console.log(`Donating $${props.amount}`);

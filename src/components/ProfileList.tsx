@@ -1,5 +1,6 @@
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/20/solid";
 import { PlusIcon } from "@heroicons/react/24/solid";
+import { Divider } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,7 +11,8 @@ const people = [
     title: "CTO",
     role: "Admin",
     email: "jaxcoder@example.com",
-    imageUrl: "",
+    imageUrl:
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
   {
     name: "Jane Cooper",
@@ -18,7 +20,8 @@ const people = [
     title: "Regional Paradigm Technician",
     role: "Manager",
     email: "janecooper@example.com",
-    imageUrl: "",
+    imageUrl:
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
 ];
 
@@ -29,12 +32,13 @@ export default function ProfileList() {
         <span className="text-2xl">Profiles</span>
         <Link
           href={`/profile/new`}
-          className="flex items-center justify-between bg-blue-500 text-white rounded-xl p-2"
+          className="flex items-center justify-between bg-blue-500 text-white rounded-xl shadow-xl p-2"
         >
           <PlusIcon className="h-5 w-5 text-white mr-1" aria-hidden="true" />
           <span className="">New Profile</span>
         </Link>
       </div>
+      <Divider className="my-4" />
       <ul
         role="list"
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
@@ -42,7 +46,7 @@ export default function ProfileList() {
         {people.map((person) => (
           <li
             key={person.email}
-            className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow cursor-pointer hover:bg-gray-50 sm:col-span-1"
+            className="col-span-1 divide-y divide-gray-200 rounded-lg bg-gray-50  shadow-xl cursor-pointer hover:bg-gray-100 sm:col-span-1"
           >
             <div className="flex w-full items-center justify-between space-x-6 p-6">
               <div className="flex-1 truncate">
@@ -62,6 +66,8 @@ export default function ProfileList() {
                 className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300"
                 src={person.imageUrl}
                 alt=""
+                width={40}
+                height={40}
               />
             </div>
             <div>

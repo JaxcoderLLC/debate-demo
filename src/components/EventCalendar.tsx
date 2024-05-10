@@ -7,7 +7,7 @@ import {
   PlusIcon,
 } from "@heroicons/react/20/solid";
 import { Menu, Transition } from "@headlessui/react";
-import { classNames } from "@/utils/common";
+import { classNames, statuses } from "@/utils/common";
 import Image from "next/image";
 import { EStatus } from "@/app/types";
 import { Calendar } from "@nextui-org/calendar";
@@ -35,20 +35,34 @@ export default function EventCalendar() {
       </h2>
       <div className="lg:grid lg:grid-cols-12 lg:gap-x-16">
         <ol className="mt-4 divide-y divide-gray-100 text-sm leading-6 lg:col-span-7 xl:col-span-8">
-          {events.map((meeting) => (
+          {events.map((event) => (
             <li
-              key={meeting.id}
+              key={event.id}
               className="relative flex space-x-6 py-6 xl:static"
             >
               <Image
-                src={""}
+                src={
+                  "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                }
                 alt=""
                 className="h-14 w-14 flex-none rounded-full"
+                width={56}
+                height={56}
               />
               <div className="flex-auto">
-                <h3 className="pr-10 font-semibold text-gray-900 xl:pr-0">
-                  {meeting.name}
-                </h3>
+                <div className="flex items-start gap-x-3">
+                  <p className="text-sm font-semibold leading-6 text-gray-900">
+                    {event.name}
+                  </p>
+                  <p
+                    className={classNames(
+                      statuses[event.status as keyof typeof statuses],
+                      "rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset"
+                    )}
+                  >
+                    {EStatus[event.status]}
+                  </p>
+                </div>
                 <dl className="mt-2 flex flex-col text-gray-500 xl:flex-row">
                   <div className="flex items-start space-x-3">
                     <dt className="mt-0.5">
@@ -59,8 +73,8 @@ export default function EventCalendar() {
                       />
                     </dt>
                     <dd>
-                      <time dateTime={meeting.dueDate}>
-                        {meeting.dueDate} at {meeting.dueDateTime}
+                      <time dateTime={event.dueDate}>
+                        {event.dueDate} at {event.dueDateTime}
                       </time>
                     </dd>
                   </div>
@@ -137,7 +151,7 @@ export default function EventCalendar() {
           />
           <Link
             href={"/event/new"}
-            className="flex justify-center p-2 lg:col-span-5 xl:col-span-4 rounded-xl border text-white border-gray-200 bg-blue-500 hover:bg-blue-700"
+            className="flex justify-center p-2 shadow-xl lg:col-span-5 xl:col-span-4 rounded-xl border text-white border-gray-200 bg-blue-500 hover:bg-blue-700"
           >
             <PlusIcon height={24} width={24} className="mr-1" />
             <span className="mt-[1px] mr-2">New Event</span>
