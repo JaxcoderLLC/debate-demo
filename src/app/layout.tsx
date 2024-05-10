@@ -26,10 +26,12 @@ export default function RootLayout({
           className={`${inter.className} flex flex-col min-h-screen justify-between text-gray-700`}
         >
           {/* Header */}
-          <header>
+          <header className="mx-auto w-full max-w-4xl px-4">
             <Navbar />
           </header>
-          <div className="isolate mt-20">{children}</div>
+          <div className="isolate mt-20 mx-auto w-full max-w-4xl px-4">
+            {children}
+          </div>
           {/* Footer */}
           <footer className="mt-auto">
             <Footer />

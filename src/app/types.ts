@@ -43,16 +43,16 @@ export type TProfileResponse = {
   createdAt: string;
 };
 
-export type Candidate = {
+export type TCandidate = {
   id: number;
   recipientId: Address;
   name: string;
   imageUrl?: StaticImageData;
-  donations?: Donation[];
+  donations?: TDonation[];
   totalDonations?: bigint;
 };
 
-export type Donation = {
+export type TDonation = {
   id: string;
   amount: number;
   owner: string;
@@ -61,8 +61,8 @@ export type Donation = {
 
 export type IDonationContextProps = {
   isLoaded: boolean;
-  candidates: Candidate[];
-  setCandidates: (candidates: Candidate[]) => void;
+  candidates: TCandidate[];
+  setCandidates: (candidates: TCandidate[]) => void;
 };
 
 export type TSetAllocatorData = {
@@ -86,3 +86,41 @@ export type TToastNotification = {
   show: boolean;
   args: any[];
 };
+
+export type TAbiComponent = {
+  name: string;
+  type: string;
+  internalType?: string;
+  components?: Array<TAbiComponent>;
+};
+
+export type TAbiItem = {
+  type: string; // 'function', 'event', 'constructor', etc.
+  name?: string; // Function or event name
+  anonymous?: boolean; // true if the function is anonymous
+  inputs?: Array<{
+    name: string;
+    type: string;
+    internalType?: string;
+    indexed?: boolean;
+    components?: Array<TAbiComponent>;
+  }>; // Function or event parameters
+  outputs?: Array<{
+    name: string;
+    type: string;
+    internalType?: string;
+    components?: Array<{
+      internalType?: string;
+      name?: string;
+      type?: string;
+      components?: Array<{
+        internalType?: string;
+        name?: string;
+        type?: string;
+      }>;
+    }>;
+  }>; // Function outputs
+  stateMutability?: "pure" | "view" | "nonpayable" | "payable"; // Function state mutability
+};
+
+export type TContractAbi = Array<TAbiItem>;

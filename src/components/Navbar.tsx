@@ -49,7 +49,7 @@ export default function Navbar() {
     if (ready && authenticated) {
       setToast("Welcome back, " + user?.email ?? "email not set");
     }
-  }, [ready, authenticated]);
+  }, [ready, authenticated, user?.email]);
 
   if (!ready) {
     return null;
@@ -62,18 +62,15 @@ export default function Navbar() {
           <Link className="md:flex md:items-center md:cursor-pointer" href="/">
             <span className="text-3xl">Debate & Donate</span>
           </Link>
-          {/* <div className="md:flex md:items-center md:space-x-4 ml-2 cursor-pointer rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="px-3 py-2 text-md font-medium"
-                aria-current={item.current ? "page" : undefined}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div> */}
+          <div className="md:flex md:items-center md:space-x-4 ml-2 cursor-pointer rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2">
+            <Link
+              key="manage"
+              href="/manage"
+              className="px-3 py-2 mt-1 text-md font-medium"
+            >
+              Manage
+            </Link>
+          </div>
         </div>
 
         <div className="flex-shrink-0">
