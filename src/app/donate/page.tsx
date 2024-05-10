@@ -223,8 +223,8 @@ function DonateButton(props: {
       type="button"
       className={
         props.disabled
-          ? `cursor-not-allowed p-2 px-3 mt-4 text-center border rounded-lg text-sm text-white shimmer-gradient-blue`
-          : `p-2 px-3 mt-4 text-center border rounded-lg text-sm text-white shimmer-gradient-blue`
+          ? `cursor-not-allowed p-2 px-3 mt-4 text-center border rounded-lg text-sm text-white bg-blue-500 hover:bg-blue-700`
+          : `p-2 px-3 mt-4 text-center border rounded-lg text-sm text-white bg-blue-500 hover:bg-blue-700`
       }
       onClick={async () => {
         console.log(`Donating $${props.amount}`);

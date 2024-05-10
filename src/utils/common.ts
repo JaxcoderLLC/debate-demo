@@ -1,6 +1,6 @@
 import {
-  AbiComponent,
-  AbiItem,
+  TAbiComponent,
+  TAbiItem,
   IDonationStatus,
   TContractAbi,
   TStatus,
@@ -186,7 +186,7 @@ export const getEventValues = (
 
   const { topics, data } = log as { topics: string[]; data: string };
 
-  const d = decodeEventLog({
+  const d: any = decodeEventLog({
     abi: [event as any],
     data: data as `0x${string}`,
     topics: topics as any,
@@ -195,7 +195,7 @@ export const getEventValues = (
   return d.args; // Add type assertion here
 };
 
-function getEventTopic(event: AbiItem): string {
+function getEventTopic(event: TAbiItem): string {
   const inputTypesString = getInputTypeString(event);
   const eventString = `${event.name}(${inputTypesString})`;
   const eventTopic = keccak256(stringToBytes(eventString));
@@ -203,7 +203,7 @@ function getEventTopic(event: AbiItem): string {
   return eventTopic;
 }
 
-function getInputTypeString(event: AbiItem): string {
+function getInputTypeString(event: TAbiItem): string {
   const inputTypes = event.inputs ? flattenInputTypes(event.inputs) : [];
   return inputTypes.join(",");
 }
@@ -212,7 +212,7 @@ function flattenInputTypes(
   inputs: Array<{
     name: string;
     type: string;
-    components?: Array<AbiComponent>;
+    components?: Array<TAbiComponent>;
   }>
 ): string[] {
   const result: string[] = [];
@@ -229,3 +229,11 @@ function flattenInputTypes(
 
   return result;
 }
+
+export const statuses = {
+  InProgress: "text-green-700 bg-green-50 ring-green-600/20",
+  Completed: "text-blue-700 bg-blue-50 ring-blue-600/20",
+  Pending: "text-yellow-800 bg-yellow-50 ring-yellow-600/20",
+  Rejected: "text-red-800 bg-red-50 ring-red-600/20",
+  Canceled: "text-gray-800 bg-gray-50 ring-gray-600/20",
+};

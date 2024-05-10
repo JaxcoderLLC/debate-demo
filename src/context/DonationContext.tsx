@@ -1,12 +1,7 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
-import {
-  TStatus,
-  IDonationContextProps,
-  Donation,
-  Candidate,
-} from "../app/types";
+import { IDonationContextProps, TCandidate } from "../app/types";
 
 export const DonationContext = createContext<IDonationContextProps>({
   isLoaded: false,
@@ -19,7 +14,7 @@ export const DonationContextProvider = (props: {
 }) => {
   const { children } = props;
   const [isLoaded, setIsLoaded] = useState(false);
-  const [candidates, setCandidates] = useState<Candidate[]>([]);
+  const [candidates, setCandidates] = useState<TCandidate[]>([]);
 
   useEffect(() => {
     console.log("fetching candidates...");

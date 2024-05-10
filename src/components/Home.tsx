@@ -7,7 +7,7 @@ const Home = () => {
     <main>
       <div className="flex flex-col items-center justify-center min-h-screen py-2 -mt-48">
         <button
-          className="p-6 m-4 w-80 text-4xl border shimmer-gradient-blue rounded-lg font-medium text-white"
+          className="p-6 m-4 w-80 text-4xl border rounded-lg font-medium text-white bg-blue-500 hover:bg-blue-700"
           onClick={() => {
             console.log("Fund Account");
           }}
@@ -15,7 +15,7 @@ const Home = () => {
           Fund Account
         </button>
         <button
-          className="p-6 m-4 w-80 text-4xl border shimmer-gradient-blue rounded-lg font-medium text-white"
+          className="p-6 m-4 w-80 text-4xl border rounded-lg font-medium text-white bg-blue-500 hover:bg-blue-700"
           onClick={() => {
             console.log("Verify ID");
           }}
@@ -23,7 +23,7 @@ const Home = () => {
           Verify ID
         </button>
         <Link
-          className="p-6 m-4 w-80 text-center text-4xl border shimmer-gradient-blue rounded-lg font-medium text-white"
+          className="p-6 m-4 w-80 text-center text-4xl border rounded-lg font-medium text-white bg-blue-500 hover:bg-blue-700"
           href={"/donate"}
         >
           Donate

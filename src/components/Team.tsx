@@ -2,18 +2,23 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 
-const people = [
+const teamates = [
   {
-    id: "0x1",
-    name: "Lindsay Walton",
-    department: "Optimization",
-    email: "lindsay.walton@example.com",
-    role: "Manager",
-    image:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    id: 1,
+    name: "Jaxoder",
+    address: "0x1234567890abcdef1234567890abcdef12345678",
+    role: "Admin",
+    imageUrl: "",
   },
-  // More people...
+  {
+    id: 2,
+    name: "Jane Cooper",
+    address: "0x1234567890abcdef1234567890abcdef12345678",
+    role: "Manager",
+    imageUrl: "",
+  },
 ];
+
 
 export default function Team() {
   return (
@@ -34,7 +39,7 @@ export default function Team() {
             className="flex rounded-xl bg-blue-600 p-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
             <PlusIcon height={24} width={24} className="mr-1" />
-            <span className="mt-[2px]">Add User</span>
+            <span className="mt-[2px] mr-2">Add User</span>
           </Link>
         </div>
       </div>
@@ -68,8 +73,8 @@ export default function Team() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {people.map((person) => (
-                  <tr key={person.email}>
+                {teamates.map((person) => (
+                  <tr key={person.id}>
                     <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                       <div className="flex items-center">
                         <div>
@@ -77,7 +82,7 @@ export default function Team() {
                             {person.name}
                           </div>
                           <div className="mt-1 text-gray-500">
-                            {person.email}
+                            {person.address}
                           </div>
                         </div>
                       </div>

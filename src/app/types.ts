@@ -40,6 +40,29 @@ export type TProfileResponse = {
   createdAt: string;
 };
 
+export type TPoolMetadata = {
+  profileId: `0x${string}`;
+  name: string;
+  website: string;
+  description: string;
+  base64Image?: string;
+};
+
+export type TApplicationMetadata = {
+  name: string;
+  website: string;
+  description: string;
+  email: string;
+  base64Image: string;
+};
+
+export type TNewApplication = TApplicationMetadata & {
+  requestedAmount: bigint;
+  recipientAddress: `0x${string}`;
+  profileId?: `0x${string}`;
+  profileName?: string;
+};
+
 export type TCandidate = {
   id: number;
   recipientId: Address;
