@@ -106,6 +106,7 @@ function Candidates() {
     console.log("Fetching price...");
 
     fetchPrice("ethereum");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
