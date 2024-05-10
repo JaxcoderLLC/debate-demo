@@ -5,7 +5,6 @@ export enum EStatus {
   Pending = "Pending",
   InProgress = "InProgress",
   Canceled = "Canceled",
-  Rejected = "Rejected",
   Completed = "Completed",
 }
 
@@ -13,7 +12,6 @@ export type TStatus =
   | EStatus.Pending
   | EStatus.InProgress
   | EStatus.Canceled
-  | EStatus.Rejected
   | EStatus.Completed;
 
 export interface IDonationStatus {
@@ -21,7 +19,6 @@ export interface IDonationStatus {
   [EStatus.InProgress]: string;
   [EStatus.Completed]: string;
   [EStatus.Canceled]: string;
-  [EStatus.Rejected]: string;
 }
 
 export type TProfilesByOwnerResponse = {
