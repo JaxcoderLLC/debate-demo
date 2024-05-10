@@ -15,7 +15,7 @@ import Image from "next/image";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
 import { Address, formatEther, parseEther } from "viem";
-import { Candidate } from "../types";
+import { TCandidate } from "../types";
 import { useSendTransaction } from "@privy-io/react-auth";
 import {
   TimeInterval,
@@ -39,7 +39,7 @@ export default function Donate() {
   );
 }
 
-const candidates: Candidate[] = [
+const candidates: TCandidate[] = [
   {
     id: 1,
     recipientId: "0x08e350796d1ffc87837072d3a92975fdf7a7b11c",

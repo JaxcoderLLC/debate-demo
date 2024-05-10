@@ -1,16 +1,15 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import PhotoIcon from "@heroicons/react/20/solid/PhotoIcon";
 import UserCircleIcon from "@heroicons/react/24/outline/UserCircleIcon";
 import { classNames } from "@/utils/common";
-import { Menu, Transition } from "@headlessui/react";
+// import { Menu, Transition } from "@headlessui/react";
 import {
   CursorArrowRaysIcon,
-  EllipsisVerticalIcon,
   EnvelopeOpenIcon,
   UsersIcon,
 } from "@heroicons/react/20/solid";
@@ -18,66 +17,16 @@ import ArrowUpIcon from "@heroicons/react/24/outline/ArrowUpIcon";
 import ArrowDownIcon from "@heroicons/react/24/outline/ArrowDownIcon";
 import Link from "next/link";
 import { PlusIcon } from "@heroicons/react/24/solid";
-import { TStatus, EStatus } from "../types";
+import { EStatus } from "../types";
+import Tabs from "@/components/Tabs";
+import ProfileForm from "@/components/ProfileForm";
+import Team from "@/components/Team";
 
 const schema = yup.object({
   roundName: yup.string().required(),
   roundStart: yup.date().required(),
   roundEnd: yup.date().required(),
 });
-
-const tabs = [
-  { name: "Profile", current: true },
-  { name: "Events", current: false },
-  { name: "Stats", current: false },
-  { name: "Team Members", current: false },
-  { name: "Billing", current: false },
-];
-
-function Tabs({
-  activeTab,
-  setActiveTab,
-}: {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-}) {
-  return (
-    <div>
-      <nav
-        className="isolate flex divide-x divide-gray-200 rounded-t-lg shadow"
-        aria-label="Tabs"
-      >
-        {tabs.map((tab, tabIdx) => (
-          <span
-            key={tab.name}
-            onClick={(e) => {
-              e.preventDefault();
-              setActiveTab(tab.name);
-            }}
-            className={classNames(
-              tab.name === activeTab
-                ? "text-gray-900"
-                : "text-gray-500 hover:text-gray-700",
-              tabIdx === 0 ? "rounded-l-lg" : "",
-              tabIdx === tabs.length - 1 ? "rounded-r-lg" : "",
-              "group cursor-pointer relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10"
-            )}
-            aria-current={tab.name === activeTab ? "page" : undefined}
-          >
-            <span>{tab.name}</span>
-            <span
-              aria-hidden="true"
-              className={classNames(
-                tab.name === activeTab ? "bg-blue-500" : "bg-transparent",
-                "absolute inset-x-0 bottom-0 h-0.5"
-              )}
-            />
-          </span>
-        ))}
-      </nav>
-    </div>
-  );
-}
 
 export default function Manage() {
   const {
@@ -103,167 +52,12 @@ export default function Manage() {
       )}
       {activeTab === "Events" && <EventList />}
       {activeTab === "Stats" && <Stats />}
-      {/* Similarly, add other forms for other tabs as needed */}
+      {activeTab === "Team Members" && <Team />}
     </div>
   );
 }
 
-function ProfileForm({ register, handleSubmit, onSubmit }) {
-  return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-b-xl md:col-span-2 p-2"
-    >
-      <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
-        <div>
-          <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Profile
-          </h2>
-          <p className="mt-1 text-sm leading-6 text-gray-600">
-            This information will be displayed publicly so be careful what you
-            share.
-          </p>
-        </div>
 
-        <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-          <div className="sm:col-span-4">
-            <label
-              htmlFor="profileName"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Profile Name
-            </label>
-            <div className="mt-2">
-              <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                <input
-                  type="text"
-                  name="profileName"
-                  id="profileName"
-                  className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  placeholder="My Cool Profile"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="sm:col-span-4">
-            <label
-              htmlFor="website"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Website
-            </label>
-            <div className="mt-2">
-              <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">
-                  http://
-                </span>
-                <input
-                  type="text"
-                  name="website"
-                  id="website"
-                  className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  placeholder="www.example.com"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="col-span-full">
-            <label
-              htmlFor="about"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              About
-            </label>
-            <div className="mt-2">
-              <textarea
-                id="about"
-                name="about"
-                placeholder="I'm a cool person who likes to do cool things."
-                rows={3}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                defaultValue={""}
-              />
-            </div>
-            <p className="mt-3 text-sm leading-6 text-gray-600">
-              Write a few sentences about yourself.
-            </p>
-          </div>
-
-          <div className="col-span-full">
-            <label
-              htmlFor="photo"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Photo
-            </label>
-            <div className="mt-2 flex items-center gap-x-3">
-              <UserCircleIcon
-                className="h-12 w-12 text-gray-300"
-                aria-hidden="true"
-              />
-              <button
-                type="button"
-                className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-              >
-                Change
-              </button>
-            </div>
-          </div>
-
-          <div className="col-span-full">
-            <label
-              htmlFor="cover-photo"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Cover photo
-            </label>
-            <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-              <div className="text-center">
-                <PhotoIcon
-                  className="mx-auto h-12 w-12 text-gray-300"
-                  aria-hidden="true"
-                />
-                <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                  <label
-                    htmlFor="file-upload"
-                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                  >
-                    <span>Upload a file</span>
-                    <input
-                      id="file-upload"
-                      name="file-upload"
-                      type="file"
-                      className="sr-only"
-                    />
-                  </label>
-                  <p className="pl-1">or drag and drop</p>
-                </div>
-                <p className="text-xs leading-5 text-gray-600">
-                  PNG, JPG, GIF up to 10MB
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button
-          type="button"
-          className="text-sm font-semibold leading-6 text-gray-900"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          Save
-        </button>
-      </div>
-    </form>
-  );
-}
 
 const statuses = {
   InProgress: "text-green-700 bg-green-50 ring-green-600/20",
@@ -321,7 +115,7 @@ const events = [
 function EventList() {
   return (
     <div className="my-4">
-      <div className=" flex flex-row justify-between">
+      <div className="flex flex-row justify-between">
         <h3 className="flex text-2xl font-semibold leading-6 text-gray-900">
           Events
         </h3>
