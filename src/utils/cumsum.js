@@ -54,7 +54,7 @@ const cumSum = () => {
             .y(function (d) { return y(d.value) })
           )
 
-        return <svg width={500} height={300}></svg>;
+        // return <svg width={500} height={300}></svg>;
       })
 }
 
