@@ -8,11 +8,7 @@ import { useSetActiveWallet } from "@privy-io/wagmi";
 import Button from "./Button";
 import { TToastNotification } from "@/app/types";
 import { Address } from "viem";
-import {
-  BeakerIcon,
-  ClipboardDocumentIcon,
-  ComputerDesktopIcon,
-} from "@heroicons/react/20/solid";
+import { ClipboardDocumentIcon } from "@heroicons/react/20/solid";
 
 export default function Navbar() {
   const [toastNotification, setToastNotification] =

@@ -1,5 +1,3 @@
-"use client";
-
 import { createConfig, createStorage, http, usePublicClient } from "wagmi";
 import { injected, metaMask, walletConnect } from "wagmi/connectors";
 import { base, baseSepolia, optimismSepolia } from "wagmi/chains";
@@ -58,12 +56,17 @@ export const privyConfig: PrivyClientConfig = {
   },
 };
 
-export const walletClient = createWalletClient({
-  chain: optimismSepolia,
-  transport: custom(window ? window.ethereum! : http()),
-});
+// let transport: any = http();
+// if (typeof window !== "undefined") {
+//   transport = custom(window.ethereum!);
+// }
 
-export const publicClient = createPublicClient({
-  chain: optimismSepolia,
-  transport: http(),
-});
+// export const walletClient = createWalletClient({
+//   chain: optimismSepolia,
+//   transport: custom(transport),
+// });
+
+// export const publicClient = createPublicClient({
+//   chain: optimismSepolia,
+//   transport: http(),
+// });

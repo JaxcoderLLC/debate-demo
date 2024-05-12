@@ -16,7 +16,7 @@ const schema = yup.object({
 
 export default function NewProfile() {
   const { wallets } = useWallets();
-  const wallet = wallets[1]; // Replace this with your desired wallet
+  const wallet = wallets[0]; // Replace this with your desired wallet
   const [provider, setProvider] = useState<any>();
 
   useEffect(() => {

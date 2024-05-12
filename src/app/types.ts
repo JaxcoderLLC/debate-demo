@@ -27,6 +27,7 @@ export type TProfilesByOwnerResponse = {
   owner: string;
   createdAt: string;
   anchor: Address;
+  role: string;
 };
 
 export type TProfileResponse = {

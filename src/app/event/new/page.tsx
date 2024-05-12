@@ -7,7 +7,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import Link from "next/link";
 
-const schema = yup.object({});
+const schema = yup.object({
+  "event-name": yup.string().required().min(3),
+  email: yup.string().email().required(),
+  about: yup.string().required().min(50),
+});
 
 export default function NewEvent() {
   const {
@@ -17,6 +21,7 @@ export default function NewEvent() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    mode: "onChange",
   });
   const onSubmit = (data: any) => console.log(data);
 
@@ -48,12 +53,18 @@ export default function NewEvent() {
                 </label>
                 <div className="mt-2">
                   <input
+                    {...register("event-name")}
                     type="text"
                     name="event-name"
                     id="event-name"
                     autoComplete="event-name"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
+                  {errors["event-name"] && (
+                    <p className="text-rose-700 text-sm">
+                      * {errors["event-name"]?.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -66,12 +77,18 @@ export default function NewEvent() {
                 </label>
                 <div className="mt-2">
                   <input
+                    {...register("email")}
                     id="email"
                     name="email"
                     type="email"
                     autoComplete="email"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
+                  {errors["email"] && (
+                    <p className="text-rose-700 text-sm">
+                      * {errors["email"]?.message}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="col-span-full">
@@ -83,6 +100,7 @@ export default function NewEvent() {
                 </label>
                 <div className="mt-2">
                   <textarea
+                    {...register("about")}
                     id="about"
                     name="about"
                     placeholder="I'm a cool event who likes to host cool people."
@@ -90,6 +108,11 @@ export default function NewEvent() {
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     defaultValue={""}
                   />
+                  {errors["about"] && (
+                    <p className="text-rose-700 text-sm">
+                      * {errors["about"]?.message}
+                    </p>
+                  )}
                 </div>
                 <p className="mt-3 text-sm leading-6 text-gray-600">
                   Write a few sentences about the event.

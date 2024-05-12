@@ -14,6 +14,7 @@ const profiles: TProfilesByOwnerResponse[] = [
     owner: "0x1234567890abcdef1234567890abcdef12345678",
     createdAt: "2021-06-01T00:00:00Z",
     anchor: "0x6509aca95f0d798b5fcb24f1c78fa2cffa3fea43",
+    role: "ADMIN",
   },
   {
     profileId:
@@ -22,6 +23,7 @@ const profiles: TProfilesByOwnerResponse[] = [
     owner: "0x1234567890abcdef1234567890abcdef12345678",
     createdAt: "2021-06-01T00:00:00Z",
     anchor: "0x6509aca95f0d798b5fcb24f1c78fa2cffa3fea43",
+    role: "MANAGER",
   },
 ];
 

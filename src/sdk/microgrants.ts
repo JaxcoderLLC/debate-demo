@@ -34,7 +34,7 @@ import { allo } from "./allo";
 import { getProfileById } from "@/services/request";
 import { optimismSepolia } from "viem/chains";
 import { injected } from "wagmi/connectors";
-import { privyConfig, publicClient, walletClient } from "@/services/wagmi";
+// import { privyConfig, publicClient, walletClient } from "@/services/wagmi";
 import { MicroGrantsABI } from "@/app/abi/Microgrants";
 
 // create a strategy instance
@@ -61,26 +61,26 @@ export const deployMicrograntsStrategy = async (
   pointer: any,
   profileId: string
 ) => {
-  const [account] = await walletClient.getAddresses();
-  let strategyAddress: string = "0x";
-  let poolId = -1;
+  // const [account] = await walletClient.getAddresses();
+  // let strategyAddress: string = "0x";
+  // let poolId = -1;
 
-  try {
-    const hash = await walletClient!.deployContract({
-      abi: deployParams.abi,
-      bytecode: deployParams.bytecode as `0x${string}`,
-      args: [],
-      account: account,
-    });
+  // try {
+  //   const hash = await walletClient!.deployContract({
+  //     abi: deployParams.abi,
+  //     bytecode: deployParams.bytecode as `0x${string}`,
+  //     args: [],
+  //     account: account,
+  //   });
 
-    const receipt = await publicClient.waitForTransactionReceipt({
-      hash: hash,
-      confirmations: 2,
-    });
-    strategyAddress = receipt.contractAddress!;
-  } catch (e) {
-    console.error("Deploying Strategy", e);
-  }
+  //   const receipt = await publicClient.waitForTransactionReceipt({
+  //     hash: hash,
+  //     confirmations: 2,
+  //   });
+  //   strategyAddress = receipt.contractAddress!;
+  // } catch (e) {
+  //   console.error("Deploying Strategy", e);
+  // }
 
   // NOTE: Timestamps should be in seconds and start should be a few minutes in the future to account for transaction times.7
   const startDateInSeconds = Math.floor(new Date().getTime() / 1000) + 300;
@@ -100,7 +100,7 @@ export const deployMicrograntsStrategy = async (
 
   const poolCreationData: CreatePoolArgs = {
     profileId: profileId as Address, // sender must be a profile member
-    strategy: strategyAddress, // approved strategy contract
+    strategy: "", // strategyAddress, // approved strategy contract
     initStrategyData: initStrategyData, // unique to the strategy
     token: NATIVE as Address, // you need to change this to your token address
     amount: BigInt(1e14),
@@ -117,51 +117,51 @@ export const deployMicrograntsStrategy = async (
     poolCreationData
   );
 
-  try {
-    const [account] = await walletClient.getAddresses();
+  // try {
+  //   const [account] = await walletClient.getAddresses();
 
-    console.log("account", account);
+  //   console.log("account", account);
 
-    const hash = await walletClient.sendTransaction({
-      to: createPoolData.to,
-      data: createPoolData.data,
-      value: BigInt(createPoolData.value),
-      account: account,
-    });
+  //   const hash = await walletClient.sendTransaction({
+  //     to: createPoolData.to,
+  //     data: createPoolData.data,
+  //     value: BigInt(createPoolData.value),
+  //     account: account,
+  //   });
 
-    const receipt = await publicClient.waitForTransactionReceipt({
-      hash: hash,
-      confirmations: 2,
-    });
+  //   const receipt = await publicClient.waitForTransactionReceipt({
+  //     hash: hash,
+  //     confirmations: 2,
+  //   });
 
-    const logValues = getEventValues(receipt, MicroGrantsABI, "Initialized");
-    // poolId is a BigInt and we need to parse it to a number
-    if (logValues.poolId) poolId = Number(logValues.poolId);
+  //   const logValues = getEventValues(receipt, MicroGrantsABI, "Initialized");
+  //   // poolId is a BigInt and we need to parse it to a number
+  //   if (logValues.poolId) poolId = Number(logValues.poolId);
 
-    // NOTE: Index Pool Example
-    const pollingData: any = {
-      chainId: 421614,
-      poolId: poolId,
-    };
-    let pollingResult = await pollUntilDataIsIndexed(
-      checkIfPoolIsIndexedQuery,
-      pollingData,
-      "microGrant"
-    );
-    // NOTE: Index Metadata Example
-    const pollingMetadataResult = await pollUntilMetadataIsAvailable(
-      pointer.IpfsHash
-    );
+  //   // NOTE: Index Pool Example
+  //   const pollingData: any = {
+  //     chainId: 421614,
+  //     poolId: poolId,
+  //   };
+  //   let pollingResult = await pollUntilDataIsIndexed(
+  //     checkIfPoolIsIndexedQuery,
+  //     pollingData,
+  //     "microGrant"
+  //   );
+  //   // NOTE: Index Metadata Example
+  //   const pollingMetadataResult = await pollUntilMetadataIsAvailable(
+  //     pointer.IpfsHash
+  //   );
 
-    setTimeout(() => {}, 5000);
+  //   setTimeout(() => {}, 5000);
 
-    return {
-      address: strategyAddress as `0x${string}`,
-      poolId: poolId,
-    };
-  } catch (e) {
-    console.error("Creating Pool", e);
-  }
+  //   return {
+  //     address: strategyAddress as `0x${string}`,
+  //     poolId: poolId,
+  //   };
+  // } catch (e) {
+  //   console.error("Creating Pool", e);
+  // }
 };
 
 export const batchSetAllocator = async (data: SetAllocatorData[]) => {

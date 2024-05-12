@@ -1,5 +1,4 @@
 import { PlusIcon } from "@heroicons/react/24/solid";
-import Image from "next/image";
 import Link from "next/link";
 
 const teamates = [

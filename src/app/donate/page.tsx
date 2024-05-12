@@ -14,7 +14,7 @@ import JohnSImage from "../../assets/candidates/JohnS.png";
 import Image from "next/image";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
-import { Address, formatEther, parseEther } from "viem";
+import { Address, parseEther } from "viem";
 import { TCandidate } from "../types";
 import { useSendTransaction } from "@privy-io/react-auth";
 import {
@@ -79,7 +79,7 @@ function Candidates() {
     TimeInterval.MONTH
   );
 
-  const { fetchPrice, ethValues, usdValues } = usePrice("ethereum");
+  const { fetchPrice, usdValues } = usePrice("ethereum");
 
   useEffect(() => {
     console.log(customAmount);

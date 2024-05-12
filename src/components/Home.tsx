@@ -5,7 +5,7 @@ import Link from "next/link";
 const Home = () => {
   return (
     <main>
-      <div className="flex flex-col items-center justify-center min-h-screen py-2 -mt-48">
+      <div className="flex flex-col items-center justify-center min-h-screen py-2 -mt-24">
         <button
           className="p-6 m-4 w-80 text-4xl border rounded-lg font-medium text-white bg-blue-500 hover:bg-blue-700"
           onClick={() => {
