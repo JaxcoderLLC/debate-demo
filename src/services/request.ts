@@ -1,29 +1,64 @@
 "use server";
 
 import { TProfileResponse, TProfilesByOwnerResponse } from "@/app/types";
-import request from "graphql-request";
-import { getProfile, getProfilesByOwnerQuery, graphqlEndpoint } from "../utils/query";
+import request, { GraphQLClient } from "graphql-request";
+import { getProfile, graphqlEndpoint } from "../utils/query";
+import { getProfilesByOwnerQuery } from "@/utils/queries";
 
-const getProfilesByOwner = async ({
+// mocked for now
+const profiles: TProfilesByOwnerResponse[] = [
+  {
+    profileId:
+      "0x1cfa52382f1f47f7e3fd3cd78303d0eb0ae23bff73b11513706563c3cc4b85cd",
+    name: "Jaxoder",
+    owner: "0x1234567890abcdef1234567890abcdef12345678",
+    createdAt: "2021-06-01T00:00:00Z",
+    anchor: "0x6509aca95f0d798b5fcb24f1c78fa2cffa3fea43",
+  },
+  {
+    profileId:
+      "0x1cfa52382f1f47f7e3fd3cd78303d0eb0ae23bff73b11513706563c3cc4b85cd",
+    name: "Jane Cooper",
+    owner: "0x1234567890abcdef1234567890abcdef12345678",
+    createdAt: "2021-06-01T00:00:00Z",
+    anchor: "0x6509aca95f0d798b5fcb24f1c78fa2cffa3fea43",
+  },
+];
+
+export const getProfilesByOwner = async ({
   chainId,
   account,
 }: {
   chainId: string;
-  account: string | `0x${string}`;
+  account: string;
 }): Promise<TProfilesByOwnerResponse[]> => {
-  const response: {
-    profilesByOwner: TProfilesByOwnerResponse[];
-  } = await request(graphqlEndpoint, getProfilesByOwnerQuery, {
-    chainId: chainId,
-    owner: account,
-  });
+  const headers = {
+    "Content-Type": "application/json",
+    // Authorization: `Bearer YOUR_ACCESS_TOKEN`,
+    // Include additional headers as needed
+  };
 
-  // filter out old profiles that were created before the new registry was deployed
-  const filteredProfiles = response.profilesByOwner.filter(
-    (profile) =>
-      new Date(profile.createdAt) > new Date("2023-11-02T00:00:00+00:00"),
-  );
-  return filteredProfiles;
+  const client = new GraphQLClient(graphqlEndpoint, { headers });
+  const variables = {
+    userAddress: account,
+  };
+
+  try {
+    // fixme: not sure why this is failing?
+    // const response = await client.request<{
+    //   profilesByOwner: TProfilesByOwnerResponse[];
+    // }>(getProfilesByOwnerQuery, variables);
+
+    // console.log("Profiles by owner:", response.profilesByOwner);
+
+    // return response.profilesByOwner;
+
+    return profiles;
+  } catch (error) {
+    console.error("Error fetching profiles:", error);
+    // Handle errors as appropriate for your application context
+    throw error; // Re-throw or handle differently based on your error strategy
+  }
 };
 
 export const getProfileById = async ({
@@ -42,5 +77,3 @@ export const getProfileById = async ({
 
   return response.profile;
 };
-
-export default getProfilesByOwner;

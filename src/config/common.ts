@@ -1,5 +1,7 @@
 import { TNewApplication, TPoolMetadata } from "@/app/types";
 import dotenv from "dotenv";
+import { Address, Hex } from "viem";
+import { optimismSepolia } from "viem/chains";
 dotenv.config();
 
 type CommonConfig = {
@@ -7,18 +9,17 @@ type CommonConfig = {
   poolId: number;
   nonce: number;
   rpc: string;
-  ownerProfileId: `0x${string}`;
-  ownerAddress: `0x${string}`;
-  anchorAddress: `0x${string}`;
-  profileName: string;
-  managers: `0x${string}`[];
+  ownerProfileId: Hex;
+  ownerAddress: Address;
+  anchorAddress: Address;
+  managers: Address[];
   application: TNewApplication;
-  recipientId: `0x${string}`;
+  recipientId: Address;
   metadata: {
     protocol: bigint;
     pointer: string;
   };
-  members: `0x${string}`[];
+  members: Address[];
   pool: TPoolMetadata;
 };
 
@@ -26,21 +27,20 @@ type CommonConfig = {
 export const base64Image = ``;
 
 export const commonConfig: CommonConfig = {
-  chainId: 8453,
+  chainId: optimismSepolia.id,
   poolId: 0,
   nonce: Math.floor(Math.random() * 10000),
   rpc: process.env.NEXT_PUBLIC_RPC_URL as string, // arbitrum-sepolia
   ownerProfileId:
-    "0x57132bcaad3cb1af283f89a53a438ded9329002893a3bb070b9908fb9ed4929d",
-  ownerAddress: "0x3f15B8c6F9939879Cb030D6dd935348E57109637",
-  anchorAddress: "0x3f15B8c6F9939879Cb030D6dd935348E57109637",
-  profileName: "Allo Workshop",
+    "0x1cfa52382f1f47f7e3fd3cd78303d0eb0ae23bff73b11513706563c3cc4b85cd",
+  ownerAddress: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
+  anchorAddress: "0x6509aca95f0d798b5fcb24f1c78fa2cffa3fea43",
   managers: [],
   application: {
     requestedAmount: BigInt(0),
-    recipientAddress: "0x3f15B8c6F9939879Cb030D6dd935348E57109637",
+    recipientAddress: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
     profileId:
-      "0x57132bcaad3cb1af283f89a53a438ded9329002893a3bb070b9908fb9ed4929d",
+      "0x1cfa52382f1f47f7e3fd3cd78303d0eb0ae23bff73b11513706563c3cc4b85cd",
     name: "Test Application",
     website: "https://docs.allo.gitcoin.co",
     profileName: "Jax Test",
@@ -52,7 +52,7 @@ export const commonConfig: CommonConfig = {
     protocol: BigInt(1), // NOTE: This is the pointer to the metadata on IPFS
     pointer: "bafybeia4khbew3r2mkflyn7nzlvfzcb3qpfeftz5ivpzfwn77ollj47gqi",
   },
-  recipientId: "0x3f15B8c6F9939879Cb030D6dd935348E57109637",
+  recipientId: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
   members: [],
   pool: {
     profileId:

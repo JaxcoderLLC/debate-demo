@@ -63,11 +63,12 @@ const candidates: TCandidate[] = [
   },
 ];
 
-type Amounts = {
+type TAmounts = {
   [key: string]: { amount: bigint };
 };
+
 function Candidates() {
-  const [customAmount, setCustomAmount] = useState<Amounts>({
+  const [customAmount, setCustomAmount] = useState<TAmounts>({
     1: { amount: BigInt(0) },
     2: { amount: BigInt(0) },
     3: { amount: BigInt(0) },

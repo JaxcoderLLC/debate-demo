@@ -1,6 +1,7 @@
 import { gql } from "graphql-request";
 
-export const graphqlEndpoint = process.env.NEXT_PUBLIC_GRAPHQL_URL || "";
+export const graphqlEndpoint =
+  process.env.NEXT_PUBLIC_GRAPHQL_URL || "https://grants-stack-indexer-v2.gitcoin.co/graphiql";
 
 export const checkIfRecipientIsIndexedQuery = gql`
   query checkIfRecipientIsIndexedQuery(
@@ -190,17 +191,17 @@ export const getMicroGrantRecipientQuery = gql`
   }
 `;
 
-export const getProfilesByOwnerQuery = gql`
-  query getProfilesByOwnerQuery($chainId: String!, $owner: String!) {
-    profilesByOwner(chainId: $chainId, owner: $owner) {
-      profileId
-      name
-      owner
-      createdAt
-      anchor
-    }
-  }
-`;
+// export const getProfilesByOwnerQuery = gql`
+//   query getProfilesByOwnerQuery($chainId: String!, $owner: String!) {
+//     profilesByOwner(chainId: $chainId, owner: $owner) {
+//       profileId
+//       name
+//       owner
+//       createdAt
+//       anchor
+//     }
+//   }
+// `;
 
 export const getProfile = gql`
   query getProfile($chainId: String!, $profileId: String!) {

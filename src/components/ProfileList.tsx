@@ -1,8 +1,13 @@
+import { TProfilesByOwnerResponse } from "@/app/types";
+import { getProfilesByOwner } from "@/services/request";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/20/solid";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { Divider } from "@nextui-org/react";
+import request from "graphql-request";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 const people = [
   {
@@ -26,6 +31,23 @@ const people = [
 ];
 
 export default function ProfileList() {
+  const [userProfiles, setUserProfiles] = useState<TProfilesByOwnerResponse[]>(
+    []
+  );
+
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      const response = await getProfilesByOwner({
+        chainId: "11155420",
+        account: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
+      });
+      console.log(response);
+      setUserProfiles(response);
+    };
+
+    fetchProfiles();
+  }, []);
+
   return (
     <div className="mt-4">
       <div className="flex items-center justify-between">

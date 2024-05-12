@@ -1,11 +1,12 @@
 "use client";
 
-import { createConfig, createStorage, http } from "wagmi";
+import { createConfig, createStorage, http, usePublicClient } from "wagmi";
 import { injected, metaMask, walletConnect } from "wagmi/connectors";
 import { base, baseSepolia, optimismSepolia } from "wagmi/chains";
 
 import dotenv from "dotenv";
 import { PrivyClientConfig } from "@privy-io/react-auth";
+import { createPublicClient, createWalletClient, custom } from "viem";
 
 dotenv.config();
 
@@ -56,3 +57,13 @@ export const privyConfig: PrivyClientConfig = {
     overflow: ["google"],
   },
 };
+
+export const walletClient = createWalletClient({
+  chain: optimismSepolia,
+  transport: custom(window ? window.ethereum! : http()),
+});
+
+export const publicClient = createPublicClient({
+  chain: optimismSepolia,
+  transport: http(),
+});

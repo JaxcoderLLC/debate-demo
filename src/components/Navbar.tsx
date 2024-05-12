@@ -73,7 +73,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 mt-2">
           {/* Add privy connect here */}
           {ready && !authenticated ? (
             <div className="mb-0">
