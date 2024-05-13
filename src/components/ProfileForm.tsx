@@ -5,10 +5,12 @@ export default function ProfileForm({
   handleSubmit,
   onSubmit,
   register,
+  errors,
 }: {
   handleSubmit: any;
   onSubmit: any;
   register: any;
+  errors: any;
 }) {
   return (
     <form
@@ -45,6 +47,11 @@ export default function ProfileForm({
                   placeholder="My Cool Profile"
                 />
               </div>
+              {errors.profileName && (
+                <p className="text-rose-700 text-sm">
+                  * {errors.profileName?.message}
+                </p>
+              )}
             </div>
           </div>
           <div className="sm:col-span-4">
@@ -60,6 +67,7 @@ export default function ProfileForm({
                   http://
                 </span>
                 <input
+                  {...register("website")}
                   type="text"
                   name="website"
                   id="website"
@@ -67,6 +75,11 @@ export default function ProfileForm({
                   placeholder="www.example.com"
                 />
               </div>
+              {errors["website"] && (
+                <p className="text-rose-700 text-sm">
+                  * {errors["website"]?.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -159,7 +172,7 @@ export default function ProfileForm({
         </Link>
         <button
           type="submit"
-          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="p-2 m-4 w-36 border rounded-lg text-sm text-white bg-blue-500 hover:bg-blue-700"
         >
           Save
         </button>

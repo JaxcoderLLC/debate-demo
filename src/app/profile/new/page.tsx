@@ -4,14 +4,15 @@ import ProfileForm from "@/components/ProfileForm";
 import { createProfile } from "@/sdk/registry";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useWallets } from "@privy-io/react-auth";
-import { on } from "events";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Address } from "viem";
 import * as yup from "yup";
 
 const schema = yup.object({
-  profileName: yup.string().required(),
+  profileName: yup.string().required().min(5).max(50),
+  website: yup.string().url(),
+  about: yup.string(),
 });
 
 export default function NewProfile() {
@@ -55,6 +56,7 @@ export default function NewProfile() {
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
         register={register}
+        errors={errors}
       />
     </div>
   );

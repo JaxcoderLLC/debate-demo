@@ -145,3 +145,11 @@ export type TAbiItem = {
 };
 
 export type TContractAbi = Array<TAbiItem>;
+
+export type TModalPlacement =
+  | "center"
+  | "auto"
+  | "top"
+  | "top-center"
+  | "bottom"
+  | "bottom-center";

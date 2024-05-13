@@ -1,5 +1,7 @@
-import { PlusIcon } from "@heroicons/react/24/solid";
+import { PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import BaseModal from "./BaseModal";
+import { Button, useDisclosure } from "@nextui-org/react";
 
 const teamates = [
   {
@@ -18,8 +20,9 @@ const teamates = [
   },
 ];
 
-
 export default function Team() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   return (
     <div className="px-4 sm:px-6 lg:px-8 mt-4">
       <div className="sm:flex sm:items-center">
@@ -32,14 +35,16 @@ export default function Team() {
           </p>
         </div>
         <div className="sm:ml-16 sm:mt-0 flex-row">
-          <Link
-            href="/team/new"
-            type="button"
-            className="flex rounded-xl bg-blue-600 p-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          <Button
+            className="flex rounded-xl bg-blue-600 p-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer"
+            onPress={(data: any) => {
+              console.log("Add User", data);
+              onOpen();
+            }}
           >
             <PlusIcon height={24} width={24} className="mr-1" />
             <span className="mt-[2px] mr-2">Add User</span>
-          </Link>
+          </Button>
         </div>
       </div>
       <div className="mt-8 flow-root">
@@ -95,12 +100,11 @@ export default function Team() {
                       {person.role}
                     </td>
                     <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <Link
-                        href={`/team/${person.id}`}
-                        className="block rounded-xl bg-blue-600 p-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                      >
-                        Edit
-                      </Link>
+                      <div className="flex flex-row items-center justify-between hover:shadow-xl">
+                        <span>
+                          <XMarkIcon className="h-5 w-5 text-rose-500 cursor-pointer hover:bg-rose-200 hover:text-rose-700 rounded-xl border border-rose-600" />
+                        </span>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -109,6 +113,16 @@ export default function Team() {
           </div>
         </div>
       </div>
+      <BaseModal
+        modalPlacement="center"
+        title={"Add User"}
+        body={<span>Add a new user to your organization.</span>}
+        onSubmit={(data: any) => {
+          console.log("Add User", data);
+        }}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      />
     </div>
   );
 }
