@@ -8,9 +8,9 @@ import {
 } from "@allo-team/allo-v2-sdk";
 import { optimismSepolia } from "wagmi/chains";
 import { AllocationSuperlfuid } from "@allo-team/allo-v2-sdk/dist/strategies/SuperFluidStrategy/types";
-import JoshLImage from "../../assets/candidates/JoshL.png";
+import JoshLImage from "../../assets/candidates/JoshStanding.png";
 import RichardMImage from "../../assets/candidates/RichardM.png";
-import JohnSImage from "../../assets/candidates/JohnS.png";
+import JohnSImage from "../../assets/candidates/SteinbeckCutOut.png";
 import Image from "next/image";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
@@ -107,7 +107,7 @@ function Candidates() {
     console.log("Fetching price...");
 
     fetchPrice("ethereum");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -118,14 +118,16 @@ function Candidates() {
           className="mx-auto mt-4 grid max-w-screen grid-cols-1 gap-x-8 gap-y-10 lg:mx-0"
         >
           {candidates.map((person) => (
-            <li key={person.id + "_" + person.name} className="flex flex-row border rounded-xl p-2 bg-gray-50 shadow-xl">
+            <li
+              key={person.id + "_" + person.name}
+              className="flex flex-row border rounded-xl p-2 bg-gray-50 shadow-xl"
+            >
               <div className="flex flex-row">
-                <div className="relative w-40 md:h-56 h-40">
+                <div className="flex items-center justify-center relative w-40 h-48">
                   <Image
                     src={person.imageUrl!}
                     alt={`${person.name} image`}
                     layout="fill"
-                    objectFit="cover"
                     className="rounded-lg shadow-sm"
                   />
                 </div>

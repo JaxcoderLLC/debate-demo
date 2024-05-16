@@ -42,7 +42,7 @@
     right: 0;          /* Align right edge with the viewport */
     top: 0;            /* Align it at the top */
     width: 100%;       /* Full width on mobile */
-    height: 80px;      /* Specified height */
+    height: 60px;      /* Specified height */
     font-size: 24px;   /* 2xl text size in Tailwind */
     color: white;      /* Text color */
     background-color: #1d4ed8; /* A blue background color */

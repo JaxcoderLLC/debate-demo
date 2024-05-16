@@ -52,24 +52,24 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="navbar sm:rounded-b-xl">
+    <nav className="navbar sm:rounded-b-xl pb-2">
       <div className="mx-4 flex flex-row justify-between">
         <div className="flex flex-row items-center">
           <Link className="md:flex md:items-center md:cursor-pointer" href="/">
             <span className="text-3xl">Debate & Donate</span>
           </Link>
-          <div className="md:flex md:items-center md:space-x-4 ml-2 mt-2">
+          <div className="md:flex md:items-center md:space-x-4 ml-2 my-2">
             <Link
               key="manage"
               href="/manage"
-              className="px-3 py-2 mt-1 text-md font-medium hover:bg-gray-100 hover:text-gray-800 cursor-pointer rounded-xl my-2"
+              className="px-2 mt-1 text-md font-medium hover:bg-gray-100 hover:text-gray-800 cursor-pointer rounded-xl"
             >
               Manage
             </Link>
             <Link
               key="live"
               href="/live"
-              className="px-3 py-2 mt-1 text-md font-medium hover:bg-gray-100 hover:text-gray-800 cursor-pointer rounded-xl my-2"
+              className="px-2 mt-1 text-md font-medium hover:bg-gray-100 hover:text-gray-800 cursor-pointer rounded-xl"
             >
               Live
             </Link>
@@ -95,7 +95,7 @@ export default function Navbar() {
               </div>
             </div>
           ) : (
-            <div className="flex items-center gap-4 mt-3">
+            <div className="flex items-center gap-4">
               <div
                 className="flex items-center"
                 onClick={() => {

@@ -1,13 +1,13 @@
 import {
   Allo,
   CreatePoolArgs,
-  InitializeParams,
-  MicroGrantsStrategy,
+  DirectGrantsLiteStrategy,
   NATIVE,
 } from "@allo-team/allo-v2-sdk";
 import { commonConfig } from "@/config/common";
 import { optimismSepolia } from "viem/chains";
 import { useWallets } from "@privy-io/react-auth";
+import { InitializeData } from "@allo-team/allo-v2-sdk/dist/strategies/DirectGrantsLiteStrategy/types";
 
 export const useAllo = async () => {
   const { wallets } = useWallets();
@@ -18,7 +18,7 @@ export const useAllo = async () => {
     chain: optimismSepolia.id,
     rpc: process.env.NEXT_PUBLIC_OP_SEPOLIA_RPC_URL as string,
   });
-  const strategy = new MicroGrantsStrategy({
+  const strategy = new DirectGrantsLiteStrategy({
     chain: optimismSepolia.id,
     rpc: process.env.NEXT_PUBLIC_OP_SEPOLIA_RPC_URL as string,
   });
@@ -32,12 +32,11 @@ export const useAllo = async () => {
     Math.floor(new Date().getTime() / 1000) + 10000
   );
 
-  const initParams: InitializeParams = {
+  const initParams: InitializeData = {
     useRegistryAnchor: false,
-    allocationStartTime: startDateInSeconds,
-    allocationEndTime: endDateInSeconds,
-    approvalThreshold: BigInt(1),
-    maxRequestedAmount: BigInt(1000000000000000000),
+    metadataRequired: false,
+    registrationStartTime: startDateInSeconds,
+    registrationEndTime: endDateInSeconds,
   };
 
   const initStrategyData = await strategy.getInitializeData(initParams);
@@ -56,7 +55,7 @@ export const useAllo = async () => {
   };
 
   // Prepare the transaction data
-  const createPoolData = await allo.createPoolWithCustomStrategy(
+  const createPoolData = allo.createPoolWithCustomStrategy(
     poolCreationData
   );
 
@@ -70,38 +69,10 @@ export const useAllo = async () => {
       method: "eth_sendTransaction",
       params: [transactionRequest],
     });
-    // const tx = await walletClient.sendTransaction({
-    //   to: createPoolData.to as string,
-    //   data: createPoolData.data,
-    //   value: BigInt(createPoolData.value),
-    // });
-
-    // const receipt =
-    // await wagmiConfigData.publicClient.waitForTransactionReceipt({
-    //   hash: tx.hash,
-    //   confirmations: 2,
-    // });
-
-    // const logValues = getEventValues(receipt, MicroGrantsABI, "Initialized");
-    // // poolId is a BigInt and we need to parse it to a number
-    // if (logValues.poolId) poolId = Number(logValues.poolId);
-
-    // NOTE: Index Pool Example
-    // const pollingData: any = {
-    //   chainId: 421614,
-    //   poolId: poolId,
-    // };
-    // let pollingResult = await pollUntilDataIsIndexed(
-    //   checkIfPoolIsIndexedQuery,
-    //   pollingData,
-    //   "microGrant"
-    // );
-    // NOTE: Index Metadata Example
-    // const pollingMetadataResult = await pollUntilMetadataIsAvailable(
-    //   pointer.IpfsHash
-    // );
 
     setTimeout(() => {}, 5000);
+
+    return transactionHash;
 
     // return {
     //   address: strategyAddress as `0x${string}`,

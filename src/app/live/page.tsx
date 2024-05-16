@@ -12,7 +12,7 @@ export default function Live() {
     if (!isInitialized) {
       const margin = { top: 10, right: 30, bottom: 30, left: 90 },
         width = 800 - margin.left - margin.right,
-        height = 800 - margin.top - margin.bottom;
+        height = 700 - margin.top - margin.bottom;
 
       // Clear existing SVG if necessary
       d3.select(svgContainerRef.current).select("svg").remove();
