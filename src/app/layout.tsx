@@ -12,6 +12,12 @@ export const metadata: Metadata = {
   title: "Debate & Donate",
   description:
     "Debate & Donate is a platform that allows you to donate to your favorite candidates and see how they perform in debates.",
+  formatDetection: {
+    telephone: false,
+    date: false,
+    address: false,
+    email: false,
+  },
 };
 
 export default function RootLayout({

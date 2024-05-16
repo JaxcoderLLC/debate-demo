@@ -58,13 +58,20 @@ export default function Navbar() {
           <Link className="md:flex md:items-center md:cursor-pointer" href="/">
             <span className="text-3xl">Debate & Donate</span>
           </Link>
-          <div className="md:flex md:items-center md:space-x-4 ml-2 cursor-pointer rounded-xl hover:bg-gray-100 hover:text-gray-800 my-2">
+          <div className="md:flex md:items-center md:space-x-4 ml-2 mt-2">
             <Link
               key="manage"
               href="/manage"
-              className="px-3 py-2 mt-1 text-md font-medium"
+              className="px-3 py-2 mt-1 text-md font-medium hover:bg-gray-100 hover:text-gray-800 cursor-pointer rounded-xl my-2"
             >
               Manage
+            </Link>
+            <Link
+              key="live"
+              href="/live"
+              className="px-3 py-2 mt-1 text-md font-medium hover:bg-gray-100 hover:text-gray-800 cursor-pointer rounded-xl my-2"
+            >
+              Live
             </Link>
           </div>
         </div>
