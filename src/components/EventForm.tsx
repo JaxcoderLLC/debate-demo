@@ -1,5 +1,6 @@
 "use client";
 
+import { useAllo } from "@/hooks/useAllo";
 import Link from "next/link";
 
 export default function EventForm({
@@ -13,6 +14,8 @@ export default function EventForm({
   onSubmit: any;
   errors: any;
 }) {
+  const { createPool } = useAllo();
+
   return (
     <div className="space-y-10 divide-y divide-gray-900/10 mt-2">
       <div className="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3">

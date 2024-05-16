@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import EventForm from "@/components/EventForm";
+import { useAllo } from "@/hooks/useAllo";
 
 const schema = yup.object({
   eventName: yup.string().required().min(3),
@@ -21,7 +22,15 @@ export default function NewEvent() {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-  const onSubmit = (data: any) => console.log(data);
+  const { createPool, strategy } = useAllo();
+  const onSubmit = (data: any) => {
+    console.log(data);
+
+    createPool({
+      regStartTime: BigInt(Math.floor(new Date().getTime() / 1000) + 300),
+      regEndTime: BigInt(Math.floor(new Date().getTime() / 1000) + 10000),
+    });
+  };
 
   return (
     <div>
