@@ -10,7 +10,7 @@ import { TToastNotification } from "@/app/types";
 import { Address } from "viem";
 import { ClipboardDocumentIcon } from "@heroicons/react/20/solid";
 import ToastNotification from "./ToastNotification";
-import DonateLogo from "../assets/DebateLogo.webp";
+import DonateLogo from "../assets/DDLogo.webp";
 import Image from "next/image";
 
 export default function Navbar() {
@@ -63,13 +63,13 @@ export default function Navbar() {
               className="md:flex md:items-center md:cursor-pointer mr-8"
               href="/"
             >
-              {/* <span className="text-3xl">Debate & Donate</span> */}
-              <Image
+              <span className="text-3xl">Debate & Donate</span>
+              {/* <Image
                 src={DonateLogo}
                 alt="Donate Logo"
                 width={50}
                 height={50}
-              />
+              /> */}
             </Link>
             <div className="md:flex md:items-center md:space-x-4 ml-2 my-2">
               <Link
@@ -134,9 +134,9 @@ export default function Navbar() {
         {/* todo: set up toast notifs */}
         {/* <div>{toastNotification.args[0]}</div> */}
       </nav>
-      <div className="mr-20">
+      {/* <div className="mr-20">
         <ToastNotification {...toastNotification} />
-      </div>
+      </div> */}
     </div>
   );
 }
