@@ -18,26 +18,27 @@ export const DonationContextProvider = (props: {
 
   useEffect(() => {
     console.log("fetching candidates...");
+    // todo: fetch candidates from the blockchain / they are known as profiles
     const fetchCandidates = async () => {
       // note: hardcoded candidates for now
       setCandidates([
         {
           id: 1,
-          recipientId: "0x8C180840fcBb90CE8464B4eCd12ab0f840c6647C",
+          recipientId: "0x3f15B8c6F9939879Cb030D6dd935348E57109637",
           name: "Josh Levitt",
           imageUrl: undefined,
           totalDonations: BigInt(0),
         },
         {
           id: 2,
-          recipientId: "0x8C180840fcBb90CE8464B4eCd12ab0f840c6647C",
+          recipientId: "0x3f15B8c6F9939879Cb030D6dd935348E57109637",
           name: "Richard McArthur",
           imageUrl: undefined,
           totalDonations: BigInt(0),
         },
         {
           id: 3,
-          recipientId: "0x8C180840fcBb90CE8464B4eCd12ab0f840c6647C",
+          recipientId: "0x3f15B8c6F9939879Cb030D6dd935348E57109637",
           name: "John Steinck",
           imageUrl: undefined,
           totalDonations: BigInt(0),

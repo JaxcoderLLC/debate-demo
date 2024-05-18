@@ -5,41 +5,29 @@ import {
   NATIVE,
 } from "@allo-team/allo-v2-sdk";
 import { commonConfig } from "@/config/common";
-import { optimismSepolia } from "viem/chains";
-import { useWallets } from "@privy-io/react-auth";
+import { base } from "viem/chains";
 import { InitializeData } from "@allo-team/allo-v2-sdk/dist/strategies/DirectGrantsLiteStrategy/types";
-import { useEffect, useState } from "react";
+import { Address, createWalletClient, custom } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 
 export const useAllo = () => {
-  const { wallets } = useWallets();
-  const wallet = wallets[0]; // Replace this with your desired wallet
-
-  const [provider, setProvider] = useState<any>();
-
-  useEffect(() => {
-    const fetchProvider = async () => {
-      const provider = await wallet.getEthereumProvider();
-      setProvider(provider);
-    };
-
-    fetchProvider();
-  }, [wallet]);
-
   const allo = new Allo({
-    chain: optimismSepolia.id,
-    rpc: process.env.NEXT_PUBLIC_OP_SEPOLIA_RPC_URL as string,
+    chain: base.id,
+    rpc: process.env.NEXT_PUBLIC_BASE_RPC_URL as string,
   });
   const strategy = new DirectGrantsLiteStrategy({
-    chain: optimismSepolia.id,
-    rpc: process.env.NEXT_PUBLIC_OP_SEPOLIA_RPC_URL as string,
+    chain: base.id,
+    rpc: process.env.NEXT_PUBLIC_BASE_RPC_URL as string,
   });
-  strategy.setContract("0x11b5B8094F668D870487a62012ed8ffd69E2bbd7");
+  strategy.setContract("0x79A5EEc2C87Cd2116195E71af7A38647f89C8Ffa");
 
   // NOTE: Timestamps should be in seconds and start should be a few minutes in the future to account for transaction times.7
   const createPool = async ({
+    owner,
     regStartTime,
     regEndTime,
   }: {
+    owner: Address;
     regStartTime: bigint;
     regEndTime: bigint;
   }) => {
@@ -52,9 +40,11 @@ export const useAllo = () => {
 
     const initStrategyData = await strategy.getInitializeData(initParams);
 
+    // todo: check if the user has a profile and if not create one so they can donate...
+
     const poolCreationData: CreatePoolArgs = {
       profileId: commonConfig.ownerProfileId, // sender must be a profile member
-      strategy: "0x11b5B8094F668D870487a62012ed8ffd69E2bbd7", // approved strategy contract
+      strategy: "0x79A5EEc2C87Cd2116195E71af7A38647f89C8Ffa", // approved strategy contract
       initStrategyData: initStrategyData, // unique to the strategy
       token: NATIVE as `0x${string}`, // you need to change this to your token address
       amount: BigInt(1e14),
@@ -71,14 +61,22 @@ export const useAllo = () => {
     let transactionHash = "0x";
 
     try {
-      const transactionRequest = {
-        to: createPoolData.to as string,
+      // const transactionRequest = {
+      //   to: createPoolData.to as string,
+      //   data: createPoolData.data,
+      //   value: BigInt(createPoolData.value),
+      // };
+      const walletClient = createWalletClient({
+        account: owner,
+        chain: base,
+        transport: custom(window.ethereum!),
+      });
+      
+      transactionHash = await walletClient.sendTransaction({
+        account: owner,
         data: createPoolData.data,
+        to: createPoolData.to,
         value: BigInt(createPoolData.value),
-      };
-      transactionHash = await provider.request({
-        method: "eth_sendTransaction",
-        params: [transactionRequest],
       });
 
       setTimeout(() => {}, 5000);
@@ -91,3 +89,12 @@ export const useAllo = () => {
 
   return { strategy, createPool };
 };
+
+// const transactionRequest = {
+//   to: '0xTheRecipientAddress',
+//   value: 100000,
+// };
+// const transactionHash = await provider.request({
+//   method: 'eth_sendTransaction',
+//   params: [transactionRequest],
+// });

@@ -3,11 +3,11 @@
 import {
   Allo,
   Registry,
-  SQFSuperFluidStrategy,
+  DirectGrantsLiteStrategy,
+  DirectGrantsLiteStrategyAbi,
   TransactionData,
 } from "@allo-team/allo-v2-sdk";
-import { optimismSepolia } from "wagmi/chains";
-import { AllocationSuperlfuid } from "@allo-team/allo-v2-sdk/dist/strategies/SuperFluidStrategy/types";
+import { base } from "wagmi/chains";
 import JoshLImage from "../../assets/candidates/JoshStanding.png";
 import RichardMImage from "../../assets/candidates/RichardM.png";
 import JohnSImage from "../../assets/candidates/SteinbeckCutOut.png";
@@ -24,6 +24,7 @@ import {
   unitOfTime,
 } from "@/utils/utils";
 import { usePrice } from "@/hooks/usePrice";
+import { Allocation } from "@allo-team/allo-v2-sdk/dist/strategies/DirectGrantsLiteStrategy/types";
 
 /* eslint-disable @next/next/no-img-element */
 export default function Donate() {
@@ -42,21 +43,21 @@ export default function Donate() {
 const candidates: TCandidate[] = [
   {
     id: 1,
-    recipientId: "0x08e350796d1ffc87837072d3a92975fdf7a7b11c",
+    recipientId: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
     name: "Josh Levitt",
     imageUrl: JoshLImage,
     totalDonations: BigInt(0),
   },
   {
     id: 2,
-    recipientId: "0x433237e7c33834e250d63d3a6a066dce1f5c0a4b",
+    recipientId: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
     name: "Richard McArthur",
     imageUrl: RichardMImage,
     totalDonations: BigInt(0),
   },
   {
     id: 3,
-    recipientId: "0x9f56fa49af3b3e6fdebe64763bd34ae4aa1c4106",
+    recipientId: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
     name: "John Steinck",
     imageUrl: JohnSImage,
     totalDonations: BigInt(0),
@@ -234,21 +235,9 @@ function DonateButton(props: {
         console.log(`Donating $${props.amount}`);
 
         // todo: set up donation call - allocate() function on Allo
-        await allocate(
-          {
-            recipientId: props.recipientId,
-            flowRate: parseEther(
-              (
-                props.amount /
-                BigInt(
-                  fromTimeUnitsToSeconds(1, unitOfTime[TimeInterval.MONTH])
-                )
-              ).toString()
-            ),
-          },
-          22,
-          sendTransaction
-        );
+        const allocationData: Allocation[] = [];
+
+        await allocate(allocationData, 1, sendTransaction);
       }}
       disabled={props.disabled}
     >
@@ -259,88 +248,28 @@ function DonateButton(props: {
 }
 
 const allo = new Allo({
-  chain: optimismSepolia.id,
+  chain: base.id,
   rpc: process.env.RPC_URL as string,
 });
 
-const registry = new Registry({
-  chain: optimismSepolia.id,
+const strategy = new DirectGrantsLiteStrategy({
+  chain: base.id,
   rpc: process.env.RPC_URL as string,
 });
-
-const strategy = new SQFSuperFluidStrategy({
-  chain: optimismSepolia.id,
-  rpc: process.env.RPC_URL as string,
-});
-
-// Note: admin function
-const batchSetAllocator = async (
-  data: AllocationSuperlfuid[],
-  poolId: number
-) => {
-  if (strategy) {
-    // todo: set the strategy ID from the one you deployed/created
-    const strategyAddress = await allo.getStrategy(BigInt(poolId));
-    console.log("strategyAddress", strategyAddress);
-
-    // Set the contract address -> docs:
-    strategy.setContract(strategyAddress as `0x${string}`);
-    strategy.setPoolId(BigInt(poolId));
-    const txData: TransactionData = strategy.getBatchAllocationData(data);
-
-    console.log("txData", txData);
-
-    // try {
-    //   const tx = await sendTransaction({
-    //     to: txData.to as string,
-    //     data: txData.data,
-    //     value: BigInt(txData.value),
-    //   });
-
-    //   await publicClient.waitForTransactionReceipt({
-    //     hash: tx.hash,
-    //   });
-
-    //   await new Promise((resolve) => setTimeout(resolve, 3000));
-    // } catch (e) {
-    //   console.log("Updating Allocators", e);
-    // }
-  }
-};
 
 // Note: This is called when donate button is clicked
 const allocate = async (
-  data: AllocationSuperlfuid,
+  data: Allocation[],
   poolId: number,
   sendTransaction: any
 ) => {
   console.log("Allocating...", { data, poolId });
 
-  // Set some allocators for demo
-  // NOTE: move this
-  // const allocatorData: AllocationSuperlfuid[] = [
-  //   {
-  //     recipientId: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
-  //     flowRate: BigInt(0),
-  //   },
-  // ];
-
-  // todo: set the allocators defined above
-  // await batchSetAllocator(allocatorData, poolId);
-  // console.log("Allocators set");
-
   if (strategy) {
-    // todo: set your poolId here
     strategy.setPoolId(BigInt(poolId));
 
-    // console.log(data);
-
     // Get the allocation data from the SDK
-    // todo: snippet => getAllocationData
-    const allocationData: TransactionData = strategy.getAllocationData(
-      data.recipientId,
-      BigInt(parseEther("0.0016"))
-    );
+    const allocationData: TransactionData = strategy.getAllocateData(data);
 
     console.log("allocationData", allocationData);
 

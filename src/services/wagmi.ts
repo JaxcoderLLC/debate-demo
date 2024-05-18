@@ -1,10 +1,10 @@
 import { createConfig, createStorage, http, usePublicClient } from "wagmi";
 import { injected, metaMask, walletConnect } from "wagmi/connectors";
-import { base, baseSepolia, optimismSepolia } from "wagmi/chains";
+import { base, baseSepolia } from "wagmi/chains";
 
 import dotenv from "dotenv";
 import { PrivyClientConfig } from "@privy-io/react-auth";
-import { createPublicClient, createWalletClient, custom } from "viem";
+// import { createPublicClient, createWalletClient, custom } from "viem";
 
 dotenv.config();
 
@@ -14,21 +14,13 @@ const projectId =
   (process.env.PROJECT_ID as string) || "31b0b6255ee5cc68ae76cab5fa96a9a0";
 
 export const wagmiConfig = createConfig({
-  chains: [optimismSepolia],
+  chains: [base],
   connectors: [connector, walletConnect({ projectId })],
   // storage: createStorage({ storage: window?.localStorage }),
   transports: {
-    // [baseSepolia.id]: http(
-    //   (process.env.NEXT_PUBLIC_BASE_RPC_URL as string) ||
-    //     "https://base-sepolia.g.alchemy.com/v2/xFAklZUTuJWw2xfnsDrN73PklwhbZVfh",
-    //   { batch: true }
-    // ),
-    [optimismSepolia.id]: http(
-      process.env.NEXT_PUBLIC_OP_SEPOLIA_RPC_URL as string,
-      {
-        batch: true,
-      }
-    ),
+    [base.id]: http(process.env.NEXT_PUBLIC_BASE_RPC_URL as string, {
+      batch: true,
+    }),
   },
 });
 
@@ -42,7 +34,7 @@ export const privyConfig: PrivyClientConfig = {
   appearance: {
     showWalletLoginFirst: false,
   },
-  defaultChain: optimismSepolia,
+  defaultChain: base,
   legal: {
     privacyPolicyUrl: "https://privy.io/privacy",
     termsAndConditionsUrl: "https://privy.io/terms",
@@ -55,18 +47,3 @@ export const privyConfig: PrivyClientConfig = {
     overflow: ["google"],
   },
 };
-
-// let transport: any = http();
-// if (typeof window !== "undefined") {
-//   transport = custom(window.ethereum!);
-// }
-
-// export const walletClient = createWalletClient({
-//   chain: optimismSepolia,
-//   transport: custom(transport),
-// });
-
-// export const publicClient = createPublicClient({
-//   chain: optimismSepolia,
-//   transport: http(),
-// });
