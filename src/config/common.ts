@@ -32,7 +32,7 @@ export const commonConfig: CommonConfig = {
   nonce: Math.floor(Math.random() * 10000),
   rpc: process.env.NEXT_PUBLIC_RPC_URL as string, // arbitrum-sepolia
   ownerProfileId:
-    "0x1cfa52382f1f47f7e3fd3cd78303d0eb0ae23bff73b11513706563c3cc4b85cd",
+    "0xbd01541de456ae5fc87d555d738da6a83bfbb0ef98c5cfebcaebdff94f1948f4",
   ownerAddress: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
   anchorAddress: "0x6509aca95f0d798b5fcb24f1c78fa2cffa3fea43",
   managers: [],
@@ -40,7 +40,7 @@ export const commonConfig: CommonConfig = {
     requestedAmount: BigInt(0),
     recipientAddress: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
     profileId:
-      "0x1cfa52382f1f47f7e3fd3cd78303d0eb0ae23bff73b11513706563c3cc4b85cd",
+      "0xbd01541de456ae5fc87d555d738da6a83bfbb0ef98c5cfebcaebdff94f1948f4",
     name: "Test Application",
     website: "https://docs.allo.gitcoin.co",
     profileName: "Jax Test",
@@ -55,8 +55,7 @@ export const commonConfig: CommonConfig = {
   recipientId: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
   members: [],
   pool: {
-    profileId:
-      "0x",
+    profileId: "0x",
     name: "Test Debate Pool",
     description: "A pool for debate demo",
     website: "https://allo.gitcoin.co",

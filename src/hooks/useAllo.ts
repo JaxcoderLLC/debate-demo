@@ -7,8 +7,6 @@ import {
 import { commonConfig } from "@/config/common";
 import { base } from "viem/chains";
 import { InitializeData } from "@allo-team/allo-v2-sdk/dist/strategies/DirectGrantsLiteStrategy/types";
-import { Address, createWalletClient, custom } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
 
 export const useAllo = () => {
   const allo = new Allo({
@@ -18,16 +16,16 @@ export const useAllo = () => {
   const strategy = new DirectGrantsLiteStrategy({
     chain: base.id,
     rpc: process.env.NEXT_PUBLIC_BASE_RPC_URL as string,
+    address: "0x79A5EEc2C87Cd2116195E71af7A38647f89C8Ffa",
   });
-  strategy.setContract("0x79A5EEc2C87Cd2116195E71af7A38647f89C8Ffa");
 
   // NOTE: Timestamps should be in seconds and start should be a few minutes in the future to account for transaction times.7
   const createPool = async ({
-    owner,
+    provider,
     regStartTime,
     regEndTime,
   }: {
-    owner: Address;
+    provider: any;
     regStartTime: bigint;
     regEndTime: bigint;
   }) => {
@@ -47,10 +45,11 @@ export const useAllo = () => {
       strategy: "0x79A5EEc2C87Cd2116195E71af7A38647f89C8Ffa", // approved strategy contract
       initStrategyData: initStrategyData, // unique to the strategy
       token: NATIVE as `0x${string}`, // you need to change this to your token address
-      amount: BigInt(1e14),
+      amount: BigInt(0),
       metadata: {
         protocol: BigInt(1),
-        pointer: "test pointer", //pointer.IpfsHash,
+        // todo: update this with the pointer to the metadata on IPFS
+        pointer: "bafybeia4khbew3r2mkflyn7nzlvfzcb3qpfeftz5ivpzfwn77ollj47gqi", //pointer.IpfsHash,
       },
       managers: commonConfig.managers,
     };
@@ -61,22 +60,24 @@ export const useAllo = () => {
     let transactionHash = "0x";
 
     try {
-      // const transactionRequest = {
-      //   to: createPoolData.to as string,
-      //   data: createPoolData.data,
-      //   value: BigInt(createPoolData.value),
-      // };
-      const walletClient = createWalletClient({
-        account: owner,
-        chain: base,
-        transport: custom(window.ethereum!),
-      });
-      
-      transactionHash = await walletClient.sendTransaction({
-        account: owner,
+      const transactionRequest = {
+        to: createPoolData.to as string,
         data: createPoolData.data,
-        to: createPoolData.to,
         value: BigInt(createPoolData.value),
+      };
+      // const walletClient = createWalletClient({
+      //   account: owner,
+      //   chain: base,
+      //   transport: custom(window.ethereum!),
+      // });
+
+      transactionHash = await provider.request({
+        method: "eth_sendTransaction",
+        params: [transactionRequest],
+        // account: owner,
+        // data: createPoolData.data,
+        // to: createPoolData.to,
+        // value: BigInt(createPoolData.value),
       });
 
       setTimeout(() => {}, 5000);

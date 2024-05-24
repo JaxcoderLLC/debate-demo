@@ -3,7 +3,7 @@
 import ProfileForm from "@/components/ProfileForm";
 import { createProfile } from "@/sdk/registry";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useWallets } from "@privy-io/react-auth";
+import { EIP1193Provider, useWallets } from "@privy-io/react-auth";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Address } from "viem";
@@ -15,10 +15,16 @@ const schema = yup.object({
   about: yup.string(),
 });
 
+type FormData = {
+  profileName: string;
+  website?: string;
+  about?: string;
+};
+
 export default function NewProfile() {
   const { wallets } = useWallets();
   const wallet = wallets[0]; // Replace this with your desired wallet
-  const [provider, setProvider] = useState<any>();
+  const [provider, setProvider] = useState<EIP1193Provider>();
 
   useEffect(() => {
     // todo: move to context
@@ -35,11 +41,11 @@ export default function NewProfile() {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: FormData) => {
     console.log(data);
 
     // Create a new profile

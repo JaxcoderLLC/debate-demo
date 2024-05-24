@@ -1,7 +1,6 @@
 import {
   TAbiComponent,
   TAbiItem,
-  IDonationStatus,
   TContractAbi,
   TStatus,
 } from "@/app/types";

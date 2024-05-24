@@ -1,7 +1,7 @@
 "use client";
 
 import { useAllo } from "@/hooks/useAllo";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { EIP1193Provider, usePrivy, useWallets } from "@privy-io/react-auth";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -15,19 +15,16 @@ export default function EventForm({
   errors: any;
 }) {
   // Privy hooks
-  const { ready, authenticated } = usePrivy();
+  const { ready, authenticated, user } = usePrivy();
   const { wallets, ready: walletsReady } = useWallets();
-  // const wallet = wallets[0]; // Replace this with your desired wallet
-  const embeddedWallet =
-    walletsReady &&
-    wallets.find((wallet) => wallet.walletClientType === "privy");
-
-  const [provider, setProvider] = useState<any>();
+  const wallet = wallets[0]; // Replace this with your desired wallet
+  const [provider, setProvider] = useState<EIP1193Provider>();
 
   useEffect(() => {
+    // todo: move to context
     const fetchProvider = async () => {
-      if (ready && embeddedWallet && authenticated) {
-        const provider = await embeddedWallet.getEthereumProvider();
+      if (ready && wallet && authenticated) {
+        const provider = await wallet.getEthereumProvider();
 
         console.log("provider ready ser", provider);
 
@@ -36,18 +33,19 @@ export default function EventForm({
     };
 
     fetchProvider();
-  }, [ready, embeddedWallet, authenticated]);
+  }, [ready, wallet, authenticated]);
 
   if (!ready) {
     console.log("Not ready");
   }
 
-  const { createPool } = useAllo(provider);
+  const { createPool, strategy } = useAllo();
 
   const onSubmit = (data: any) => {
     console.log(data);
 
     createPool({
+      provider,
       regStartTime: BigInt(Math.floor(new Date().getTime() / 1000) + 300),
       regEndTime: BigInt(Math.floor(new Date().getTime() / 1000) + 10000),
     });
