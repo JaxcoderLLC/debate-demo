@@ -5,7 +5,6 @@ import { getEventValues } from "@/utils/common";
 import { Registry } from "@allo-team/allo-v2-sdk";
 import { TransactionData } from "@allo-team/allo-v2-sdk/dist/Common/types";
 import { CreateProfileArgs } from "@allo-team/allo-v2-sdk/dist/Registry/types";
-import { sendTransaction } from "@wagmi/core";
 import { Address } from "viem";
 
 // create a registry instance

@@ -46,8 +46,8 @@ export default function EventForm({
 
     createPool({
       provider,
-      regStartTime: BigInt(Math.floor(new Date().getTime() / 1000) + 300),
-      regEndTime: BigInt(Math.floor(new Date().getTime() / 1000) + 10000),
+      regStartTime: BigInt(Math.floor(new Date().getTime() / 1000) + 3000),
+      regEndTime: BigInt(Math.floor(new Date().getTime() / 1000) +20000),
     });
   };
 

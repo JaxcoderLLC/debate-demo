@@ -38,6 +38,8 @@ export const useAllo = () => {
 
     const initStrategyData = await strategy.getInitializeData(initParams);
 
+    console.log("initStrategyData", initStrategyData)
+
     // todo: check if the user has a profile and if not create one so they can donate...
 
     const poolCreationData: CreatePoolArgs = {
@@ -45,7 +47,7 @@ export const useAllo = () => {
       strategy: "0x79A5EEc2C87Cd2116195E71af7A38647f89C8Ffa", // approved strategy contract
       initStrategyData: initStrategyData, // unique to the strategy
       token: NATIVE as `0x${string}`, // you need to change this to your token address
-      amount: BigInt(0),
+      amount: BigInt(1e14),
       metadata: {
         protocol: BigInt(1),
         // todo: update this with the pointer to the metadata on IPFS
@@ -55,7 +57,7 @@ export const useAllo = () => {
     };
 
     // Prepare the transaction data
-    const createPoolData = allo.createPoolWithCustomStrategy(poolCreationData);
+    const createPoolData = allo.createPool(poolCreationData);
 
     let transactionHash = "0x";
 
