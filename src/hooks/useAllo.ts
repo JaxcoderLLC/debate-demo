@@ -19,7 +19,7 @@ export const useAllo = () => {
     address: "0x79A5EEc2C87Cd2116195E71af7A38647f89C8Ffa",
   });
 
-  // NOTE: Timestamps should be in seconds and start should be a few minutes in the future to account for transaction times.7
+  // NOTE: Timestamps should be in seconds and start should be a few minutes in the future to account for transaction times
   const createPool = async ({
     provider,
     regStartTime,
@@ -37,8 +37,6 @@ export const useAllo = () => {
     };
 
     const initStrategyData = await strategy.getInitializeData(initParams);
-
-    console.log("initStrategyData", initStrategyData)
 
     // todo: check if the user has a profile and if not create one so they can donate...
 
@@ -67,19 +65,10 @@ export const useAllo = () => {
         data: createPoolData.data,
         value: BigInt(createPoolData.value),
       };
-      // const walletClient = createWalletClient({
-      //   account: owner,
-      //   chain: base,
-      //   transport: custom(window.ethereum!),
-      // });
 
       transactionHash = await provider.request({
         method: "eth_sendTransaction",
         params: [transactionRequest],
-        // account: owner,
-        // data: createPoolData.data,
-        // to: createPoolData.to,
-        // value: BigInt(createPoolData.value),
       });
 
       setTimeout(() => {}, 5000);
@@ -92,12 +81,3 @@ export const useAllo = () => {
 
   return { strategy, createPool };
 };
-
-// const transactionRequest = {
-//   to: '0xTheRecipientAddress',
-//   value: 100000,
-// };
-// const transactionHash = await provider.request({
-//   method: 'eth_sendTransaction',
-//   params: [transactionRequest],
-// });

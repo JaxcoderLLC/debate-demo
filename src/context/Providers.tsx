@@ -8,6 +8,7 @@ import { NextUIProvider } from "@nextui-org/react";
 
 const queryClient = new QueryClient();
 import PrivyWrapper from "./PrivyWrapper";
+import { ProfileContextProvider } from "./ProfileContext";
 
 const Providers = (props: { children: JSX.Element[] | JSX.Element }) => {
   return (
@@ -15,7 +16,11 @@ const Providers = (props: { children: JSX.Element[] | JSX.Element }) => {
       <PrivyWrapper>
         <QueryClientProvider client={queryClient}>
           <WagmiProvider config={wagmiConfig}>
-            <DonationContextProvider>{props.children}</DonationContextProvider>
+            <ProfileContextProvider>
+              <DonationContextProvider>
+                {props.children}
+              </DonationContextProvider>
+            </ProfileContextProvider>
           </WagmiProvider>
         </QueryClientProvider>
       </PrivyWrapper>

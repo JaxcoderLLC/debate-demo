@@ -21,24 +21,35 @@ export interface IDonationStatus {
   [EStatus.Canceled]: string;
 }
 
-export type TProfilesByOwnerResponse = {
-  profileId: Hex;
-  name: string;
-  owner: string;
-  createdAt: string;
-  anchor: Address;
+export type TRole = {
+  address: Address;
+  projectId: Hex;
   role: string;
-};
+}
 
-export type TProfileResponse = {
+export type TProfile = {
   profileId: Hex;
-  nonce: number;
   name: string;
+  nonce: number;
   metadataPointer: string;
   owner: Address;
   anchor: Address;
+  roles: TRole[];
   creator: Address;
   createdAt: string;
+  tags: string[];
+};
+
+export type TProfilesByOwnerResponse = TProfile[] & {
+  // overrides...
+};
+
+export type TProfileResponse = TProfile & {
+  // overrides...
+};
+
+export type FetchProfilesResponse = {
+  projects: TProfile[];
 };
 
 export type TPoolMetadata = {

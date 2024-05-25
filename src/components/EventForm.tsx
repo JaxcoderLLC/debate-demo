@@ -17,7 +17,7 @@ export default function EventForm({
   // Privy hooks
   const { ready, authenticated, user } = usePrivy();
   const { wallets, ready: walletsReady } = useWallets();
-  const wallet = wallets[0]; // Replace this with your desired wallet
+  const wallet = wallets[0];
   const [provider, setProvider] = useState<EIP1193Provider>();
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function EventForm({
     console.log("Not ready");
   }
 
-  const { createPool, strategy } = useAllo();
+  const { createPool } = useAllo();
 
   const onSubmit = (data: any) => {
     console.log(data);

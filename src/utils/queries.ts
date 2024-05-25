@@ -1,17 +1,11 @@
 import { gql } from "graphql-request";
 
 export const getProfilesByOwnerQuery = gql`
-  query ($userAddress: String!) {
+  query ($userAddress: String!, $chainId: Int!) {
     projects(
-      first: 100
       filter: {
-        roles: {
-          every: {
-            address: { equalTo: "0xe3f12ef28ccdadac60dac287395251b5d16cdaba" }
-          }
-        }
-        chainId: { in: [11155420] }
-        rolesExist: true
+        roles: { every: { address: { equalTo: $userAddress } } }
+        chainId: { in: [$chainId] }
       }
     ) {
       roles(first: 100) {

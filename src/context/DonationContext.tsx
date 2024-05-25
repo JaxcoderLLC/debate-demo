@@ -46,6 +46,7 @@ export const DonationContextProvider = (props: {
       ]);
       setIsLoaded(true);
     };
+
     fetchCandidates();
   }, []);
 
