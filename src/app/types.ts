@@ -1,4 +1,5 @@
 import { StaticImageData } from "next/image";
+import { Dispatch, SetStateAction } from "react";
 import { Address, Hex } from "viem";
 
 export enum EStatus {
@@ -25,18 +26,26 @@ export type TRole = {
   address: Address;
   projectId: Hex;
   role: string;
-}
+};
 
 export type TProfile = {
-  profileId: Hex;
+  id: Hex;
   name: string;
   nonce: number;
-  metadataPointer: string;
+  metadata: {
+    name: string;
+    type: string;
+  };
+  metadataCid: string;
   owner: Address;
-  anchor: Address;
+  anchorAddress: Address;
+  applications: any[];
   roles: TRole[];
   creator: Address;
   createdAt: string;
+  projectNumber: number | null;
+  projectType: string; // "CANONICAL"
+  registryAddress: Address;
   tags: string[];
 };
 
@@ -164,3 +173,73 @@ export type TModalPlacement =
   | "top-center"
   | "bottom"
   | "bottom-center";
+
+export type TEvent = {
+  id: string;
+  chainId: number;
+  strategyName: string;
+  strategyAddress: Address;
+  applicationsStartTime: string;
+  applicationsEndTime: string;
+  matchAmount?: bigint;
+  matchAmountInUsd?: bigint;
+  roundMetadata: {
+    name: string;
+    support: {
+      info: string;
+      type: string;
+    };
+    roundType: string;
+    eligibility: {
+      description: string;
+      requirements: [
+        {
+          requirement: string;
+        }
+      ];
+    };
+    feesAddress: Address;
+    feesPercentage: number;
+    programContractAddress: Address;
+    quadraticFundingConfig: {
+      matchingCap: boolean;
+      sybilDefense: boolean;
+      minDonationThreshold: boolean;
+      matchingFundsAvailable: bigint;
+    };
+  };
+  applicationMetadata: {
+    version: string;
+    lastUpdatedOn: number;
+    applicationSchema: {
+      questions: [
+        {
+          id: number;
+          info: string;
+          type: string;
+          title: string;
+          hidden: boolean;
+          required: boolean;
+          encrypted: boolean;
+        }
+      ];
+      requirements?: {
+        github: {
+          required: boolean;
+          verification: boolean;
+        };
+        twitter: {
+          required: boolean;
+          verification: boolean;
+        };
+      };
+    };
+  };
+  tags: string[];
+};
+
+export interface IEventContextProps {
+  isLoaded: boolean;
+  events: TEvent[];
+  setEvents: Dispatch<SetStateAction<TEvent[]>>;
+}

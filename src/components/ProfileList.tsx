@@ -1,6 +1,11 @@
 import { ProfileContext } from "@/context/ProfileContext";
-import { CogIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import { Divider } from "@nextui-org/react";
+import {
+  CogIcon,
+  PlusIcon,
+  XMarkIcon,
+  ClipboardIcon,
+} from "@heroicons/react/24/solid";
+import { Divider, Tooltip } from "@nextui-org/react";
 import Link from "next/link";
 import { useContext } from "react";
 
@@ -28,10 +33,10 @@ export default function ProfileList() {
       >
         {profiles.map((profile) => (
           <li
-            key={profile.profileId}
+            key={profile.id}
             className="col-span-1 rounded-lg bg-gray-50 shadow-xl hover:bg-gray-100 sm:col-span-1"
           >
-            <div className="flex w-full items-center justify-between space-x-2 p-4">
+            <div className="flex w-full items-center justify-between space-x-2 p-2">
               <div className="truncate">
                 <div className="flex items-center justify-between space-x-3">
                   <h3 className="truncate text-sm font-medium text-gray-900">
@@ -54,14 +59,36 @@ export default function ProfileList() {
                 height={40}
               /> */}
             </div>
-            <div className="flex w-full items-center justify-between space-x-2 p-4">
-              Tags: {profile.tags.at(0)}
+            <div className="flex w-full items-center justify-between space-x-1 p-2">
+              <span className="mr-2">Anchor: </span>
+              {profile.anchorAddress.slice(0, 8)}...
+              {profile.anchorAddress.slice(-6)}
+              <Tooltip
+                content="Copy Address"
+                shadow="sm"
+                placement="top"
+                className="text-xs"
+              >
+                <ClipboardIcon
+                  className="hover:cursor-pointer"
+                  onClick={(e) => {
+                    navigator.clipboard.writeText(profile.anchorAddress);
+                    e.preventDefault();
+                  }}
+                  height={16}
+                  width={16}
+                />
+              </Tooltip>
+            </div>
+            <div className="flex w-full items-center justify-between space-x-2 p-2">
+              <span>Applications: </span>
+              {profile.applications.length}
             </div>
             <div>
               <div className="-mt-px flex divide-x cursor-pointer divide-gray-200">
                 <div className="flex w-0 flex-1">
                   <Link
-                    href={`/profile/${profile.profileId}`}
+                    href={`/profile/${profile.id}`}
                     className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                   >
                     <CogIcon

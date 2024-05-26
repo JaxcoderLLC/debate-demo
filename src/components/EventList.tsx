@@ -1,87 +1,77 @@
-import { EStatus } from "@/app/types";
-import { classNames, statuses } from "@/utils/common";
-import { PlusIcon } from "@heroicons/react/20/solid";
+import { TEvent } from "@/app/types";
+import { DatePicker, TimeInput } from "@nextui-org/react";
 import Link from "next/link";
-
-// todo: type this as a round
-const events = [
-  {
-    id: 1,
-    name: "GraphQL API",
-    status: EStatus.Completed,
-    createdBy: "Leslie Alexander",
-    dueDate: "March 17, 2023",
-    dueDateTime: "2023-03-17T00:00Z",
-  },
-  {
-    id: 2,
-    name: "New benefits plan",
-    status: EStatus.InProgress,
-    createdBy: "Leslie Alexander",
-    dueDate: "May 5, 2023",
-    dueDateTime: "2023-05-05T00:00Z",
-  },
-  {
-    id: 3,
-    name: "Onboarding emails",
-    status: EStatus.InProgress,
-    createdBy: "Courtney Henry",
-    dueDate: "May 25, 2023",
-    dueDateTime: "2023-05-25T00:00Z",
-  },
-  {
-    id: 4,
-    name: "iOS app",
-    status: EStatus.Canceled,
-    createdBy: "Leonard Krasner",
-    dueDate: "June 7, 2023",
-    dueDateTime: "2023-06-07T00:00Z",
-  },
-];
+import { parseAbsoluteToLocal } from "@internationalized/date";
+import moment, { now } from "moment";
 
 // Events are just rounds.
-export default function EventList() {
+export default function EventList(props: { events: TEvent[] }) {
+  console.log("events from EventList component", props.events);
+
+  const isAfterEventEndDate = (event: TEvent) => {
+    return (
+      now() >
+      moment.parseZone(event.applicationsEndTime ?? new Date()).valueOf()
+    );
+  };
+
   return (
     <div className="my-4">
+      <h2 className="text-2xl font-semibold leading-6 text-gray-900 my-8">
+        Ongoing Events
+      </h2>
       <ul role="list" className="divide-y divide-gray-100 mt-2">
-        {events.map((event) => (
-          <li
-            key={event.id}
-            className="flex items-center justify-between gap-x-6 py-5"
-          >
-            <div className="min-w-0">
-              <div className="flex items-start gap-x-3">
-                <p className="text-sm font-semibold leading-6 text-gray-900">
-                  {event.name}
-                </p>
-                <p
+        {props.events.map(
+          (event) =>
+            !isAfterEventEndDate(event) && (
+              <li
+                key={event.id}
+                className="flex items-center justify-between gap-x-6 py-5"
+              >
+                <div className="min-w-0">
+                  <div className="flex items-start gap-x-3">
+                    <p className="text-sm font-semibold leading-6 text-gray-900">
+                      {event.roundMetadata?.name ?? "Anonymous"}
+                    </p>
+                    {/* <p
                   className={classNames(
                     statuses[event.status as keyof typeof statuses],
                     "rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset"
                   )}
                 >
                   {EStatus[event.status]}
-                </p>
-              </div>
-              <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
-                <p className="whitespace-nowrap">
-                  Due on{" "}
-                  <time dateTime={event.dueDateTime}>{event.dueDate}</time>
-                </p>
-                <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
-                  <circle cx={1} cy={1} r={1} />
-                </svg>
-                <p className="truncate">Created by {event.createdBy}</p>
-              </div>
-            </div>
-            <div className="flex flex-none items-center gap-x-4">
-              <Link
-                href={`/event/${event.id.toString()}`}
-                className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
-              >
-                View event<span className="sr-only">, {event.name}</span>
-              </Link>
-              {/* <Menu as="div" className="relative flex-none">
+                </p> */}
+                  </div>
+                  <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                    Start
+                    <p className="whitespace-nowrap">
+                      <DatePicker
+                        aria-label="Start date"
+                        className="max-w-md"
+                        granularity="minute"
+                        variant="bordered"
+                        hideTimeZone={false}
+                        isReadOnly={true}
+                        defaultValue={parseAbsoluteToLocal(
+                          event.applicationsStartTime ?? new Date()
+                        )}
+                      />
+                    </p>
+                    <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
+                      <circle cx={1} cy={1} r={1} />
+                    </svg>
+                    {/* todo: we don't have the creator yet */}
+                    {/* <p className="truncate">Created by {event.???}</p> */}
+                  </div>
+                </div>
+                <div className="flex flex-none items-center gap-x-4">
+                  <Link
+                    href={`/event/${event.id.toString()}`}
+                    className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+                  >
+                    View event
+                  </Link>
+                  {/* <Menu as="div" className="relative flex-none">
                   <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
                     <span className="sr-only">Open options</span>
                     <EllipsisVerticalIcon
@@ -128,9 +118,10 @@ export default function EventList() {
                     </Menu.Items>
                   </Transition>
                 </Menu> */}
-            </div>
-          </li>
-        ))}
+                </div>
+              </li>
+            )
+        )}
       </ul>
     </div>
   );

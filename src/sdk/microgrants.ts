@@ -249,7 +249,7 @@ export const createApplication = async (
         chainId: chain.toString(),
         profileId: profileId!.toLowerCase(),
       })
-    ).anchor;
+    ).anchorAddress;
   }
 
   console.log("anchorAddress", anchorAddress);
