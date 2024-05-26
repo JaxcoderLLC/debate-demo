@@ -175,7 +175,7 @@ export type TModalPlacement =
   | "bottom-center";
 
 export type TEvent = {
-  id: string;
+  id: string; // roundId
   chainId: number;
   strategyName: string;
   strategyAddress: Address;

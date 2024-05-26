@@ -146,7 +146,7 @@ export default function EventCalendar(props: { events: TEvent[] }) {
                 </li>
               )
           )}
-          {props.events && (
+          {props.events.length === 0 && (
             <div className="mt-8 p-2 bg-yellow-500 text-black rounded-lg">
               No upcoming events
             </div>
