@@ -242,4 +242,5 @@ export interface IEventContextProps {
   isLoaded: boolean;
   events: TEvent[];
   setEvents: Dispatch<SetStateAction<TEvent[]>>;
+  createPool: (data: any) => void;
 }

@@ -1,9 +1,10 @@
 "use client";
 
+import { EventContext } from "@/context/EventContext";
 import { useAllo } from "@/hooks/useAllo";
 import { EIP1193Provider, usePrivy, useWallets } from "@privy-io/react-auth";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function EventForm({
   register,
@@ -14,11 +15,16 @@ export default function EventForm({
   handleSubmit: any;
   errors: any;
 }) {
+  const { createPool } = useContext(EventContext);
   // Privy hooks
   const { ready, authenticated, user } = usePrivy();
   const { wallets, ready: walletsReady } = useWallets();
   const wallet = wallets[0];
   const [provider, setProvider] = useState<EIP1193Provider>();
+
+  if (!ready) {
+    console.log("Not ready");
+  }
 
   useEffect(() => {
     // todo: move to context
@@ -35,19 +41,13 @@ export default function EventForm({
     fetchProvider();
   }, [ready, wallet, authenticated]);
 
-  if (!ready) {
-    console.log("Not ready");
-  }
-
-  const { createPool } = useAllo();
-
   const onSubmit = (data: any) => {
     console.log(data);
 
     createPool({
       provider,
       regStartTime: BigInt(Math.floor(new Date().getTime() / 1000) + 3000),
-      regEndTime: BigInt(Math.floor(new Date().getTime() / 1000) +20000),
+      regEndTime: BigInt(Math.floor(new Date().getTime() / 1000) + 50000),
     });
   };
 

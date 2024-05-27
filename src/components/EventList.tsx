@@ -30,9 +30,9 @@ export default function EventList(props: { events: TEvent[] }) {
               >
                 <div className="min-w-0">
                   <div className="flex items-start gap-x-3">
-                    <p className="text-sm font-semibold leading-6 text-gray-900">
+                    <span className="text-sm font-semibold leading-6 text-gray-900">
                       {event.roundMetadata?.name ?? "Anonymous"}
-                    </p>
+                    </span>
                     {/* <p
                   className={classNames(
                     statuses[event.status as keyof typeof statuses],
@@ -44,7 +44,7 @@ export default function EventList(props: { events: TEvent[] }) {
                   </div>
                   <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
                     Start
-                    <p className="whitespace-nowrap">
+                    <div className="whitespace-nowrap">
                       <DatePicker
                         aria-label="Start date"
                         className="max-w-md"
@@ -56,7 +56,7 @@ export default function EventList(props: { events: TEvent[] }) {
                           event.applicationsStartTime ?? new Date()
                         )}
                       />
-                    </p>
+                    </div>
                     <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
                       <circle cx={1} cy={1} r={1} />
                     </svg>
