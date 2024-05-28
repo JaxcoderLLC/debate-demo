@@ -183,6 +183,7 @@ export type TEvent = {
   applicationsEndTime: string;
   matchAmount?: bigint;
   matchAmountInUsd?: bigint;
+  roles: TRole[];
   roundMetadata: {
     name: string;
     support: {

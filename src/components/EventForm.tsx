@@ -1,7 +1,6 @@
 "use client";
 
 import { EventContext } from "@/context/EventContext";
-import { useAllo } from "@/hooks/useAllo";
 import { EIP1193Provider, usePrivy, useWallets } from "@privy-io/react-auth";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
@@ -27,7 +26,6 @@ export default function EventForm({
   }
 
   useEffect(() => {
-    // todo: move to context
     const fetchProvider = async () => {
       if (ready && wallet && authenticated) {
         const provider = await wallet.getEthereumProvider();
@@ -46,7 +44,7 @@ export default function EventForm({
 
     createPool({
       provider,
-      regStartTime: BigInt(Math.floor(new Date().getTime() / 1000) + 3000),
+      regStartTime: BigInt(Math.floor(new Date().getTime() / 1000) + 10000),
       regEndTime: BigInt(Math.floor(new Date().getTime() / 1000) + 50000),
     });
   };

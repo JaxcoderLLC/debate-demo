@@ -13,6 +13,7 @@ import Tabs from "@/components/Tabs";
 import Team from "@/components/Team";
 import ProfileList from "@/components/ProfileList";
 import Events from "@/components/Events";
+import MyEvents from "@/components/MyEvents";
 
 export default function Manage() {
   const [activeTab, setActiveTab] = useState("Profile");
@@ -21,6 +22,7 @@ export default function Manage() {
       <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
       {activeTab === "Profile" && <ProfileList />}
       {activeTab === "Events" && <Events />}
+      {activeTab === "My Events" && <MyEvents />}
       {activeTab === "Stats" && <Stats />}
       {activeTab === "Team Members" && <Team />}
       {activeTab === "Fees & Settings" && <div>Settings</div>}

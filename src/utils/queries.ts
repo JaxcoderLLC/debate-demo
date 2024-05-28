@@ -341,6 +341,10 @@ export const getEventsByChainId = gql`
       fundedAmountInUsd
       roundMetadata
       applicationMetadata
+      roles {
+        address
+        role
+      }
       tags
     }
   }
@@ -368,6 +372,10 @@ export const getEventsByChainIdAndRoundId = gql`
       fundedAmountInUsd
       roundMetadata
       applicationMetadata
+      roles {
+        address
+        role
+      }
       tags
     }
   }
