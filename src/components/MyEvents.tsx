@@ -1,15 +1,13 @@
-import { Badge, DatePicker, Menu } from "@nextui-org/react";
+import { DatePicker } from "@nextui-org/react";
 import Link from "next/link";
 import { parseAbsoluteToLocal } from "@internationalized/date";
 import { EventContext } from "@/context/EventContext";
-import { Fragment, useContext } from "react";
-import { classNames } from "@/utils/common";
-import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
+import { useContext } from "react";
+import { PlusIcon } from "@heroicons/react/24/solid";
 
 // Events are just rounds.
 export default function MyEvents() {
   const { events } = useContext(EventContext);
-  console.log("events from MyEvents component", events);
 
   // filter if user has a role in the event
   const filteredEvents = events.filter(
@@ -22,13 +20,20 @@ export default function MyEvents() {
       )
   );
 
-  console.log("filtered events", filteredEvents);
-
   return (
     <div className="my-4">
-      <h2 className="text-2xl font-semibold leading-6 text-gray-900 my-8">
-        My Events
-      </h2>
+      <div className="flex flex-row justify-between items-center">
+        <h2 className="text-2xl font-semibold leading-6 text-gray-900 my-8">
+          My Events
+        </h2>
+        <Link
+          href={"/event/new"}
+          className="flex justify-center p-2 shadow-xl rounded-xl border text-white border-gray-200 bg-blue-500 hover:bg-blue-700"
+        >
+          <PlusIcon height={24} width={24} className="mr-1" />
+          <span className="mt-[1px] mr-2">New Event</span>
+        </Link>
+      </div>
       <ul role="list" className="divide-y divide-gray-100 mt-2">
         {filteredEvents.map((event) => (
           <li

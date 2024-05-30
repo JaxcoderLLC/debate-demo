@@ -1,6 +1,6 @@
 "use client";
 
-import { TEvent } from "@/app/types";
+import { TCandidate, TEvent, TEventWithCandidates } from "@/app/types";
 import { EventContext } from "@/context/EventContext";
 import { getEventsByChainIdAndRoundId } from "@/utils/queries";
 import { XMarkIcon } from "@heroicons/react/20/solid";
@@ -10,13 +10,17 @@ import {
 } from "@heroicons/react/24/solid";
 import { useContext, useEffect, useState } from "react";
 import fetch from "graphql-request";
+import { Address } from "viem";
+import { Card, Skeleton } from "@nextui-org/react";
 
 export default function EventDetail({ params }: { params: { id: string } }) {
   console.log("params", params);
 
   const { id } = params;
   const { events } = useContext(EventContext);
-  const [event, setEvent] = useState<TEvent>({} as TEvent);
+  const [event, setEvent] = useState<TEventWithCandidates>(
+    {} as TEventWithCandidates
+  );
 
   useEffect(() => {
     const fetchEvent = async (roundId: string) => {
@@ -24,7 +28,7 @@ export default function EventDetail({ params }: { params: { id: string } }) {
 
       console.log("Event fetched", event);
 
-      setEvent(event as TEvent);
+      setEvent(event as TEventWithCandidates);
     };
 
     fetchEvent(id);
@@ -32,12 +36,13 @@ export default function EventDetail({ params }: { params: { id: string } }) {
 
   console.log("Event", event);
 
-  const adminAddress = event.roles.filter((role) => role.role === "ADMIN")[0]
-    .address;
+  const adminAddress: Address = event?.roles?.filter(
+    (role) => role.role === "ADMIN"
+  )[0].address;
 
   return (
     <>
-      {event ? (
+      {event && event.roundMetadata ? (
         <>
           <div className="flex flex-row justify-between px-4 sm:px-0">
             <div>
@@ -75,7 +80,7 @@ export default function EventDetail({ params }: { params: { id: string } }) {
                 </dt>
                 <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <span className="flex-grow">
-                    {event.roundMetadata.eligibility.description}
+                    {event.roundMetadata?.eligibility?.description}
                   </span>
                 </dd>
               </div>
@@ -97,7 +102,7 @@ export default function EventDetail({ params }: { params: { id: string } }) {
               </div>
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
-                  Attendies
+                  Candidates
                 </dt>
                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <ul
@@ -179,7 +184,24 @@ export default function EventDetail({ params }: { params: { id: string } }) {
           </div>
         </>
       ) : (
-        <div>loading</div>
+        <div className="flex flex-col items-center justify-center p-4">
+          <Card className="w-full space-y-5 p-4" radius="lg">
+            <Skeleton className="rounded-lg">
+              <div className="h-24 rounded-lg bg-default-300"></div>
+            </Skeleton>
+            <div className="space-y-3">
+              <Skeleton className="w-3/5 rounded-lg">
+                <div className="h-3 w-3/5 rounded-lg bg-default-200"></div>
+              </Skeleton>
+              <Skeleton className="w-4/5 rounded-lg">
+                <div className="h-3 w-4/5 rounded-lg bg-default-200"></div>
+              </Skeleton>
+              <Skeleton className="w-2/5 rounded-lg">
+                <div className="h-3 w-2/5 rounded-lg bg-default-300"></div>
+              </Skeleton>
+            </div>
+          </Card>
+        </div>
       )}
     </>
   );

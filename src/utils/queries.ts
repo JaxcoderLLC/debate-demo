@@ -341,6 +341,11 @@ export const getEventsByChainId = gql`
       fundedAmountInUsd
       roundMetadata
       applicationMetadata
+      applications {
+        projectId
+        metadata
+        anchorAddress
+      }
       roles {
         address
         role
@@ -372,6 +377,11 @@ export const getEventsByChainIdAndRoundId = gql`
       fundedAmountInUsd
       roundMetadata
       applicationMetadata
+      applications {
+        projectId
+        metadata
+        anchorAddress
+      }
       roles {
         address
         role
@@ -380,6 +390,18 @@ export const getEventsByChainIdAndRoundId = gql`
     }
   }
 `;
+
+// filter by roles
+// filter: {
+//   chainId: { equalTo: 8453 }
+//   tags: { contains: "allo-v2" }
+//   rolesExist: true
+//   roles: {
+//     every: {
+//       address: { equalTo: "0xe3f12ef28ccdadac60dac287395251b5d16cdaba" }
+//     }
+//   }
+// }
 
 /**
  * Get projects by their address
@@ -419,20 +441,19 @@ export const getProjectsByAddress = gql`
 export const getProjectsAndRolesByAddress = gql`
   query getProjectsAndRolesByAddressQuery(
     $address: String!
-    $version: [String!]!
     $chainIds: [Int!]!
   ) {
     projects(
-      first: 1000
+      first: 100
       filter: {
         roles: { every: { address: { equalTo: $address } } }
-        tags: { contains: $version }
+        tags: { contains: "allo-v2" }
         not: { tags: { contains: "program" } }
         chainId: { in: $chainIds }
         rolesExist: true
       }
     ) {
-      roles(first: 1000) {
+      roles(first: 100) {
         role
         address
         projectId
@@ -449,7 +470,7 @@ export const getProjectsAndRolesByAddress = gql`
       anchorAddress
       projectType
       createdAtBlock
-      applications(first: 1000) {
+      applications(first: 100) {
         id
         metadata
       }
@@ -457,11 +478,12 @@ export const getProjectsAndRolesByAddress = gql`
   }
 `;
 
+// use to make sure the tx is confirmed/indexed
 export const getBlockNumberQuery = gql`
   query getBlockNumberQuery($chainId: Int!) {
     {
       subscriptions(
-        first: 1000
+        first: 100
         filter: { chainId: { equalTo: $chainId }, toBlock: { equalTo: "latest" } }
       ) {
         chainId
@@ -471,32 +493,32 @@ export const getBlockNumberQuery = gql`
   }
 `;
 
-export const getRoundsQuery = gql`
-  query GetRounds(
-    $first: Int
-    $orderBy: [RoundsOrderBy!]
-    $filter: RoundFilter
-  ) {
-    rounds(first: $first, orderBy: $orderBy, filter: $filter) {
-      id
-      chainId
-      tags
-      roundMetadata
-      roundMetadataCid
-      applicationsStartTime
-      applicationsEndTime
-      matchAmountInUsd
-      matchAmount
-      matchTokenAddress
-      strategyId
-      strategyName
-      strategyAddress
-      applications(first: 1000, filter: { status: { equalTo: APPROVED } }) {
-        id
-      }
-    }
-  }
-`;
+// export const getEventsQuery = gql`
+//   query GetEvents(
+//     $first: Int
+//     $orderBy: [RoundsOrderBy!]
+//     $filter: RoundFilter
+//   ) {
+//     rounds(first: $first, orderBy: $orderBy, filter: $filter) {
+//       id
+//       chainId
+//       tags
+//       roundMetadata
+//       roundMetadataCid
+//       applicationsStartTime
+//       applicationsEndTime
+//       matchAmountInUsd
+//       matchAmount
+//       matchTokenAddress
+//       strategyId
+//       strategyName
+//       strategyAddress
+//       applications(first: 1000, filter: { status: { equalTo: APPROVED } }) {
+//         id
+//       }
+//     }
+//   }
+// `;
 
 export const getRoundByIdAndChainId = gql`
   query getRoundByIdAndChainId($roundId: String!, $chainId: Int!) {

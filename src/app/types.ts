@@ -61,27 +61,12 @@ export type FetchProfilesResponse = {
   projects: TProfile[];
 };
 
-export type TPoolMetadata = {
+export type TEventMetadata = {
   profileId: Hex;
   name: string;
   website: string;
   description: string;
   base64Image?: string;
-};
-
-export type TApplicationMetadata = {
-  name: string;
-  website: string;
-  description: string;
-  email: string;
-  base64Image: string;
-};
-
-export type TNewApplication = TApplicationMetadata & {
-  requestedAmount: bigint;
-  recipientAddress: `0x${string}`;
-  profileId?: `0x${string}`;
-  profileName?: string;
 };
 
 export type TCandidate = {
@@ -91,6 +76,8 @@ export type TCandidate = {
   imageUrl?: StaticImageData;
   donations?: TDonation[];
   totalDonations?: bigint;
+  anchorAddress?: Address;
+  status: TStatus;
 };
 
 export type TDonation = {
@@ -236,12 +223,22 @@ export type TEvent = {
       };
     };
   };
+  applications: {
+    projectId: Hex;
+    metadata: any;
+    anchorAddress: Address;
+  }[];
   tags: string[];
+};
+
+export type TEventWithCandidates = TEvent & {
+  candidates: TCandidate[];
 };
 
 export interface IEventContextProps {
   isLoaded: boolean;
-  events: TEvent[];
-  setEvents: Dispatch<SetStateAction<TEvent[]>>;
+  events: TEventWithCandidates[];
+  setEvents: Dispatch<SetStateAction<TEventWithCandidates[]>>;
   createPool: (data: any) => void;
+  userEvents: TEventWithCandidates[];
 }

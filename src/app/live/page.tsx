@@ -33,7 +33,7 @@ export default function Live() {
       setIsInitialized(true); // Set initialization to true to prevent reruns
     }
     // This empty dependency array ensures the effect runs only once on mount
-  }, []);
+  }, [isInitialized]);
 
   return (
     <div>

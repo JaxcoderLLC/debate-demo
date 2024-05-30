@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useAccount, useDisconnect } from "wagmi";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
-import { useSetActiveWallet } from "@privy-io/wagmi";
 import Button from "./Button";
 import { TToastNotification } from "@/app/types";
 import { Address } from "viem";
@@ -26,21 +24,8 @@ export default function Navbar() {
   }
 
   // Privy hooks
-  const {
-    ready,
-    user,
-    authenticated,
-    login,
-    connectWallet,
-    logout,
-    linkWallet,
-  } = usePrivy();
-  const { wallets, ready: walletsReady } = useWallets();
-
-  // WAGMI hooks
-  const { address, isConnected, isConnecting, isDisconnected } = useAccount();
-  const { disconnect } = useDisconnect();
-  const { setActiveWallet } = useSetActiveWallet();
+  const { ready, user, authenticated, login, logout } = usePrivy();
+  // const { wallets, ready: walletsReady } = useWallets();
 
   console.log("isOnboarded:", isOnboarded, "ready", ready);
 

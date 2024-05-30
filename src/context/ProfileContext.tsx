@@ -40,7 +40,7 @@ export const ProfileContextProvider = (props: {
 
       console.log("response shit", response);
 
-      setProfiles([...profiles, ...response.projects]);
+      setProfiles(response.projects);
       setIsLoaded(true);
     };
 
