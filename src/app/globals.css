@@ -45,7 +45,7 @@
     height: 60px;      /* Specified height */
     font-size: 24px;   /* 2xl text size in Tailwind */
     color: white;      /* Text color */
-    background-color: #1d4ed8; /* A blue background color */
+    background-color: #14B8A6; /* background color */
     z-index: 10;       /* Keep it above other elements */
 }
 

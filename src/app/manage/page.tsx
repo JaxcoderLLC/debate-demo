@@ -16,7 +16,7 @@ import Events from "@/components/Events";
 import MyEvents from "@/components/MyEvents";
 
 export default function Manage() {
-  const [activeTab, setActiveTab] = useState("Profile");
+  const [activeTab, setActiveTab] = useState("My Events");
   return (
     <div className="mt-8">
       <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -115,7 +115,7 @@ function Stats() {
                 <div className="text-sm">
                   <a
                     href="#"
-                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                    className="font-medium text-teal-600 hover:text-teal-500"
                   >
                     View all<span className="sr-only"> {item.name} stats</span>
                   </a>

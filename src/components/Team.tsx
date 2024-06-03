@@ -1,5 +1,4 @@
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
 import BaseModal from "./BaseModal";
 import { Button, useDisclosure } from "@nextui-org/react";
 
@@ -21,7 +20,16 @@ const teamates = [
 ];
 
 export default function Team() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isOpenAdd,
+    onOpen: onOpenAdd,
+    onOpenChange: onOpenAddChange,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenRemove,
+    onOpen: onOpenRemove,
+    onOpenChange: onOpenRemoveChange,
+  } = useDisclosure();
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 mt-4">
@@ -34,15 +42,15 @@ export default function Team() {
             A list of all the users in your organization.
           </p>
         </div>
-        <div className="sm:ml-16 sm:mt-0 flex-row">
+        <div className="sm:ml-16 sm:mt-0 flex-row items-center">
           <Button
-            className="flex rounded-xl bg-blue-600 p-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer"
+            className="flex rounded-xl p-2 text-center text-sm font-semibold text-pink-200 border-pink-200 bg-teal-400 hover:bg-teal-700 hover:border-pink-400 hover:text-pink-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer"
             onPress={(data: any) => {
               console.log("Add User", data);
-              onOpen();
+              onOpenAdd();
             }}
           >
-            <PlusIcon height={24} width={24} className="mr-1" />
+            <PlusIcon height={16} width={16} className="ml-1" />
             <span className="mt-[2px] mr-2">Add User</span>
           </Button>
         </div>
@@ -100,7 +108,10 @@ export default function Team() {
                       {person.role}
                     </td>
                     <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <div className="flex flex-row items-center justify-between hover:shadow-xl">
+                      <div
+                        className="flex flex-row items-center justify-between hover:shadow-xl"
+                        onClick={onOpenRemove}
+                      >
                         <span>
                           <XMarkIcon className="h-5 w-5 text-rose-500 cursor-pointer hover:bg-rose-200 hover:text-rose-700 rounded-xl border border-rose-600" />
                         </span>
@@ -120,8 +131,26 @@ export default function Team() {
         onSubmit={(data: any) => {
           console.log("Add User", data);
         }}
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        isOpen={isOpenAdd}
+        onOpenChange={onOpenAddChange}
+        onConfirm={() => {}}
+        onCancel={() => {
+          onOpenAddChange();
+        }}
+      />
+      <BaseModal
+        modalPlacement="center"
+        title={"Remove User"}
+        body={<span>Remove a new user from your organization.</span>}
+        onSubmit={(data: any) => {
+          console.log("Remove User", data);
+        }}
+        isOpen={isOpenRemove}
+        onOpenChange={onOpenRemoveChange}
+        onConfirm={() => {}}
+        onCancel={() => {
+          onOpenRemoveChange();
+        }}
       />
     </div>
   );

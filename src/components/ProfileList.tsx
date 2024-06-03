@@ -20,10 +20,10 @@ export default function ProfileList() {
         <span className="text-2xl">Profiles</span>
         <Link
           href={`/profile/new`}
-          className="flex items-center justify-between bg-blue-500 text-white rounded-xl shadow-xl p-2"
+          className="flex items-center justify-between text-pink-200 border-pink-200 bg-teal-400 hover:bg-teal-700 hover:border-pink-400 hover:text-pink-400 rounded-xl shadow-xl p-2"
         >
-          <PlusIcon className="h-5 w-5 text-white mr-1" aria-hidden="true" />
-          <span className="">New Profile</span>
+          <PlusIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+          <span>New Profile</span>
         </Link>
       </div>
       <Divider className="my-4" />

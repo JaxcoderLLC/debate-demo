@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
-import { IDonationContextProps, TCandidate } from "../app/types";
+import { EStatus, IDonationContextProps, TCandidate } from "../app/types";
 
 export const DonationContext = createContext<IDonationContextProps>({
   isLoaded: false,
@@ -27,21 +27,30 @@ export const DonationContextProvider = (props: {
           recipientId: "0x3f15B8c6F9939879Cb030D6dd935348E57109637",
           name: "Josh Levitt",
           imageUrl: undefined,
+          donations: [],
           totalDonations: BigInt(0),
+          anchorAddress: "0x",
+          status: EStatus.InProgress,
         },
         {
           id: 2,
           recipientId: "0x3f15B8c6F9939879Cb030D6dd935348E57109637",
           name: "Richard McArthur",
           imageUrl: undefined,
+          donations: [],
           totalDonations: BigInt(0),
+          anchorAddress: "0x",
+          status: EStatus.InProgress,
         },
         {
           id: 3,
           recipientId: "0x3f15B8c6F9939879Cb030D6dd935348E57109637",
           name: "John Steinck",
           imageUrl: undefined,
+          donations: [],
           totalDonations: BigInt(0),
+          anchorAddress: "0x",
+          status: EStatus.InProgress,
         },
       ]);
       setIsLoaded(true);

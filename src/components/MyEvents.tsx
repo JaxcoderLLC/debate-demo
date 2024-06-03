@@ -28,7 +28,7 @@ export default function MyEvents() {
         </h2>
         <Link
           href={"/event/new"}
-          className="flex justify-center p-2 shadow-xl rounded-xl border text-white border-gray-200 bg-blue-500 hover:bg-blue-700"
+          className="flex justify-center p-2 shadow-xl rounded-xl border text-pink-100 border-pink-200 bg-teal-400 hover:bg-teal-700 hover:border-pink-400 hover:text-pink-400"
         >
           <PlusIcon height={24} width={24} className="mr-1" />
           <span className="mt-[1px] mr-2">New Event</span>

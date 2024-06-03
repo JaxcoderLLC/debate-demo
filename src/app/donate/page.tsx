@@ -15,7 +15,7 @@ import Image from "next/image";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
 import { Address, parseEther } from "viem";
-import { TCandidate } from "../types";
+import { EStatus, TCandidate } from "../types";
 import { useSendTransaction } from "@privy-io/react-auth";
 import {
   TimeInterval,
@@ -46,21 +46,30 @@ const candidates: TCandidate[] = [
     recipientId: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
     name: "Josh Levitt",
     imageUrl: JoshLImage,
+    donations: [],
     totalDonations: BigInt(0),
+    status: EStatus.InProgress,
+    anchorAddress: "0x",
   },
   {
     id: 2,
     recipientId: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
     name: "Richard McArthur",
     imageUrl: RichardMImage,
+    donations: [],
     totalDonations: BigInt(0),
+    status: EStatus.InProgress,
+    anchorAddress: "0x",
   },
   {
     id: 3,
     recipientId: "0xe3f12ef28CCDadaC60daC287395251b5D16cdABA",
     name: "John Steinck",
     imageUrl: JohnSImage,
+    donations: [],
     totalDonations: BigInt(0),
+    status: EStatus.InProgress,
+    anchorAddress: "0x",
   },
 ];
 
@@ -228,8 +237,8 @@ function DonateButton(props: {
       type="button"
       className={
         props.disabled
-          ? `cursor-not-allowed p-2 px-3 mt-4 text-center shadow-xl border rounded-lg text-sm text-white bg-blue-500 hover:bg-blue-700`
-          : `p-2 px-3 mt-4 shadow-xl text-center border rounded-lg text-sm text-white bg-blue-500 hover:bg-blue-700`
+          ? `cursor-not-allowed p-2 px-3 mt-4 text-center shadow-xl border rounded-lg text-sm text-white bg-teal-500 hover:bg-teal-700`
+          : `p-2 px-3 mt-4 shadow-xl text-center border rounded-lg text-sm text-white bg-teal-500 hover:bg-teal-700`
       }
       onClick={async () => {
         console.log(`Donating $${props.amount}`);
