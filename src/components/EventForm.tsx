@@ -146,7 +146,7 @@ export default function EventForm({
           <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
             <Link
               type="button"
-              href={"/event/"}
+              href={"/manage"}
               className="p-2 w-36 text-center border rounded-lg text-sm text-white bg-pink-500 hover:bg-pink-700"
             >
               Cancel

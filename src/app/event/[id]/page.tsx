@@ -198,6 +198,9 @@ export default function EventDetail({ params }: { params: { id: string } }) {
                               <button
                                 type="button"
                                 className="text-sm text-teal-600"
+                                onClick={(data) => {
+                                  console.log("Add candidate", data);
+                                }}
                               >
                                 <PlusIcon
                                   className="text-teal-500 border border-teal-500 rounded-full font-bold hover:text-teal-800 hover:cursor-pointer"
@@ -217,6 +220,11 @@ export default function EventDetail({ params }: { params: { id: string } }) {
                             <button
                               type="button"
                               className="text-sm text-teal-600"
+                              onClick={(data) => {
+                                console.log("Add candidate", data);
+
+                                // open modal to add a candidate
+                              }}
                             >
                               <PlusIcon
                                 className="text-teal-500 border border-teal-500 rounded-full font-bold hover:text-teal-800 hover:cursor-pointer"

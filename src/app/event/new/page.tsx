@@ -26,8 +26,6 @@ export default function NewEvent() {
         register={register}
         handleSubmit={handleSubmit}
         errors={errors}
-        editMode={false}
-        setEditMode={() => {}}
       />
     </div>
   );
