@@ -4,9 +4,10 @@ import {
   DirectGrantsLiteStrategy,
   NATIVE,
 } from "@allo-team/allo-v2-sdk";
-import { commonConfig } from "@/config/common";
+import { base64Image, commonConfig } from "@/config/common";
 import { base } from "viem/chains";
 import { InitializeData } from "@allo-team/allo-v2-sdk/dist/strategies/DirectGrantsLiteStrategy/types";
+import { getIPFSClient } from "@/services/ipfs";
 
 export const useAllo = () => {
   const allo = new Allo({
@@ -37,6 +38,28 @@ export const useAllo = () => {
     };
 
     const initStrategyData = await strategy.getInitializeData(initParams);
+
+    // Save metadata to IPFS -> returns a pointer we save on chain for the metadata
+    const ipfsClient = getIPFSClient();
+    const metadata = {
+      profileId: commonConfig.ownerProfileId,
+      name: commonConfig.pool.name,
+      website: commonConfig.pool.website,
+      description: commonConfig.pool.description,
+      base64Image: base64Image,
+    };
+
+    // NOTE: Use this to pin your base64 image to IPFS
+    let imagePointer;
+    if (metadata.base64Image && metadata.base64Image.includes("base64")) {
+      imagePointer = await ipfsClient.pinJSON({
+        data: metadata.base64Image,
+      });
+      metadata.base64Image = imagePointer;
+    }
+
+    const pointer = await ipfsClient.pinJSON(metadata);
+    console.log("Metadata saved to IPFS with pointer: ", pointer);
 
     // todo: check if the user has a profile and if not create one so they can donate...
 

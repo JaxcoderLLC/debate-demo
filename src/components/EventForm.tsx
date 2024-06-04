@@ -44,7 +44,7 @@ export default function EventForm({
   //   (role) => role.role === "ADMIN"
   // )[0].address;
 
-  const onEditSubmit = async (data: any) => {
+  const onUpdate = async (data: any) => {
     console.log("data", data);
   };
 
@@ -85,6 +85,18 @@ export default function EventForm({
               share.
             </p>
           </div>
+          {!editMode && (
+            <div>
+              <button
+                className="p-2 m-4 w-36 border rounded-lg text-sm text-white bg-teal-500 hover:bg-teal-700"
+                onClick={() => {
+                  setEditMode(!editMode);
+                }}
+              >
+                Edit
+              </button>
+            </div>
+          )}
 
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -103,6 +115,7 @@ export default function EventForm({
                     <input
                       {...register("eventName")}
                       type="text"
+                      disabled={!editMode}
                       name="eventName"
                       id="eventName"
                       autoComplete="eventName"
@@ -130,6 +143,7 @@ export default function EventForm({
                       id="support"
                       name="support"
                       type="support"
+                      disabled={!editMode}
                       autoComplete="support"
                       defaultValue={"todo"}
                       className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -153,6 +167,7 @@ export default function EventForm({
                       {...register("about")}
                       id="about"
                       name="about"
+                      disabled={!editMode}
                       placeholder="I'm a cool event who likes to host cool people."
                       rows={3}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -167,40 +182,43 @@ export default function EventForm({
                     )}
                   </div>
                   <p className="mt-3 text-sm leading-6 text-gray-600">
-                    {!editMode && "Write a few sentences about the event."}
+                    {editMode && "Write a few sentences about the event."}
                   </p>
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-              <Link
-                href="/manage"
-                type="button"
-                className="p-2 w-36 text-center border rounded-lg text-sm text-white bg-pink-500 hover:bg-pink-700"
-              >
-                Cancel
-              </Link>
-              {editMode ? (
+            {editMode && (
+              <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
                 <button
+                  className="p-2 w-36 text-center border rounded-lg text-sm text-white bg-pink-500 hover:bg-pink-700"
                   onClick={() => {
-                    // update event/round
-                    onEditSubmit({});
-
                     setEditMode(!editMode);
                   }}
-                  className="p-2 m-4 w-36 border rounded-lg text-sm text-white bg-teal-500 hover:bg-teal-700"
                 >
-                  Update
+                  Cancel
                 </button>
-              ) : (
-                <button
-                  type="submit"
-                  className="p-2 w-36 border rounded-lg text-sm text-white bg-teal-500 hover:bg-teal-700"
-                >
-                  Save
-                </button>
-              )}
-            </div>
+                {editMode ? (
+                  <button
+                    onClick={() => {
+                      // update event/round
+                      onUpdate({});
+
+                      setEditMode(!editMode);
+                    }}
+                    className="p-2 m-4 w-36 border rounded-lg text-sm text-white bg-teal-500 hover:bg-teal-700"
+                  >
+                    Update
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="p-2 w-36 border rounded-lg text-sm text-white bg-teal-500 hover:bg-teal-700"
+                  >
+                    Save
+                  </button>
+                )}
+              </div>
+            )}
           </form>
         </div>
       </div>
