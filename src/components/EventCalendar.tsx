@@ -17,7 +17,8 @@ import Link from "next/link";
 import moment from "moment";
 
 export default function EventCalendar(props: { events: TEvent[] }) {
-  const [value, setValue] = useState(parseDate("2024-05-10"));
+  const now = moment().format("YYYY-MM-DD");
+  const [value, setValue] = useState(parseDate(now));
 
   const isUpcomingEvent = (event: TEvent) => {
     return (

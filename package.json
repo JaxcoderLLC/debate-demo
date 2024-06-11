@@ -33,7 +33,7 @@
     "react-hook-form": "^7.51.4",
     "swr": "^2.2.5",
     "viem": "^2.9.22",
-    "wagmi": "^2.5.19",
+    "wagmi": "^2.9.10",
     "yup": "^1.4.0"
   },
   "devDependencies": {
