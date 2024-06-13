@@ -1,4 +1,4 @@
-import { TNewApplication, TPoolMetadata } from "@/app/types";
+import { TEventMetadata } from "@/app/types";
 import dotenv from "dotenv";
 import { Address, Hex } from "viem";
 import { optimismSepolia } from "viem/chains";
@@ -13,14 +13,14 @@ type CommonConfig = {
   ownerAddress: Address;
   anchorAddress: Address;
   managers: Address[];
-  application: TNewApplication;
+  application: any;
   recipientId: Address;
   metadata: {
     protocol: bigint;
     pointer: string;
   };
   members: Address[];
-  pool: TPoolMetadata;
+  pool: TEventMetadata;
 };
 
 // NOTE: Update this with your own base64 image

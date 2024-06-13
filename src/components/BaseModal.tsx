@@ -16,6 +16,8 @@ export default function BaseModal({
   onSubmit,
   isOpen,
   onOpenChange,
+  onConfirm,
+  onCancel,
 }: {
   modalPlacement: TModalPlacement;
   title: string;
@@ -23,6 +25,8 @@ export default function BaseModal({
   onSubmit: any;
   isOpen: boolean;
   onOpenChange: any;
+  onConfirm: any;
+  onCancel: any;
 }): JSX.Element {
   return (
     <div className="flex flex-col gap-2">
@@ -47,7 +51,7 @@ export default function BaseModal({
                   Close
                 </Button>
                 <Button color="primary" onPress={onSubmit}>
-                  Action
+                  Confirm
                 </Button>
               </ModalFooter>
             </>

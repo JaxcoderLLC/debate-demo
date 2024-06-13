@@ -4,9 +4,10 @@ import {
   DirectGrantsLiteStrategy,
   NATIVE,
 } from "@allo-team/allo-v2-sdk";
-import { commonConfig } from "@/config/common";
+import { base64Image, commonConfig } from "@/config/common";
 import { base } from "viem/chains";
 import { InitializeData } from "@allo-team/allo-v2-sdk/dist/strategies/DirectGrantsLiteStrategy/types";
+import { getIPFSClient } from "@/services/ipfs";
 
 export const useAllo = () => {
   const allo = new Allo({
@@ -19,7 +20,7 @@ export const useAllo = () => {
     address: "0x79A5EEc2C87Cd2116195E71af7A38647f89C8Ffa",
   });
 
-  // NOTE: Timestamps should be in seconds and start should be a few minutes in the future to account for transaction times.7
+  // NOTE: Timestamps should be in seconds and start should be a few minutes in the future to account for transaction times
   const createPool = async ({
     provider,
     regStartTime,
@@ -38,6 +39,28 @@ export const useAllo = () => {
 
     const initStrategyData = await strategy.getInitializeData(initParams);
 
+    // Save metadata to IPFS -> returns a pointer we save on chain for the metadata
+    const ipfsClient = getIPFSClient();
+    const metadata = {
+      profileId: commonConfig.ownerProfileId,
+      name: commonConfig.pool.name,
+      website: commonConfig.pool.website,
+      description: commonConfig.pool.description,
+      base64Image: base64Image,
+    };
+
+    // NOTE: Use this to pin your base64 image to IPFS
+    let imagePointer;
+    if (metadata.base64Image && metadata.base64Image.includes("base64")) {
+      imagePointer = await ipfsClient.pinJSON({
+        data: metadata.base64Image,
+      });
+      metadata.base64Image = imagePointer;
+    }
+
+    const pointer = await ipfsClient.pinJSON(metadata);
+    console.log("Metadata saved to IPFS with pointer: ", pointer);
+
     // todo: check if the user has a profile and if not create one so they can donate...
 
     const poolCreationData: CreatePoolArgs = {
@@ -45,7 +68,7 @@ export const useAllo = () => {
       strategy: "0x79A5EEc2C87Cd2116195E71af7A38647f89C8Ffa", // approved strategy contract
       initStrategyData: initStrategyData, // unique to the strategy
       token: NATIVE as `0x${string}`, // you need to change this to your token address
-      amount: BigInt(0),
+      amount: BigInt(1e14),
       metadata: {
         protocol: BigInt(1),
         // todo: update this with the pointer to the metadata on IPFS
@@ -55,7 +78,7 @@ export const useAllo = () => {
     };
 
     // Prepare the transaction data
-    const createPoolData = allo.createPoolWithCustomStrategy(poolCreationData);
+    const createPoolData = allo.createPool(poolCreationData);
 
     let transactionHash = "0x";
 
@@ -65,19 +88,10 @@ export const useAllo = () => {
         data: createPoolData.data,
         value: BigInt(createPoolData.value),
       };
-      // const walletClient = createWalletClient({
-      //   account: owner,
-      //   chain: base,
-      //   transport: custom(window.ethereum!),
-      // });
 
       transactionHash = await provider.request({
         method: "eth_sendTransaction",
         params: [transactionRequest],
-        // account: owner,
-        // data: createPoolData.data,
-        // to: createPoolData.to,
-        // value: BigInt(createPoolData.value),
       });
 
       setTimeout(() => {}, 5000);
@@ -90,12 +104,3 @@ export const useAllo = () => {
 
   return { strategy, createPool };
 };
-
-// const transactionRequest = {
-//   to: '0xTheRecipientAddress',
-//   value: 100000,
-// };
-// const transactionHash = await provider.request({
-//   method: 'eth_sendTransaction',
-//   params: [transactionRequest],
-// });
