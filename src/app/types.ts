@@ -69,6 +69,27 @@ export type TEventMetadata = {
   base64Image?: string;
 };
 
+// round metadata example ^^^ fix above
+// {
+//   "name": "Jax v2 Test Round 1",
+//   "support": {
+//       "info": "your.email+fakedata98557@gmail.com",
+//       "type": "Email"
+//   },
+//   "roundType": "private",
+//   "eligibility": {
+//       "description": "Possimus architecto quasi sapiente. Numquam doloremque modi rem eaque quam inventore doloribus. Dolorem amet quos minima voluptate.\nVoluptatum laborum assumenda dignissimos ab. Totam dolorum vitae totam ex tempore voluptas. Itaque delectus itaque doloremque quidem quibusdam repellat.\nPlaceat nam error. Laborum eligendi aliquid culpa beatae vel inventore. Quis impedit esse nihil quod ducimus adipisci molestias culpa.",
+//       "requirements": [
+//           {
+//               "requirement": "Recusandae omnis inventore mollitia ex."
+//           }
+//       ]
+//   },
+//   "feesAddress": "",
+//   "feesPercentage": 0,
+//   "programContractAddress": "0x11e116d66f8cabbd96bcf2b025095a491939684d2863c3e2af7a44df39e7bd4c"
+// }
+
 export type TCandidate = {
   id: number;
   recipientId: Address;
