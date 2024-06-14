@@ -1,4 +1,5 @@
 import { StaticImageData } from "next/image";
+import { Dispatch, SetStateAction } from "react";
 import { Address, Hex } from "viem";
 
 export enum EStatus {
@@ -21,27 +22,46 @@ export interface IDonationStatus {
   [EStatus.Canceled]: string;
 }
 
-export type TProfilesByOwnerResponse = {
-  profileId: Hex;
-  name: string;
-  owner: string;
-  createdAt: string;
-  anchor: Address;
+export type TRole = {
+  address: Address;
+  projectId: Hex;
   role: string;
 };
 
-export type TProfileResponse = {
-  profileId: Hex;
-  nonce: number;
+export type TProfile = {
+  id: Hex;
   name: string;
-  metadataPointer: string;
+  nonce: number;
+  metadata: {
+    name: string;
+    type: string;
+  };
+  metadataCid: string;
   owner: Address;
-  anchor: Address;
+  anchorAddress: Address;
+  applications: any[];
+  roles: TRole[];
   creator: Address;
   createdAt: string;
+  projectNumber: number | null;
+  projectType: string; // "CANONICAL"
+  registryAddress: Address;
+  tags: string[];
 };
 
-export type TPoolMetadata = {
+export type TProfilesByOwnerResponse = TProfile[] & {
+  // overrides...
+};
+
+export type TProfileResponse = TProfile & {
+  // overrides...
+};
+
+export type FetchProfilesResponse = {
+  projects: TProfile[];
+};
+
+export type TEventMetadata = {
   profileId: Hex;
   name: string;
   website: string;
@@ -49,20 +69,26 @@ export type TPoolMetadata = {
   base64Image?: string;
 };
 
-export type TApplicationMetadata = {
-  name: string;
-  website: string;
-  description: string;
-  email: string;
-  base64Image: string;
-};
-
-export type TNewApplication = TApplicationMetadata & {
-  requestedAmount: bigint;
-  recipientAddress: `0x${string}`;
-  profileId?: `0x${string}`;
-  profileName?: string;
-};
+// round metadata example ^^^ fix above
+// {
+//   "name": "Jax v2 Test Round 1",
+//   "support": {
+//       "info": "your.email+fakedata98557@gmail.com",
+//       "type": "Email"
+//   },
+//   "roundType": "private",
+//   "eligibility": {
+//       "description": "Possimus architecto quasi sapiente. Numquam doloremque modi rem eaque quam inventore doloribus. Dolorem amet quos minima voluptate.\nVoluptatum laborum assumenda dignissimos ab. Totam dolorum vitae totam ex tempore voluptas. Itaque delectus itaque doloremque quidem quibusdam repellat.\nPlaceat nam error. Laborum eligendi aliquid culpa beatae vel inventore. Quis impedit esse nihil quod ducimus adipisci molestias culpa.",
+//       "requirements": [
+//           {
+//               "requirement": "Recusandae omnis inventore mollitia ex."
+//           }
+//       ]
+//   },
+//   "feesAddress": "",
+//   "feesPercentage": 0,
+//   "programContractAddress": "0x11e116d66f8cabbd96bcf2b025095a491939684d2863c3e2af7a44df39e7bd4c"
+// }
 
 export type TCandidate = {
   id: number;
@@ -71,6 +97,8 @@ export type TCandidate = {
   imageUrl?: StaticImageData;
   donations?: TDonation[];
   totalDonations?: bigint;
+  anchorAddress?: Address;
+  status: TStatus;
 };
 
 export type TDonation = {
@@ -153,3 +181,85 @@ export type TModalPlacement =
   | "top-center"
   | "bottom"
   | "bottom-center";
+
+export type TEvent = {
+  id: string; // roundId
+  chainId: number;
+  strategyName: string;
+  strategyAddress: Address;
+  applicationsStartTime: string;
+  applicationsEndTime: string;
+  matchAmount?: bigint;
+  matchAmountInUsd?: bigint;
+  roles: TRole[];
+  roundMetadata: {
+    name: string;
+    support: {
+      info: string;
+      type: string;
+    };
+    roundType: string;
+    eligibility: {
+      description: string;
+      requirements: [
+        {
+          requirement: string;
+        }
+      ];
+    };
+    feesAddress: Address;
+    feesPercentage: number;
+    programContractAddress: Address;
+    quadraticFundingConfig: {
+      matchingCap: boolean;
+      sybilDefense: boolean;
+      minDonationThreshold: boolean;
+      matchingFundsAvailable: bigint;
+    };
+  };
+  applicationMetadata: {
+    version: string;
+    lastUpdatedOn: number;
+    applicationSchema: {
+      questions: [
+        {
+          id: number;
+          info: string;
+          type: string;
+          title: string;
+          hidden: boolean;
+          required: boolean;
+          encrypted: boolean;
+        }
+      ];
+      requirements?: {
+        github: {
+          required: boolean;
+          verification: boolean;
+        };
+        twitter: {
+          required: boolean;
+          verification: boolean;
+        };
+      };
+    };
+  };
+  applications: {
+    projectId: Hex;
+    metadata: any;
+    anchorAddress: Address;
+  }[];
+  tags: string[];
+};
+
+export type TEventWithCandidates = TEvent & {
+  candidates: TCandidate[];
+};
+
+export interface IEventContextProps {
+  isLoaded: boolean;
+  events: TEventWithCandidates[];
+  setEvents: Dispatch<SetStateAction<TEventWithCandidates[]>>;
+  createPool: (data: any) => void;
+  userEvents: TEventWithCandidates[];
+}

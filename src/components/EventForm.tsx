@@ -1,9 +1,9 @@
 "use client";
 
-import { useAllo } from "@/hooks/useAllo";
+import { EventContext } from "@/context/EventContext";
 import { EIP1193Provider, usePrivy, useWallets } from "@privy-io/react-auth";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function EventForm({
   register,
@@ -14,14 +14,18 @@ export default function EventForm({
   handleSubmit: any;
   errors: any;
 }) {
+  const { createPool } = useContext(EventContext);
   // Privy hooks
   const { ready, authenticated, user } = usePrivy();
   const { wallets, ready: walletsReady } = useWallets();
-  const wallet = wallets[0]; // Replace this with your desired wallet
+  const wallet = wallets[0];
   const [provider, setProvider] = useState<EIP1193Provider>();
 
+  if (!ready) {
+    console.log("Not ready");
+  }
+
   useEffect(() => {
-    // todo: move to context
     const fetchProvider = async () => {
       if (ready && wallet && authenticated) {
         const provider = await wallet.getEthereumProvider();
@@ -35,25 +39,19 @@ export default function EventForm({
     fetchProvider();
   }, [ready, wallet, authenticated]);
 
-  if (!ready) {
-    console.log("Not ready");
-  }
-
-  const { createPool, strategy } = useAllo();
-
   const onSubmit = (data: any) => {
     console.log(data);
 
     createPool({
       provider,
-      regStartTime: BigInt(Math.floor(new Date().getTime() / 1000) + 300),
-      regEndTime: BigInt(Math.floor(new Date().getTime() / 1000) + 10000),
+      regStartTime: BigInt(Math.floor(new Date().getTime() / 1000) + 10000),
+      regEndTime: BigInt(Math.floor(new Date().getTime() / 1000) + 50000),
     });
   };
 
   return (
     <div className="space-y-10 divide-y divide-gray-900/10 mt-2">
-      <div className="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-1">
         <div className="px-4 sm:px-0">
           <h2 className="text-base font-semibold leading-7 text-gray-900">
             Event Information
@@ -84,10 +82,10 @@ export default function EventForm({
                     name="eventName"
                     id="eventName"
                     autoComplete="eventName"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6"
                   />
                   {errors["eventName"] && (
-                    <p className="text-rose-700 text-sm">
+                    <p className="text-pink-700 text-sm">
                       * {errors["eventName"]?.message}
                     </p>
                   )}
@@ -96,23 +94,23 @@ export default function EventForm({
 
               <div className="sm:col-span-3">
                 <label
-                  htmlFor="email"
+                  htmlFor="support"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Email address
+                  Support
                 </label>
                 <div className="mt-2">
                   <input
-                    {...register("email")}
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    {...register("support")}
+                    id="support"
+                    name="support"
+                    type="support"
+                    autoComplete="support"
+                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
-                  {errors["email"] && (
-                    <p className="text-rose-700 text-sm">
-                      * {errors["email"]?.message}
+                  {errors["support"] && (
+                    <p className="text-pink-700 text-sm">
+                      * {errors["support"]?.message}
                     </p>
                   )}
                 </div>
@@ -132,10 +130,9 @@ export default function EventForm({
                     placeholder="I'm a cool event who likes to host cool people."
                     rows={3}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    defaultValue={""}
                   />
                   {errors["about"] && (
-                    <p className="text-rose-700 text-sm">
+                    <p className="text-pink-700 text-sm">
                       * {errors["about"]?.message}
                     </p>
                   )}
@@ -148,17 +145,20 @@ export default function EventForm({
           </div>
           <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
             <Link
-              href="/manage"
               type="button"
-              className="text-sm font-semibold leading-6 text-gray-900"
+              href={"/manage"}
+              className="p-2 w-36 text-center border rounded-lg text-sm text-white bg-pink-500 hover:bg-pink-700"
             >
               Cancel
             </Link>
             <button
-              type="submit"
-              className="p-2 m-4 w-36 border rounded-lg text-sm text-white bg-blue-500 hover:bg-blue-700"
+              onClick={() => {
+                // update event/round
+                onSubmit({});
+              }}
+              className="p-2 m-4 w-36 border rounded-lg text-sm text-white bg-teal-500 hover:bg-teal-700"
             >
-              Save
+              Create
             </button>
           </div>
         </form>

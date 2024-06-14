@@ -1,7 +1,6 @@
 import { base64Image, commonConfig } from "@/config/common";
 import { getIPFSClient } from "@/services/ipfs";
 import { Allo } from "@allo-team/allo-v2-sdk";
-import { deployMicrograntsStrategy } from "./microgrants";
 
 // create an allo instance
 // snippet => createAlloInstance
@@ -42,11 +41,11 @@ export const createPool = async () => {
   console.log("Metadata saved to IPFS with pointer: ", pointer);
 
   // Deploy the microgrants strategy - `microgrants.ts`
-  const poolId = await deployMicrograntsStrategy(
-    "0x12345",
-    commonConfig.ownerProfileId
-  );
-  console.log("Pool created with ID: ", poolId);
+  // const poolId = await deployMicrograntsStrategy(
+  //   "0x12345",
+  //   commonConfig.ownerProfileId
+  // );
+  // console.log("Pool created with ID: ", poolId);
 
-  return poolId;
+  return 0;
 };

@@ -3,6 +3,7 @@ import { classNames } from "@/utils/common";
 const tabs = [
   { name: "Profile", current: true },
   { name: "Events", current: false },
+  { name: "My Events", current: false },
   { name: "Stats", current: false },
   { name: "Team Members", current: false },
   { name: "Fees & Settings", current: false },

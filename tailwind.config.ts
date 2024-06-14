@@ -10,7 +10,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {},
+      colors: {
+        miami: {
+          pink: {
+            400: "",
+          },
+          emerald: {
+            400: "#34D399",
+          },
+          blue: {
+            400: "#A5F3FC",
+          },
+        },
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
