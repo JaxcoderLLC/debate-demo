@@ -7,7 +7,8 @@ import {
 import { base64Image, commonConfig } from "@/config/common";
 import { base } from "viem/chains";
 import { InitializeData } from "@allo-team/allo-v2-sdk/dist/strategies/DirectGrantsLiteStrategy/types";
-import { getIPFSClient } from "@/services/ipfs";
+import PinataClient from "@/services/pinata";
+import { TEvent } from "@/app/types";
 
 export const useAllo = () => {
   const allo = new Allo({
@@ -25,10 +26,12 @@ export const useAllo = () => {
     provider,
     regStartTime,
     regEndTime,
+    event,
   }: {
     provider: any;
     regStartTime: bigint;
     regEndTime: bigint;
+    event: TEvent;
   }) => {
     const initParams: InitializeData = {
       useRegistryAnchor: false,
@@ -40,25 +43,28 @@ export const useAllo = () => {
     const initStrategyData = await strategy.getInitializeData(initParams);
 
     // Save metadata to IPFS -> returns a pointer we save on chain for the metadata
-    const ipfsClient = getIPFSClient();
+    const pinataClient = new PinataClient();
+
+    console.log("Saving metadata to IPFS...", { event });
+
     const metadata = {
       profileId: commonConfig.ownerProfileId,
-      name: commonConfig.pool.name,
-      website: commonConfig.pool.website,
-      description: commonConfig.pool.description,
-      base64Image: base64Image,
+      name: event.roundMetadata.name,
+      website: event.roundMetadata.support.info,
+      description: event.roundMetadata.eligibility.description,
+      base64Image: event.roundMetadata.image,
     };
 
     // NOTE: Use this to pin your base64 image to IPFS
     let imagePointer;
     if (metadata.base64Image && metadata.base64Image.includes("base64")) {
-      imagePointer = await ipfsClient.pinJSON({
+      imagePointer = await pinataClient.pinJSON({
         data: metadata.base64Image,
       });
       metadata.base64Image = imagePointer;
     }
 
-    const pointer = await ipfsClient.pinJSON(metadata);
+    const pointer = await pinataClient.pinJSON(metadata);
     console.log("Metadata saved to IPFS with pointer: ", pointer);
 
     // todo: check if the user has a profile and if not create one so they can donate...
@@ -68,13 +74,13 @@ export const useAllo = () => {
       strategy: "0x79A5EEc2C87Cd2116195E71af7A38647f89C8Ffa", // approved strategy contract
       initStrategyData: initStrategyData, // unique to the strategy
       token: NATIVE as `0x${string}`, // you need to change this to your token address
-      amount: BigInt(1e14),
+      amount: BigInt(0),
       metadata: {
         protocol: BigInt(1),
-        // todo: update this with the pointer to the metadata on IPFS
-        pointer: "bafybeia4khbew3r2mkflyn7nzlvfzcb3qpfeftz5ivpzfwn77ollj47gqi", //pointer.IpfsHash,
+        pointer: pointer.IPFSHash,
       },
-      managers: commonConfig.managers,
+      // todo: setup managers
+      managers: [],
     };
 
     // Prepare the transaction data
@@ -99,7 +105,10 @@ export const useAllo = () => {
       console.error("Creating Pool", e);
     }
 
-    return transactionHash;
+    // todo: get the pool Id
+    const poolId = 0;
+
+    return poolId;
   };
 
   return { strategy, createPool };

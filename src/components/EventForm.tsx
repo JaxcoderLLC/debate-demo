@@ -4,6 +4,7 @@ import { EventContext } from "@/context/EventContext";
 import { EIP1193Provider, usePrivy, useWallets } from "@privy-io/react-auth";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
+import { base } from "viem/chains";
 
 export default function EventForm({
   register,
@@ -21,7 +22,7 @@ export default function EventForm({
   const wallet = wallets[0];
   const [provider, setProvider] = useState<EIP1193Provider>();
 
-  if (!ready) {
+  if (!ready && !walletsReady) {
     console.log("Not ready");
   }
 
@@ -44,8 +45,33 @@ export default function EventForm({
 
     createPool({
       provider,
+      // todo: start and end times
       regStartTime: BigInt(Math.floor(new Date().getTime() / 1000) + 10000),
       regEndTime: BigInt(Math.floor(new Date().getTime() / 1000) + 50000),
+      event: {
+        roundMetadata: {
+          name: data.eventName,
+          support: {
+            type: "website",
+            info: data.support,
+          },
+          eligibility: {
+            description: data.about,
+          },
+          roundType: "allov2.DirectGrantsLiteStrategy",
+        },
+        id: "",
+        chainId: base.id,
+        strategyName: "DirectGrantsLiteStrategy",
+        strategyAddress: "0x",
+        applicationsStartTime: "",
+        applicationsEndTime: "",
+        donationsStartTime: "",
+        donationsEndTime: "",
+        roles: [],
+        applications: [],
+        tags: [],
+      },
     });
   };
 
@@ -138,7 +164,7 @@ export default function EventForm({
                   )}
                 </div>
                 <p className="mt-3 text-sm leading-6 text-gray-600">
-                  "Write a few sentences about the event."
+                  🙌 Write a few sentences about the event.
                 </p>
               </div>
             </div>

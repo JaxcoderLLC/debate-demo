@@ -13,7 +13,7 @@ export const EventContext = createContext<IEventContextProps>({
   isLoaded: false,
   events: [],
   setEvents: () => {},
-  createPool: () => {},
+  createPool: () => 0,
   userEvents: [],
 });
 

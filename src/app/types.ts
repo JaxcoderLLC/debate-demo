@@ -189,11 +189,14 @@ export type TEvent = {
   strategyAddress: Address;
   applicationsStartTime: string;
   applicationsEndTime: string;
+  donationsStartTime: string;
+  donationsEndTime: string;
   matchAmount?: bigint;
   matchAmountInUsd?: bigint;
   roles: TRole[];
   roundMetadata: {
     name: string;
+    image?: string;
     support: {
       info: string;
       type: string;
@@ -201,23 +204,23 @@ export type TEvent = {
     roundType: string;
     eligibility: {
       description: string;
-      requirements: [
+      requirements?: [
         {
           requirement: string;
         }
       ];
     };
-    feesAddress: Address;
-    feesPercentage: number;
-    programContractAddress: Address;
-    quadraticFundingConfig: {
+    feesAddress?: Address;
+    feesPercentage?: number;
+    programContractAddress?: Address;
+    quadraticFundingConfig?: {
       matchingCap: boolean;
       sybilDefense: boolean;
       minDonationThreshold: boolean;
       matchingFundsAvailable: bigint;
     };
   };
-  applicationMetadata: {
+  applicationMetadata?: {
     version: string;
     lastUpdatedOn: number;
     applicationSchema: {
@@ -256,10 +259,22 @@ export type TEventWithCandidates = TEvent & {
   candidates: TCandidate[];
 };
 
+export type TCreatePoolData = {
+  provider: any;
+  regStartTime: bigint;
+  regEndTime: bigint;
+  event: TEvent;
+};
 export interface IEventContextProps {
   isLoaded: boolean;
   events: TEventWithCandidates[];
   setEvents: Dispatch<SetStateAction<TEventWithCandidates[]>>;
-  createPool: (data: any) => void;
+  createPool: (data: TCreatePoolData) => number;
   userEvents: TEventWithCandidates[];
 }
+
+export type Config = {
+  jwt: string;
+  readGateway: string;
+  writeGateway: string;
+};

@@ -1,14 +1,14 @@
-export type Config = {
-  jwt: string;
-  readGateway: string;
-  writeGateway: string;
-};
+import { Config } from "@/app/types";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const getIPFSClient = (): IPFSClient => {
-
   const jwt = process.env.NEXT_PUBLIC_PINATA_JWT;
   const readGateway = process.env.NEXT_PUBLIC_IPFS_READ_GATEWAY;
   const writeGateway = process.env.NEXT_PUBLIC_IPFS_WRITE_GATEWAY;
+
+  console.log("IPFS config", { jwt, readGateway, writeGateway });
 
   if (!jwt || !readGateway || !writeGateway) {
     throw new Error("Missing IPFS configuration");
