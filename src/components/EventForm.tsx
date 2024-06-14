@@ -138,7 +138,7 @@ export default function EventForm({
                   )}
                 </div>
                 <p className="mt-3 text-sm leading-6 text-gray-600">
-                  "Write a few sentences about the event."
+                  Write a few sentences about the event.
                 </p>
               </div>
             </div>

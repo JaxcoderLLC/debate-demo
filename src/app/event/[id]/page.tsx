@@ -164,7 +164,10 @@ export default function EventDetail({ params }: { params: { id: string } }) {
                   >
                     {event.candidates ? (
                       event.candidates?.map((candidate) => (
-                        <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                        <li
+                          key={event.id}
+                          className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6"
+                        >
                           <div className="flex w-0 flex-1 items-center">
                             <UserCircleIcon
                               className="h-5 w-5 flex-shrink-0 text-yellow-300"
