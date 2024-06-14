@@ -5,52 +5,58 @@ import * as d3 from 'd3';
 
 export type chartRow = { date: any; value: any };
 
-export var margin = { top: 10, right: 30, bottom: 30, left: 90 };
-export var width = 800 - margin.left - margin.right;
-export var height = 700 - margin.top - margin.bottom;
+export const margin = { top: 10, right: 30, bottom: 30, left: 90 };
+export const width = 800 - margin.left - margin.right;
+export const height = 700 - margin.top - margin.bottom;
 
-var svg: any;
-var x: any; 
-var y: any;
-var d3data: Array<chartRow> = [];
+let svg: any;
+let x: any;
+let y: any;
+let d3data1: Array<chartRow> = [];
+let d3data2: Array<chartRow> = [];
 
-function d3init() 
-{
+function d3init() {
   return new Promise((resolve, reject) => {
-    d3.select("#chart").select("svg").remove();
+    try {
+      d3.select("#chart").select("svg").remove();
 
-    // append the svg object to the body of the page
-    svg = d3.select("#chart").append("svg")
+      // append the svg object to the body of the page
+      svg = d3.select("#chart").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
-      .append("g")
+        .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    
-    // Add X axis --> it is a date format
-    x = d3.scaleTime()
-      .domain([
-        d3.timeParse("%Y-%m-%d")("2013-04-28"), 
-        d3.timeParse("%Y-%m-%d")("2018-04-23")
-      ])
-      .range([0, width]);
 
-    svg.append("g")
-      .attr("transform", `translate(0, ${height})`)
-      .call(d3.axisBottom(x));
+      // Add X axis --> it is a date format
+      x = d3.scaleTime()
+        .domain([
+          d3.timeParse("%Y-%m-%d")("2013-04-28"),
+          d3.timeParse("%Y-%m-%d")("2018-04-23")
+        ])
+        .range([0, width]);
 
-    // Add Y axis
-    y = d3.scaleLinear()
-      .domain([0,20500])
-      .range([height, 0]);
+      svg.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(x));
 
-    svg.append("g")
-      .call(d3.axisLeft(y));
-    
-      resolve(console.log("SVG :: ", svg));
-    });
+      // Add Y axis
+      y = d3.scaleLinear()
+        .domain([0, 20500])
+        .range([height, 0]);
+
+      svg.append("g")
+        .call(d3.axisLeft(y));
+
+      resolve(svg);
+    } 
+    catch (error) {
+      reject(console.log("D3 DRAW ERROR :: ", error));
+    }
+
+  });
 }
 
-function d3csv (data: chartRow) {
+function d3csv(data: chartRow) {
   console.log("CHART DATA :: ", data);
   // Add X axis --> it is a date format
   const x = d3
@@ -102,25 +108,28 @@ function d3csv (data: chartRow) {
     );
 }
 
-function d3append (data: chartRow) {
+function d3append(data: chartRow) {
   return new Promise((resolve, reject) => {
-    d3data.push(data);
-    resolve(d3data);
+    try {
+      d3data1.push(data);
+      resolve(d3data1);
+    } catch (error) {
+      reject(console.log("D3 APPEND ERROR :: ", error));
+    }
   });
 }
 
-function d3draw (newData: chartRow) {
+function d3draw(newData: chartRow) {
   d3append(newData)
     .then(() => {
-      console.log("D3DATA :: ", d3data);
+      console.log("D3DATA-1 :: ", d3data1);
       d3.select("#chart").select("#line").remove();
     })
     .then(() => {
       // Add the new line
-      svg
-      .append("path")
+      svg.append("path")
         .attr("id", "line")
-      .datum(d3data)
+        .datum(d3data1)
         .attr("fill", "none")
         .attr("stroke", "steelblue")
         .attr("stroke-width", 1.5)
@@ -133,8 +142,10 @@ function d3draw (newData: chartRow) {
               return y(d.value);
             })
         );
-  })
-  
+    });
+  // .catch((err) => {
+  //   console.log("D3 ERROR :: ", err)
+  // });
 }
 
 export default function D3Race({
@@ -144,38 +155,38 @@ export default function D3Race({
   id: string,
   nextRow: chartRow;
 }) {
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isD3initialized, setIsD3initialized] = useState(false);
   // const [svg, setSvg] = useState<SVGElement>(d3.select("#chart"));
-  var did = "#"+id;
-  
+  let did = "#" + id;
+
   useEffect(() => {
-    if (!isInitialized) {
+    if (!isD3initialized) {
 
       d3init().then(() => {
-        setIsInitialized(true);
+        setIsD3initialized(true);
       });
-    } else 
-    if (nextRow.date != null) {
-      
-      console.log("NEXT ROW :: ", nextRow);
-      // var svg = d3.select(document.getElementById("#chart")?.ownerDocument);
-  
-      d3draw (nextRow);
+    } else
+      if (nextRow.date != null) {
 
-      // d3.csv(
-      //   "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv",
-  
-      //   // When reading the csv, I must format variables:
-      //   function (d: chartRow) {
-      //     return { date: d3.timeParse("%Y-%m-%d")(d.date), value: d.value };
-      //   }
-      // ).then(
-      //   function (data: chartRow) {
-      //     d3csv (data);
-      //   }
-      // );
-    }
-  },[isInitialized, nextRow]);
+        console.log("NEXT ROW :: ", nextRow);
+        // let svg = d3.select(document.getElementById("#chart")?.ownerDocument);
+
+        d3draw(nextRow);
+
+        // d3.csv(
+        //   "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv",
+
+        //   // When reading the csv, I must format variables:
+        //   function (d: chartRow) {
+        //     return { date: d3.timeParse("%Y-%m-%d")(d.date), value: d.value };
+        //   }
+        // ).then(
+        //   function (data: chartRow) {
+        //     d3csv (data);
+        //   }
+        // );
+      }
+  }, [isD3initialized, nextRow]);
 
   return <div id="chart"></div>;
 }

@@ -9,7 +9,6 @@ import * as d3 from 'd3';
 
 export default function Live() {
   const [isInitialized, setIsInitialized] = useState(false);
-  const [buildChart, setBuildChart] = useState(false);
   const [data, setData] = useState<Array<chartRow>>([{ date: null, value: null }]);
   const [next, setNext] = useState<chartRow>({ date: null, value: null }); // Provide an initial value for 'next' state variable
   const [count, setCount] = useState<number>(0);
@@ -19,7 +18,7 @@ export default function Live() {
     setData(await getCSV("data.csv"));
   }
   
-  useEffect(() => {
+  useEffect(() => { // useMemo?
     if (!isInitialized) { 
       getData("data.csv");
       setIsInitialized(true);
@@ -31,7 +30,6 @@ export default function Live() {
   }
 
   function nextData() {
-    setBuildChart(true);
     var rowSlice = data.slice(count, count+1);
     console.log("ROW SLICE :: ", formatRow(rowSlice[0]));
     setNext(formatRow(rowSlice[0]));
